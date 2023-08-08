@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 style="margin-left:550px">Login</h2>
+<div style="margin-left:550px">
+    @ViewBag.Message
+   
+    @using (Html.BeginForm("Login", "KimlikDoğrulama", FormMethod.Post))
+    {
+        <label> Email Adress</label>
+        <div class="input-group">
+            <span class="fa fa-envelope" aria-hidden="true"></span>
+            <input type="text" placeholder="Kullanıcı Adı Girin" required="" name="KullaniciAdi" />
+        </div>
+        <label> Password</label>
+        <div class="input-group">
+            <span class="fa fa-lock" aria-hidden="true"></span>
+            <input type="password" placeholder="Şifre Girin" required="" name="Sifre" />
+        </div>
+        <button class="btn btn-danger btn-block" type="submit">Login</button>
+    }
+
+
+
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

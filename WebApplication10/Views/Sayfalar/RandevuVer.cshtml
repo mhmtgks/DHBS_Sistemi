@@ -1,0 +1,64 @@
+﻿@using Service;
+@{
+    Layout = "~/Views/Shared/_Layout_Doktor.cshtml";
+    ViewBag.Title = "Randevu Ver";
+}
+<script defer src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script defer src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script defer src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script defer src="~/js/script.js"></script>
+<head>
+</head>
+    <body>
+    <h2 style="text-align:center;margin-top:-250px;">Randevu AL</h2>
+    <label> Hasta Adı</label>
+    <div style="margin-left:550px; margin-top:0px;">
+        <div class="dropdown hierarchy-select" id="example">
+            <button type="button" class="btn btn-secondary dropdown-toggle" id="example-two-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+            <div class="dropdown-menu" aria-labelledby="example-two-button">
+                <div class="hs-searchbox">
+                    <input type="text" class="form-control" autocomplete="off">
+                </div>
+                <div class="hs-menu-inner">
+                    @{
+                        Hasta hasta1 = new Hasta();
+                    }
+                    @foreach (var item in hasta1.Lists("select * from Hasta"))
+                    {
+                        <a class="dropdown-item">
+                            @Html.Label(item.AdiSoyadi.ToString())
+                        </a>
+                    }
+                </div>
+            </div>
+            <input class="d-none" name="example_two" readonly="readonly" aria-hidden="true" type="text" />
+        </div>
+        @using (Html.BeginForm("RandevuVerD", "Sayfalar", FormMethod.Post))
+        {
+ 
+            <label> HastaID</label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                <input id="hastaid" type="text" placeholder="Hasta ID si" required="" name="AdiSoyadi" />
+            </div>
+            <label> Tarih</label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                <input type="text" placeholder="Tarih" required="" name="Iletisim" />
+            </div>
+            <button class="btn btn-danger btn-block" style="margin-top:10px" type="submit">Tarih Ara</button>
+        }
+    </div>
+    </body>
+
+    <script>
+
+    $(document).ready(function () {
+        $('#example').hierarchySelect({
+            hierarchy: false,
+            width: 'auto'
+        });
+    });
+
+    </script>
+

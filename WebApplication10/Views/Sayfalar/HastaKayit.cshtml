@@ -1,0 +1,368 @@
+﻿@using Service;
+
+@{
+    Layout = "~/Views/Shared/_Layout_HastaKayit.cshtml";
+    ViewBag.Title = "HastaKayıt";
+}
+<html lang="tr">
+<head>
+    <script defer src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script defer src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script defer src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script defer src="~/js/script.js"></script>
+    <script>
+        function getRowData(button) {
+            // Butona tıklanan satırdaki verileri almak için ebeveyn (<tr>) öğesini buluyoruz
+            var row = button.parentNode.parentNode;
+
+            // Satırdaki verileri çekmek için <td> öğelerini buluyoruz
+            var cells = row.getElementsByTagName("td");
+
+            // Verilere erişmek için sütun indekslerini kullanabilirsiniz (örneğin, cells[0].innerText sütun 1'in içeriğini verir)
+            var data1 = cells[0].innerText;
+            var data2 = cells[1].innerText;
+            var data3 = cells[2].innerText;
+            var data4 = cells[3].innerText;
+            var data5 = cells[4].innerText;
+            var data6 = cells[5].innerText;
+
+            var lbl1 = document.getElementById("hastaid");
+            var lbl2 = document.getElementById("TC");
+            var lbl3 = document.getElementById("adi");
+            var lbl6 = document.getElementById("iletisim");
+            var lbl4 = document.getElementById("dogumtarihi");
+            var lbl5 = document.getElementById("cinsiyet");
+            lbl1.value = data1;
+            lbl2.value = data2;
+            lbl3.value = data3;
+            lbl4.value = data5;
+            lbl6.value = data4;
+            lbl5.value = data6;
+            // ... Diğer işlemler ...
+        }
+        function getRowData1(button) {
+            // Butona tıklanan satırdaki verileri almak için ebeveyn (<tr>) öğesini buluyoruz
+            var row = button.parentNode.parentNode;
+
+            // Satırdaki verileri çekmek için <td> öğelerini buluyoruz
+            var cells = row.getElementsByTagName("td");
+
+            // Verilere erişmek için sütun indekslerini kullanabilirsiniz (örneğin, cells[0].innerText sütun 1'in içeriğini verir)
+            var data1 = cells[0].innerText;
+
+
+            var lbls = document.getElementById("hastaidsil");
+            lbls.value = data1;
+
+            // ... Diğer işlemler ...
+        }
+    </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+
+    <title>DHBS Sistemi</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
+    <script src="/jss.js"></script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/dashboard.css" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+        -webkit-keyframes chartjs-render-animation {
+            from
+
+        {
+            opacity: 0.99
+        }
+
+        to {
+            opacity: 1
+        }
+
+        }
+
+        keyframes chartjs-render-animation {
+            from
+
+        {
+            opacity: 0.99
+        }
+
+        to {
+            opacity: 1
+        }
+
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+
+
+    @if (TempData["AlertMessage"] != null)
+    {
+        if (TempData["AlertMessage"] == "Hasta ekleme Başarısız")
+        {
+            <div style="margin-left:80px;    margin-top: -250px;" class="alert alert-danger">
+                @TempData["AlertMessage"]
+            </div>
+        }
+        else
+        {
+            <div style="margin-left:80px;    margin-top: -250px;" class=" alert alert-success">
+                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                    </symbol>
+                </svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
+
+                @TempData["AlertMessage"]
+
+            </div>
+
+        }
+
+
+    }
+    else
+    {
+        <div style="margin-left:80px;    margin-top: -250px;" class="alert alert-warning">
+            Hasta ekleme-silme işlemlerinde dikkatli olunuz !!
+        </div>
+    }
+
+    
+    <h2 style="text-align:center;margin-top:-250px;">Hasta Kayıt Sistemi</h2>
+    <div>
+        <button style="margin-left:1150px; margin-top:220px;" onclick="updatetable1()"> Hasta Güncelle </button>
+    </div>
+    <div id="divsakla" style="margin-left:550px; margin-top:10px;">
+        @using (Html.BeginForm("HastaKayit", "Sayfalar", FormMethod.Post))
+        {
+            <label> TC</label>
+            <div class="input-group">
+                <span class="fa fa-envelope" aria-hidden="true"></span>
+                <input type="text" placeholder="TC GİRİN" required="" name="TC" />
+            </div>
+            <label> AdiSoyadi</label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                <input type="text" placeholder="Ad Soyad Girin" required="" name="AdiSoyadi" />
+            </div>
+            <label> Iletisim</label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                <input type="text" placeholder="Iletisim" required="" name="Iletisim" />
+            </div>
+            <label> DoğumTarihi(aa/gg/yyyy)</label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                <input type="datetime" placeholder="DoğumTarihi" required="" name="DogumTarihi" />
+            </div>
+            <label> Cinsiyet</label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                <input type="text" placeholder="Cinsiyet" required="" name="Cinsiyet" />
+            </div>
+            <button class="btn btn-danger btn-block" type="submit">Kaydet</button>
+        }
+    </div>
+
+</head>
+
+<body>
+
+    <div id="divtablo" hidden="hidden">
+    <table id="tablo3" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px; margin-top:50px;">
+        <thead>
+            <tr>
+                <th class="th-sm">
+                    ID
+                </th>
+                <th class="th-sm">
+                    TC
+                </th>
+                <th class="th-sm">
+                    Adı Soyadı
+                </th>
+                <th class="th-sm">
+                    İletişim
+                </th>
+                <th class="th-sm">
+                    Doğum Tarihi
+                </th>
+                <th class="th-sm">
+                    Cinsiyet
+                </th>
+                <th class="th-sm">
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                Hasta hasta1 = new Hasta();
+            }
+            @foreach (var item in hasta1.Lists("select * from Hasta where Status='Active'"))
+            {
+                <tr>
+                    <td>
+                        @Html.Label(item.hastaid.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.TC.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.AdiSoyadi.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.Iletisim.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.DogumTarihi.Day.ToString()+"/"+item.DogumTarihi.Month.ToString()+"/"+item.DogumTarihi.Year.ToString())
+
+                    </td>
+                    <td>
+                        @Html.Label(item.Cinsiyet.ToString())
+                    </td>
+                    <td>
+                        <button id="btnekle" class="btn btn-primary btn-sm" onclick="getRowData(this)" data-toggle="modal" data-target="#exampleModal">Güncelle</button>
+                        <button id="btsil" class="btn btn-primary btn-warning" onclick="getRowData1(this)" data-toggle="modal" data-target="#exampleModal2">Sil</button>
+                    </td>
+                </tr>
+
+            }
+
+        </tbody>
+    </table>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Hasta Kayıt Güncelle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div style="margin-left:110px; margin-top:0px;">
+                        @using (Html.BeginForm("HastaKayit", "Sayfalar", FormMethod.Post))
+                        {
+                            <label> HastaID</label>
+                            <div class="input-group">
+                                <span class="fa fa-envelope" aria-hidden="true"></span>
+                                <input id="hastaid"type="text"  required="" name="HastaID" readonly />
+                            </div>
+                            <label> TC</label>
+                            <div class="input-group">
+                                <span class="fa fa-envelope" aria-hidden="true"></span>
+                                <input id="TC" type="text" required="" name="TC" />
+                            </div>
+                            <label> AdiSoyadi</label>
+                            <div class="input-group">
+                                <span class="fa fa-lock" aria-hidden="true"></span>
+                                <input id="adi" type="text" required="" name="AdiSoyadi" />
+                            </div>
+                            <label> Iletisim</label>
+                            <div class="input-group">
+                                <span class="fa fa-lock" aria-hidden="true"></span>
+                                <input id="iletisim" type="text" required="" name="Iletisim" />
+                            </div>
+                            <label> DoğumTarihi(aa/gg/yyyy)</label>
+                            <div class="input-group">
+                                <span class="fa fa-lock" aria-hidden="true"></span>
+                                <input id="dogumtarihi" type="datetime" name="DogumTarihi" />
+                            </div>
+                            <label> Cinsiyet</label>
+                            <div class="input-group">
+                                <span class="fa fa-lock" aria-hidden="true"></span>
+                                <input id="cinsiyet" type="text" required="" name="Cinsiyet" />
+                            </div>
+                            <button class="btn btn-danger btn-block" type="submit">Güncelle</button>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Hasta Sil</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div style="margin-left:110px; margin-top:0px;">
+                        @using (Html.BeginForm("HastaKayit", "Sayfalar", FormMethod.Post))
+                        {
+                            <label > Silmek istediğinize emin misiniz?</label>
+                            <div class="input-group">
+                                <span class="fa fa-envelope" aria-hidden="true"></span>
+                                <input id="hastaidsil" type="text" required="" name="HastaID" style="visibility:hidden;" readonly />
+                            </div>
+                            <button style="margin-left:100px;" class="btn btn-danger btn-block" type="submit">Sil</button>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+  <script>
+        function updatetable1() {
+
+            let element1 = document.getElementById("divtablo");
+            let hidden1 = element1.getAttribute("hidden");
+
+            if (hidden1) {
+                element1.removeAttribute("hidden");
+            } else {
+                element1.setAttribute("hidden", "hidden");
+            }
+            
+                let element = document.getElementById("divsakla");
+                let hidden = element.getAttribute("hidden");
+
+                if (hidden) {
+                    element.removeAttribute("hidden");
+                } else {
+                    element.setAttribute("hidden", "hidden");
+                }
+            }
+
+    </script>
+</body>
+<style>
+    /* Custom CSS to move the search bar to the right */
+    div.dataTables_wrapper div.dataTables_filter {
+        margin-left: 480px;
+        margin-top: 10px;
+    }
+
+    div.dataTables_wrapper div.dataTables_length {
+        margin-left: 90px;
+        margin-top: 10px;
+    }
+</style>

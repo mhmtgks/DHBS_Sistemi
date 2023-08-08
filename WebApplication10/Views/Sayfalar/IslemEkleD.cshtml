@@ -1,0 +1,333 @@
+﻿@using Service;
+@{
+
+    IslemEkle ıslemEkle = new IslemEkle();
+}
+@model Service.DTO.GirisDTO
+@{
+    Layout = "~/Views/Shared/_Layout_Doktor.cshtml";
+    ViewBag.Title = "Islem Ekle";
+}
+<script defer src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script defer src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script defer src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script defer src="~/js/script.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+
+<title>DHBS Sistemi</title>
+
+<link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
+<script src="/jss.js"></script>
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<!-- Bootstrap core CSS -->
+<link href="/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="/dashboard.css" rel="stylesheet">
+<style type="text/css">
+    /* Chart.js */
+    -webkit-keyframes chartjs-render-animation {
+        from
+
+    {
+        opacity: 0.99
+    }
+
+    to {
+        opacity: 1
+    }
+
+    }
+
+    keyframes chartjs-render-animation {
+        from
+
+    {
+        opacity: 0.99
+    }
+
+    to {
+        opacity: 1
+    }
+
+    }
+
+    .chartjs-render-monitor {
+        -webkit-animation: chartjs-render-animation 0.001s;
+        animation: chartjs-render-animation 0.001s;
+    }
+</style>
+<script>
+    function getRowData(button) {
+     var row = button.parentNode.parentNode;
+
+    var cells = row.getElementsByTagName("td");
+
+     var data1 = cells[0].innerText;
+    var data2 = cells[1].innerText;
+    var data3 = cells[2].innerText;
+    var data4 = cells[3].innerText;
+    var data5 = cells[4].innerText;
+
+    var lbl = document.getElementById("label1");
+    var lbl1 = document.getElementById("label2");    
+    var lbl3 = document.getElementById("label3");
+
+    lbl.innerText = data1;
+    lbl1.innerText = data3;
+    lbl3.innerText = data1;
+
+
+
+
+    }
+   
+
+</script>
+
+<head>
+
+    <h2 style="text-align:center;margin-top:-250px;">İşlem Ekle</h2>
+    @if(TempData["AlertMessage"]!= null)
+    {
+        if (TempData["AlertMessage"] == "İşlem ekleme başarısız")
+        {
+            <div  style="margin-left:80px;" class="alert alert-danger">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                </svg>
+                @TempData["AlertMessage"]
+            </div>
+        }
+        else
+        {
+            <div style="margin-left:80px;" class=" alert alert-success">
+                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                    </symbol>
+                </svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
+
+                @TempData["AlertMessage"]
+          
+            </div>
+
+        }
+
+
+    }
+</head>
+<body >
+
+
+   
+
+
+    <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px;">
+        <thead>
+            <tr>
+                <th class="th-sm">
+                    ID
+                </th>
+                <th class="th-sm">
+                    TC
+                </th>
+                <th class="th-sm">
+                    Adı Soyadı
+                </th>
+                <th class="th-sm">
+                    İletişim
+                </th>
+                <th class="th-sm">
+                    Doğum Tarihi
+                </th>
+                <th class="th-sm">
+                    Cinsiyet
+                </th>
+                <th class="th-sm">
+                    İşlem Seç
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                Hasta hasta1 = new Hasta();
+            }
+            @foreach (var item in hasta1.Lists("select * from Hasta where Status='Active'"))
+            {
+                <tr>
+                    <td>
+                        @Html.Label(item.hastaid.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.TC.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.AdiSoyadi.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.Iletisim.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.DogumTarihi.Day.ToString()+"/"+item.DogumTarihi.Month.ToString()+"/"+item.DogumTarihi.Year.ToString())
+
+                    </td>
+                    <td>
+                        @Html.Label(item.Cinsiyet.ToString())
+                    </td>
+                    <td>
+                        <button id="btnekle" class="btn btn-primary btn-sm" onclick="getRowData(this)" data-toggle="modal" data-target="#exampleModal" >İŞLEM EKLE</button>
+                        <button id="btnlab" class="btn btn-primary btn-sm" onclick="getRowData(this)" data-toggle="modal" data-target="#exampleModal1" >LAB EKLE</button>
+                   
+                    </td>
+                </tr>
+
+            }
+
+        </tbody>
+    </table>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Islem Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div style="margin-left:110px; margin-top:0px;">
+                        @using (Html.BeginForm("IslemEkleD", "Sayfalar", FormMethod.Post))
+                        {
+                            <label> ID</label>
+                            <div class="input-group">
+                                <span class="fa fa-envelope" aria-hidden="true"></span>
+                                <textarea id="label1" style="resize:none" type="text" required="" name="hastaid"> Kişi Seçmediniz</textarea>
+                            </div>
+                            <label> AdiSoyadi</label>
+                            <div class="input-group">
+                                <span class="fa fa-lock" aria-hidden="true"></span>
+                                <textarea id="label2" style="resize:none" type="text" required="" name=""> Kişi Seçmediniz</textarea>
+                            </div>
+                            <label style="margin-top:15px; display:block"> İşlem</label>
+
+                            <select id="ComboBox" style="height: 60px;width: 176px; margin-top:10px;">
+                                @{
+                                    FiyatListesi fiyatListesi1 = new FiyatListesi();
+                                }
+                                @foreach (var item1 in fiyatListesi1.Lists("select * from FiyatListesi where Islab=0"))
+                                {
+                                    <option value="@item1.ProsedurID" name="prosedurid">@Html.Label(item1.Adi.ToString())</option>
+                                }
+                            </select>
+                            <input id="comboinput" name="prosedurid" style="visibility:hidden; margin-right:-100px;" />
+                            <button id="btnkaydet" class="btn btn-danger btn-block" onclick="combovalue()" type="submit" style="display:block">Kaydet</button>
+                            <button class="btn btn-danger btn-block" style="display:inline-block; margin-top:15px;">Çıkış Ver</button>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal1" tabindex="-2" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Lab Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div style="margin-left:110px; margin-top:0px;">
+                        @using (Html.BeginForm("IslemEkleD", "Sayfalar", FormMethod.Post))
+                        {
+                            <label> Hasta ID</label>
+                            <div class="input-group">
+                                <span class="fa fa-envelope" aria-hidden="true"></span>
+                                <textarea id="label3" style="resize:none" type="text" required="" name="hastaid"> Kişi Seçmediniz</textarea>
+                            </div>           
+                            <label style="margin-top:15px; display:block">  Lab İşlem</label>
+
+                            <select id="ComboBox2" style="height: 60px;width: 176px; margin-top:10px;">
+                                @{
+                                    FiyatListesi fiyatListesi2 = new FiyatListesi();
+                                }
+                                @foreach (var item2 in fiyatListesi2.Lists("select * from FiyatListesi where Islab=1"))
+                                {
+                                    <option value="@item2.ProsedurID" name="prosedurid">@Html.Label(item2.Adi.ToString())</option>
+                                }
+                            </select>
+                            <input id="inputlab" name="islab" style="visibility:hidden; margin-right:-100px;" />
+                            <input id="comboinput1" name="prosedurid" style="visibility:hidden; margin-right:-100px;" />
+                            <button id="btnkaydet" class="btn btn-danger btn-block" onclick="combovalue1()" type="submit" style="display:block">Kaydet</button>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+<script>
+    function combovalue1() {
+        var comboBox1 = document.getElementById("ComboBox2");
+        var selectedOptionValue1 = comboBox1.value;
+        var inp3 = document.getElementById("comboinput1");
+        var inp4 = document.getElementById("inputlab");
+        inp4.value = 1;
+        inp3.value = selectedOptionValue1;
+    }
+
+</script>
+
+
+
+<style>
+    /* Custom CSS to move the search bar to the right */
+    div.dataTables_wrapper div.dataTables_filter {
+        margin-left: 480px;
+    }
+
+    div.dataTables_wrapper div.dataTables_length {
+        margin-left: 90px;
+    }
+</style>
+<script>
+
+
+
+</script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="../../assets/js/vendor/popper.min.js"></script>
+<script src="../../dist/js/bootstrap.min.js"></script>
+
+<!-- Icons -->
+<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+<script>feather.replace()</script>
+
+<!-- Graphs -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.1/dist/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+
+
+
+

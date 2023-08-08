@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DHBS_Sistemi", "WebApplication10\DHBS_Sistemi.csproj", "{4213D469-8E28-4172-B37A-DD7AA013E4A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "DataDB\Data.csproj", "{C89EA14C-F9C7-4310-9308-01624254D5F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "ServiceDB\Service.csproj", "{8D4336D7-8DD9-4D53-BF5A-3AA76A3EF687}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4213D469-8E28-4172-B37A-DD7AA013E4A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4213D469-8E28-4172-B37A-DD7AA013E4A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4213D469-8E28-4172-B37A-DD7AA013E4A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4213D469-8E28-4172-B37A-DD7AA013E4A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C89EA14C-F9C7-4310-9308-01624254D5F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C89EA14C-F9C7-4310-9308-01624254D5F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C89EA14C-F9C7-4310-9308-01624254D5F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C89EA14C-F9C7-4310-9308-01624254D5F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D4336D7-8DD9-4D53-BF5A-3AA76A3EF687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D4336D7-8DD9-4D53-BF5A-3AA76A3EF687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D4336D7-8DD9-4D53-BF5A-3AA76A3EF687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D4336D7-8DD9-4D53-BF5A-3AA76A3EF687}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3D349F3D-6FAF-451E-B5A1-62426655F1AA}
+	EndGlobalSection
+EndGlobal

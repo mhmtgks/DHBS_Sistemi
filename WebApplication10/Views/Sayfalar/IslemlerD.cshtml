@@ -1,0 +1,156 @@
+﻿@using Service;
+
+@{
+    Layout = "~/Views/Shared/_Layout_Doktor.cshtml";
+    ViewBag.Title = "Randevular";
+}
+<script defer src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script defer src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script defer src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    function ıslemvalue(button) {
+        var row = button.parentNode.parentNode;
+
+        var cells = row.getElementsByTagName("td");
+
+        var data1 = cells[2].innerText;
+        var data2 = cells[1].innerText;
+
+        var lbl1=document.getElementById("input1");
+        var lbl2=document.getElementById("input2");
+;
+
+
+        lbl1.value=data1;
+        lbl2.value=data2;
+
+    }
+
+
+</script>
+<script defer src="~/js/script.js"></script>
+
+
+<head>
+    @if (TempData["AlertMessage"] != null)
+    {
+        if (TempData["AlertMessage"] == "İşlem ekleme başarısız")
+        {
+
+
+            <div style="margin-left:80px;" class="alert alert-danger">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                </svg>
+               <div>
+                @TempData["AlertMessage"]
+                </div>
+            </div>
+        }
+        else
+        {
+            <div style="margin-left:80px;" class="alert alert-success">
+                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                    </symbol>
+                    </svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
+
+
+                @TempData["AlertMessage"]
+                
+            </div>
+
+        }
+
+
+    }
+</head>
+
+<body>
+    <div style="margin-bottom: 300px;margin-left: 150px;">
+        @using (Html.BeginForm("IslemlerD", "Sayfalar", FormMethod.Post) )
+        {
+            <label>Adı Soyadı</label>
+            <input id="input1" name="Adi_SoyadiH"  />
+            <label>İşlem</label>
+            <input id="input2" name="IslemID" />
+            <button class="btn btn-danger btn-block" type="submit" style="display:block">Sil</button>
+
+
+        }
+    </div>
+    <div style="margin-top:100px">
+    <table id="tablo3" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:90px; margin-top:-150px;">
+        <thead>
+            <tr>
+                <th class="th-sm">
+                    İslem Grubu ID
+                </th>
+                <th class="th-sm">
+                    Islem ID
+                </th>
+                <th class="th-sm">
+                   Hasta Adı Soyadı
+                </th>
+                <th class="th-sm">
+                    İslem Açıklaması
+                </th>
+                <th class="th-sm">
+                    Tarih
+                </th>
+                <th class="th-sm">
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                Islemler ıslemler = new Islemler();
+            }
+            @foreach (var item in ıslemler.Lists("select I.IslemGrubuID,I.IslemID,[Adı Soyadı] as adhasta,I.IslemAciklamasi,Tarih,c.CalisanID,c.AdiSoyadi from vw_IslemlerDR I join Calisan c on c.AdiSoyadi=I.AdiSoyadi where c.CalisanID="+idExtractor.userid))
+            {
+                <tr>
+                    <td>
+                        @Html.Label(item.IslemGrubuID.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.IslemID.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.Adi_SoyadiH.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.IslemAciklamasi.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.Tarih.Day.ToString()+"/"+item.Tarih.Month.ToString()+"/"+item.Tarih.Year.ToString())
+                    </td>
+                    <td>
+                      <button onclick="ıslemvalue(this)" type="submit" >İşlem Seç </button>                                     
+                    </td>
+                </tr>
+
+            }
+
+        </tbody>
+    </table>
+    </div>
+
+
+</body>
+<style>
+    /* Custom CSS to move the search bar to the right */
+    div.dataTables_wrapper div.dataTables_filter {
+        margin-left: 480px;
+        margin-top:-240px;
+    }
+
+    div.dataTables_wrapper div.dataTables_length {
+        margin-left: 90px;
+        margin-top: -240px;
+    }
+
+
+</style>

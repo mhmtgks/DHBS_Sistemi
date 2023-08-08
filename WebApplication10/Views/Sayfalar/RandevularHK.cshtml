@@ -1,0 +1,35 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout_HastaKayit.cshtml";
+    ViewBag.Title = "Randevular";
+}
+
+<head>
+<h2 style="text-align:center;margin-top:-250px;">Randevu AL</h2>
+<div style="margin-left:550px; margin-top:0px;">
+    @using (Html.BeginForm("HastaKayit", "Sayfalar", FormMethod.Post))
+    {
+        <label> Hasta TC Kimlik numarası</label>
+        <div class="input-group">
+            <span class="fa fa-envelope" aria-hidden="true"></span>
+            <input type="text" placeholder="TC Giriniz" required="" name="TC" />
+        </div>
+        <label> Doktor Adı</label>
+        <div class="input-group">
+            <span class="fa fa-lock" aria-hidden="true"></span>
+            <input type="text" placeholder="Doktor Adı Giriniz" required="" name="AdiSoyadi" />
+        </div>
+        <label> Tarih</label>
+        <div class="input-group">
+            <span class="fa fa-lock" aria-hidden="true"></span>
+            <input type="text" placeholder="Tarih" required="" name="Iletisim" />
+        </div>
+        <label>Saat</label>
+        <div class="input-group">
+            <span class="fa fa-lock" aria-hidden="true"></span>
+            <input type="datetime" placeholder="Saat" required="" name="DogumTarihi" />
+        </div>
+        <button class="btn btn-danger btn-block" style="margin-top:10px" type="submit">Randevu Ekle</button>
+    }
+</div>
+</head>
