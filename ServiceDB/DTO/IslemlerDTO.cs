@@ -10,6 +10,7 @@ namespace Service.DTO
     public class IslemlerDTO
     {
         public int IslemGrubuID { get; set; }
+        public int HastaID { get; set; }
         public int IslemID { get; set; }
         public string Adi_SoyadiH { get; set; }
         public string Adi_SoyadiD { get; set; }

@@ -42,7 +42,7 @@ namespace DHBS_Sistemi.Controllers
         {
             try
             {
-                if (hasta.hastaid != null&& hasta.AdiSoyadi!=null)
+                if (hasta.hastaid != 0 && hasta.AdiSoyadi!=null)
                 {
                     Hasta hastacommand = new Hasta();
                     hastacommand.insert("update Hasta set TC='" + hasta.TC + "',AdiSoyadi='" + hasta.AdiSoyadi + "',Iletisim='" + hasta.Iletisim
@@ -50,7 +50,7 @@ namespace DHBS_Sistemi.Controllers
                     TempData["AlertMessage"] = "Hasta Başarı ile güncellendi";
                     return View();
                 }
-                else if (hasta.hastaid != null && hasta.AdiSoyadi == null) 
+                else if (hasta.hastaid != 0 && hasta.AdiSoyadi == null) 
                 {
                     Hasta hastacommand = new Hasta();
                     hastacommand.delete("update Hasta set Status='Passive' where HastaID="+hasta.hastaid);
@@ -89,7 +89,7 @@ namespace DHBS_Sistemi.Controllers
             {
                 Hasta hastacommand = new Hasta();
                 hastacommand.insert("insert into Hasta values('" + hasta.TC + "','" + hasta.AdiSoyadi + "','" + hasta.Iletisim
-                    + "','" + hasta.DogumTarihi + "','"+"Active"+"," + hasta.Cinsiyet + "')");
+                    + "','" + hasta.DogumTarihi + "','"+"Active"+"','"+DateTime.UtcNow+"','"+ hasta.Cinsiyet +"',"+idExtractor.userid +")");
                 return true;
             }
             catch { 
@@ -118,6 +118,7 @@ namespace DHBS_Sistemi.Controllers
             return View();
 
         }
+        [CustomValidationHK]
         public IActionResult LaboratuvarHK()
         {
 
@@ -268,6 +269,145 @@ namespace DHBS_Sistemi.Controllers
         [CustomValidationUser]
         public IActionResult RandevuAlH()
         {
+            return View();
+        }
+        [CustomValidationLab]
+        public IActionResult Laboratuvar()
+        {
+
+            return View();
+        }
+        [CustomValidationLab]
+        [HttpPost]
+        public IActionResult Laboratuvar([FromForm] LabDTO labDTO)
+        {
+            try
+            {
+                Lab lab = new Lab();
+                lab.update("Update Lab set LabDurum='" + labDTO.LabDurum + "'where LabID='" + labDTO.LabID + "'");
+                TempData["AlertMessage"] = "Lab Başarı ile güncellendi";
+                return View();
+            }
+            catch
+            {
+                TempData["AlertMessage"] = "Lab Güncelleme Başarısız";
+                return View();
+            }
+
+        }
+        [CustomValidationYonetici]
+        public IActionResult AnasayfaY()
+        {
+
+            return View();
+        }
+        [CustomValidationYonetici]
+        public IActionResult CalisanY()
+        {
+
+            return View();
+        }
+        [HttpPost]
+        [CustomValidationYonetici]
+        public IActionResult CalisanY([FromForm] CalisanDTO calisanDTO,int tip,VW_DoktorlarDTO dto)
+        {
+            // 1 silme 2 güncelleme
+
+            try
+            {
+                if (calisanDTO.CalisanID != 0 && tip==2)
+                {
+                   Calisan calisancommand = new Calisan();
+                    calisancommand.insert("update Calisan set TC='" + calisanDTO.TC + "',AdiSoyadi='" + calisanDTO.AdiSoyadi + "',Adres='" + calisanDTO.Adres
+                        + "',Ünvan='" + calisanDTO.Ünvan + "'where CalisanID=" + calisanDTO.CalisanID);
+                    TempData["AlertMessage"] = "Çalışan Başarı ile güncellendi";
+                    return View();
+                }
+                else if (calisanDTO.CalisanID != 0 && tip==1)
+                {
+                    Calisan calisancommand = new Calisan();
+                    calisancommand.delete("delete from Calisan where CalisanID=" + calisanDTO.CalisanID);
+                    TempData["AlertMessage"] = "Çalışan Başarı ile silindi";
+                    return View();
+                }
+                else if (dto.Uzmanlık!=null) 
+                {
+                    executer.execute("exec sp_doktorekle '" + calisanDTO.AdiSoyadi + "','" + calisanDTO.TC + "','" + calisanDTO.Adres + "','" + calisanDTO.Ünvan + "','" + dto.Uzmanlık + "'");
+                    return View();
+                }
+                else
+                {
+                    
+                    if (CalisanKayıtYap(calisanDTO) == true)
+                    {
+                        TempData["AlertMessage"] = "Çalışan Başarı ile eklendi";
+                        return View();
+                    }
+                    else
+                    {
+                        TempData["AlertMessage"] = "Çalışan ekleme Başarısız";
+                        return View();
+                    }
+                    
+                }
+            }
+            catch
+            {
+                TempData["AlertMessage"] = "İşlem Başarısız";
+                return View();
+              
+            }
+
+
+
+        }
+        private bool CalisanKayıtYap(CalisanDTO calisan)
+        {
+            try
+            {
+                Calisan hastacommand = new Calisan();
+                hastacommand.insert("insert into Calisan values('"+calisan.AdiSoyadi+"','"+calisan.TC+"','"+calisan.Adres+"','"+calisan.Ünvan+"',1)");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+
+        }
+        [CustomValidationYonetici]
+        public IActionResult MaliDurumY()
+        {
+
+            return View();
+        }
+        [HttpPost]
+        [CustomValidationYonetici]
+        public IActionResult MaliDurumY([FromForm] GiderDTO gider)
+        {
+
+            try
+            {
+
+                Gider hastacommand = new Gider();
+                hastacommand.insert("insert into Gider values(1,"+gider.GiderTutari+ ",'" + DateTime.UtcNow + "','" + gider.Aciklama + "')");
+                TempData["AlertMessage"] = "Gider ekleme Başarılı";
+                return View();
+
+            }
+            catch
+            {
+                TempData["AlertMessage"] = "Gider ekleme Başarısız";
+                return View();
+
+            }
+
+        }
+        [CustomValidationYonetici]
+        public IActionResult MaasY()
+        {
+
             return View();
         }
 

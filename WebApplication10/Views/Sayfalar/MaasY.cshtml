@@ -1,0 +1,92 @@
+﻿@using Service;
+@{
+    Layout = "~/Views/Shared/_Layout_Yonetici.cshtml";
+    ViewBag.Title = "Maaş Yöneticisi";
+}
+<script defer src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script defer src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script defer src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script defer src="~/js/script.js"></script>
+<html lang="tr">
+<script>
+    function getRowDatax(button) {
+        var row = button.parentNode.parentNode;
+
+        var cells = row.getElementsByTagName("td");
+
+        var data1 = cells[0].innerText;
+        var data2 = cells[3].innerText;
+        var data3 = cells[4].innerText;
+
+        var lbl = document.getElementById("label1");
+        var lbl1 = document.getElementById("label2");
+        var lbl2 = document.getElementById("label3");
+
+        lbl.innerText = data1;
+        lbl1.innerText = data2;
+        lbl2.innerText = data3;
+
+
+
+
+
+    }
+
+
+
+
+</script>
+    <body>
+
+
+    <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px;">
+        <thead>
+            <tr>
+                <th class="th-sm">
+                    Calisan ID
+                </th>
+                <th class="th-sm">
+                    Adı Soyadı
+                </th>
+                <th class="th-sm">
+                    Maaş
+                </th>
+                <th class="th-sm">
+                    Son Ödenme Tarihi
+                </th>
+                <th class="th-sm">
+
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                VW_Maaslar maas = new VW_Maaslar();
+            }
+            @foreach (var item in maas.Lists("select * from vw_Maaslar"))
+            {
+                <tr>
+                    <td>
+                        @Html.Label(item.CalisanID.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.AdiSoyadi.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.Maas.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.SonÖdenmeTarihi.Day.ToString()+"/"+item.SonÖdenmeTarihi.Month.ToString()+"/"+item.SonÖdenmeTarihi.Year.ToString()+"    "+item.SonÖdenmeTarihi.Hour.ToString()+":"+item.SonÖdenmeTarihi.Minute.ToString())
+                    </td>
+                    <td>
+                        <button id="btnekle" class="btn btn-primary btn-sm" onclick="getRowDatax(this)" data-toggle="modal" data-target="#exampleModal">Detay</button>
+
+                    </td>
+                </tr>
+
+            }
+
+        </tbody>
+    </table>
+    </body>

@@ -1,5 +1,7 @@
 ﻿new DataTable('#tablo1');
-new DataTable('#tablo3');
+new DataTable('#tablo3'); new DataTable('#tablox');
+
+
 
     function combovalue(){
     var comboBox = document.getElementById("ComboBox");
@@ -14,3 +16,8 @@ function randevalue() {
     var inp1 = document.getElementById("hastaid");
     inp1.value = selectedOptionValue;
 }
+$(document).ready(function () {
+    $('#tablo3').dataTable({
+        { "dom", "lfrtp" }
+    });
+});

@@ -9,27 +9,26 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public class Lab
+    public class VW_FatureDetay
     {
-
         Connection connection = new Connection();
         Command command = new Command();
-        public List<LabDTO> Lists(string sqlstring)
+        public List<VW_FaturaDetayDTO> Lists(string sqlstring)
         {
             SqlCommand listcommand = command.ProccesSql(sqlstring);
             SqlDataReader sqlDataReader = listcommand.ExecuteReader();
-            List<LabDTO> list = new List<LabDTO>();
+            List<VW_FaturaDetayDTO> list = new List<VW_FaturaDetayDTO>();
             while (sqlDataReader.Read())
             {
 
-                list.Add(new LabDTO
+                list.Add(new VW_FaturaDetayDTO
                 {
-                    LabID = (int)sqlDataReader["LabID"],
-                    LabDurum = sqlDataReader["LabDurum"].ToString(),
-                    LabTestAdi = sqlDataReader["LabTestAdi"].ToString(),
-                    LabAdı = sqlDataReader["LabAdı"].ToString(),
-                    DoktorID= (int)sqlDataReader["DoktorID"],
-                    Iletisim= sqlDataReader["Iletisim"].ToString(),
+                    KurumID = (int)sqlDataReader["KurumID"],
+                    AdiSoyadi = sqlDataReader["AdiSoyadi"].ToString(),
+                    IslemAciklamasi = sqlDataReader["IslemAciklamasi"].ToString(),
+                    FaturaID = sqlDataReader["FaturaID"].ToString(),
+
+
                 });
 
 
@@ -61,5 +60,8 @@ namespace Service
             connection.ConnectEnd();
             //throw new NotImplementedException();
         }
+
+
+
     }
 }

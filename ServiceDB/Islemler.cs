@@ -27,10 +27,11 @@ namespace Service
                 {
                     IslemGrubuID= (int)sqlDataReader["IslemGrubuID"],
                     IslemID =(int)sqlDataReader["IslemID"],
+                    HastaID =(int)sqlDataReader["HastaID"],
                     Adi_SoyadiH = sqlDataReader["adhasta"].ToString(),
                     Adi_SoyadiD = sqlDataReader["AdiSoyadi"].ToString(),
                     IslemAciklamasi = sqlDataReader["IslemAciklamasi"].ToString(),
-                    Tarih = sqlDataReader.GetDateTime(4),
+                    Tarih = sqlDataReader.GetDateTime(5),
                     CalisanID = (int)sqlDataReader["CalisanID"]
                  
 

@@ -1,6 +1,6 @@
 ﻿@using Service;
 @{
-    Layout = "~/Views/Shared/_Layout_Doktor.cshtml";
+    Layout = "~/Views/Shared/_Layout_Lab.cshtml";
     ViewBag.Title = "Laboratuvar";
 }
 <head>
@@ -95,30 +95,35 @@
     }
 </style>
 <script>
-    function getRowData(button) {
+    function getRowData223(button) {
         var row = button.parentNode.parentNode;
 
         var cells = row.getElementsByTagName("td");
 
         var data1 = cells[0].innerText;
-        var data2 = cells[3].innerText;
-        var data3 = cells[4].innerText;
+        var data2 = cells[1].innerText;
 
         var lbl = document.getElementById("label1");
         var lbl1 = document.getElementById("label2");
+
         var lbl2 = document.getElementById("label3");
+        var lbl3 = document.getElementById("label4");
+
+        var lbl4= document.getElementById("label5");
+        var lbl5 = document.getElementById("label6");
 
         lbl.innerText = data1;
-        lbl1.innerText = data2;
-        lbl2.innerText = data3;
+
+        lbl2.innerText = data1;
+
+        lbl4.innerText = data1;
 
 
 
 
 
-    }
- 
 
+    };
 
 
 </script>
@@ -140,19 +145,16 @@
                     Durum
                 </th>
                 <th class="th-sm">
-                    Iletisim
+
                 </th>
-                <th class="th-sm">
-                   
-                </th>
- 
+
             </tr>
         </thead>
         <tbody>
             @{
                 Lab hasta1 = new Lab();
             }
-            @foreach (var item in hasta1.Lists("select * from Lab where DoktorID="+idExtractor.userid))
+            @foreach (var item in hasta1.Lists("select * from Lab"))
             {
                 <tr>
                     <td>
@@ -168,10 +170,7 @@
                         @Html.Label(item.LabDurum.ToString())
                     </td>
                     <td>
-                        @Html.Label(item.Iletisim.ToString())
-                    </td>
-                    <td>
-                        <button id="btnekle" class="btn btn-primary btn-sm" onclick="getRowData(this)" data-toggle="modal" data-target="#exampleModal">Detay</button>
+                        <button onclick="getRowData223(this)" data-toggle="modal" data-target="#exampleModal" > Seç </button>
 
                     </td>
                 </tr>
@@ -184,29 +183,52 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">Lab Detay</h5>
+                    <h5 class="modal-title" id="exampleModalLabel1">Islem Ekle</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
+                    <table>
+                        
+                    </table>
                     <div style="margin-left:110px; margin-top:0px;">
-                        <div>
-                            <label> Lab ID  :</label>
-                            <label id="label1" style="resize:none; display:contents;" type="text" required="" name="LabID"></label>
-
-                        </div>
-                          <div>
-                            <label > Lab Durum  :</label>
-                            <label id="label2" style="resize:none;" type="text" required="" name="LabDurum"></label>
-                        </div>
-                        <div>
-                            <label style="display:block"> Lab İletisim  :</label>
-                            <label id="label3" style="resize:none;" type="text"  name="LabDurum"></label>
-                        </div>
-
-
-
+                        @using (Html.BeginForm("Laboratuvar", "Sayfalar", FormMethod.Post))
+                        {
+                            <div style="visibility:hidden" class="input-group">
+                                <span class="fa fa-envelope" aria-hidden="true"></span>
+                                <textarea id="label1" style="resize:none" type="text" required="" name="LabID"></textarea>
+                            </div>
+                            <div style="visibility:hidden" class="input-group">
+                                <span class="fa fa-lock" aria-hidden="true"></span>
+                                <textarea id="label2" style="resize:none" type="text" required="" name="LabDurum">Kabul Edildi</textarea>
+                            </div>
+                            <button class="btn btn-danger btn-block" style="display:inline-block; margin-left:-110px; margin-top:-50px;">Kabul Edildi</button>
+                        }
+                        @using (Html.BeginForm("Laboratuvar", "Sayfalar", FormMethod.Post))
+                        {
+                            <div style="visibility:hidden" class="input-group">
+                                <span class="fa fa-envelope" aria-hidden="true"></span>
+                                <textarea id="label5" style="resize:none" type="text" required="" name="LabID"></textarea>
+                            </div>
+                            <div style="visibility:hidden" class="input-group">
+                                <span class="fa fa-lock" aria-hidden="true"></span>
+                                <textarea id="label6" style="resize:none" type="text" required="" name="LabDurum">İptal Edildi</textarea>
+                            </div>
+                            <button class="btn btn-danger btn-block" style="display:inline-block; margin-top:-315px; margin-left:70px;">İptal Edildi</button>
+                        }                        
+                        @using (Html.BeginForm("Laboratuvar", "Sayfalar", FormMethod.Post))
+                        {
+                            <div style="visibility:hidden" class="input-group">
+                                <span class="fa fa-envelope" aria-hidden="true"></span>
+                                <textarea id="label3" style="resize:none" type="text" required="" name="LabID"></textarea>
+                            </div>
+                            <div style="visibility:hidden" class="input-group">
+                                <span class="fa fa-lock" aria-hidden="true"></span>
+                                <textarea id="label4" style="resize:none" type="text" required="" name="LabDurum">Gönderildi</textarea>
+                            </div>
+                            <button class="btn btn-danger btn-block" style="display:inline-block; margin-top:-575px; margin-left:230px;">Gönderildi</button>
+                        }
 
                     </div>
 

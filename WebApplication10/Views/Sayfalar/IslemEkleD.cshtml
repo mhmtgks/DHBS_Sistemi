@@ -89,6 +89,24 @@
 
 
     }
+    function showof(){
+        let element1 = document.getElementById("divlab");
+        let hidden1 = element1.getAttribute("hidden");
+        let elem2 = document.getElementById("content");
+        let sty1 = elem2.getAttribute("style");
+
+        if (hidden1) {
+            element1.removeAttribute("hidden");
+            elem2.setAttribute("style", "width: 750px; height: 490px; ")
+          
+        } else {
+            elem2.removeAttribute("style");
+            element1.setAttribute("hidden", "hidden");
+        }
+
+
+
+    }
    
 
 </script>
@@ -186,7 +204,6 @@
                     </td>
                     <td>
                         <button id="btnekle" class="btn btn-primary btn-sm" onclick="getRowData(this)" data-toggle="modal" data-target="#exampleModal" >İŞLEM EKLE</button>
-                        <button id="btnlab" class="btn btn-primary btn-sm" onclick="getRowData(this)" data-toggle="modal" data-target="#exampleModal1" >LAB EKLE</button>
                    
                     </td>
                 </tr>
@@ -197,7 +214,7 @@
     </table>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div id="content" class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel1">Islem Ekle</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -230,8 +247,39 @@
                                 }
                             </select>
                             <input id="comboinput" name="prosedurid" style="visibility:hidden; margin-right:-100px;" />
-                            <button id="btnkaydet" class="btn btn-danger btn-block" onclick="combovalue()" type="submit" style="display:block">Kaydet</button>
-                            <button class="btn btn-danger btn-block" style="display:inline-block; margin-top:15px;">Çıkış Ver</button>
+                            <button id="btnkaydet" class="btn btn-danger btn-block" onclick="combovalue()" type="submit" style="display:block; margin-top:20px; margin-left:90px;">Kaydet</button>
+                            <button class="btn btn-danger btn-block" style="display:inline-block; margin-top:-60px;">Çıkış Ver</button>
+                        }
+                        <button id="bt" class="btn btn-danger btn-block" onclick="showof()"  style="display:block ;margin-left: 200px; margin-top:-350px; margin-bottom:400px;">Lab</button>
+                    </div>
+                    <div id="divlab" hidden="hidden" style="margin-left:420px; margin-top:-350px;">
+                        @using (Html.BeginForm("IslemEkleD", "Sayfalar", FormMethod.Post))
+                        {
+
+                            <label style="margin-top:-310px;"> Lab Adı</label>
+                            <div class="input-group">
+                                <span class="fa fa-envelope" aria-hidden="true"></span>
+                                <textarea id="3" style="resize:none" type="text" required="" name="LabAdı"> </textarea>
+                            </div>
+                            <label style="margin-top:15px; display:block">  Lab İşlem</label>
+
+                            <select id="ComboBox2" style="height: 60px;width: 176px; margin-top:10px;">
+                                @{
+                                    FiyatListesi fiyatListesi2 = new FiyatListesi();
+                                }
+                                @foreach (var item2 in fiyatListesi2.Lists("select * from FiyatListesi where Islab=1"))
+                                {
+                                    <option value="@item2.ProsedurID" name="prosedurid">@Html.Label(item2.Adi.ToString())</option>
+                                }
+                            </select>
+                            <label style="visibility:hidden;"> Hasta ID</label>
+                            <div style="visibility:hidden; class="input-group">
+                                <span class="fa fa-envelope" aria-hidden="true"></span>
+                                <textarea id="label3" style="resize:none" type="text" required="" name="hastaid"> Kişi Seçmediniz</textarea>
+                            </div>
+                            <input id="inputlab" name="islab" style="visibility:hidden; margin-right:-100px;" />
+                            <input id="comboinput1" name="prosedurid" style="visibility:hidden; margin-right:-100px;" />
+                            <button id="btnkaydet" class="btn btn-warning btn-block" onclick="combovalue1()" type="submit" style="display:block; margin-left:50px; margin-top:-50px;" >Lab Kaydet</button>
                         }
 
                     </div>
@@ -250,31 +298,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div style="margin-left:110px; margin-top:0px;">
-                        @using (Html.BeginForm("IslemEkleD", "Sayfalar", FormMethod.Post))
-                        {
-                            <label> Hasta ID</label>
-                            <div class="input-group">
-                                <span class="fa fa-envelope" aria-hidden="true"></span>
-                                <textarea id="label3" style="resize:none" type="text" required="" name="hastaid"> Kişi Seçmediniz</textarea>
-                            </div>           
-                            <label style="margin-top:15px; display:block">  Lab İşlem</label>
-
-                            <select id="ComboBox2" style="height: 60px;width: 176px; margin-top:10px;">
-                                @{
-                                    FiyatListesi fiyatListesi2 = new FiyatListesi();
-                                }
-                                @foreach (var item2 in fiyatListesi2.Lists("select * from FiyatListesi where Islab=1"))
-                                {
-                                    <option value="@item2.ProsedurID" name="prosedurid">@Html.Label(item2.Adi.ToString())</option>
-                                }
-                            </select>
-                            <input id="inputlab" name="islab" style="visibility:hidden; margin-right:-100px;" />
-                            <input id="comboinput1" name="prosedurid" style="visibility:hidden; margin-right:-100px;" />
-                            <button id="btnkaydet" class="btn btn-danger btn-block" onclick="combovalue1()" type="submit" style="display:block">Kaydet</button>
-                        }
-
-                    </div>
+                   
 
                 </div>
             </div>

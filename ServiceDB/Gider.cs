@@ -9,27 +9,27 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public class Lab
+    public class Gider
     {
 
         Connection connection = new Connection();
         Command command = new Command();
-        public List<LabDTO> Lists(string sqlstring)
+        public List<GiderDTO> Lists(string sqlstring)
         {
             SqlCommand listcommand = command.ProccesSql(sqlstring);
             SqlDataReader sqlDataReader = listcommand.ExecuteReader();
-            List<LabDTO> list = new List<LabDTO>();
+            List<GiderDTO> list = new List<GiderDTO>();
             while (sqlDataReader.Read())
             {
 
-                list.Add(new LabDTO
+                list.Add(new GiderDTO
                 {
-                    LabID = (int)sqlDataReader["LabID"],
-                    LabDurum = sqlDataReader["LabDurum"].ToString(),
-                    LabTestAdi = sqlDataReader["LabTestAdi"].ToString(),
-                    LabAdı = sqlDataReader["LabAdı"].ToString(),
-                    DoktorID= (int)sqlDataReader["DoktorID"],
-                    Iletisim= sqlDataReader["Iletisim"].ToString(),
+                    GiderID = (int)sqlDataReader["GiderID"],
+                    KurumID = (int)sqlDataReader["KurumID"],
+                    GiderTutari = (decimal)sqlDataReader["GiderTutarı"],
+                    Aciklama = sqlDataReader["Açıklama"].ToString(),
+                    Tarih = sqlDataReader.GetDateTime(3),
+
                 });
 
 

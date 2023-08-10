@@ -9,9 +9,11 @@ namespace Service.DTO
     public class LabDTO
     {
         public int LabID { get; set; }
+        public int DoktorID { get; set; }
         public string LabTestAdi { get; set; }
         public string LabAdı { get; set; }
         public string LabDurum { get; set; }
+        public string Iletisim { get; set; }
 
 
 

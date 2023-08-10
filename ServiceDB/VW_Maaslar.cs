@@ -9,27 +9,27 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public class Lab
+    public class VW_Maaslar
     {
 
         Connection connection = new Connection();
         Command command = new Command();
-        public List<LabDTO> Lists(string sqlstring)
+        public List<VW_MaaslarDTO> Lists(string sqlstring)
         {
             SqlCommand listcommand = command.ProccesSql(sqlstring);
             SqlDataReader sqlDataReader = listcommand.ExecuteReader();
-            List<LabDTO> list = new List<LabDTO>();
+            List<VW_MaaslarDTO> list = new List<VW_MaaslarDTO>();
             while (sqlDataReader.Read())
             {
 
-                list.Add(new LabDTO
+                list.Add(new VW_MaaslarDTO
                 {
-                    LabID = (int)sqlDataReader["LabID"],
-                    LabDurum = sqlDataReader["LabDurum"].ToString(),
-                    LabTestAdi = sqlDataReader["LabTestAdi"].ToString(),
-                    LabAdı = sqlDataReader["LabAdı"].ToString(),
-                    DoktorID= (int)sqlDataReader["DoktorID"],
-                    Iletisim= sqlDataReader["Iletisim"].ToString(),
+                    CalisanID = (int)sqlDataReader["CalisanID"],
+                    Maas= (decimal)sqlDataReader["Maas"],
+                    AdiSoyadi = sqlDataReader["AdiSoyadi"].ToString(),
+                    IslemiYapan = (int)sqlDataReader["IslemiYapan"],
+                    SonÖdenmeTarihi = sqlDataReader.GetDateTime(3),
+
                 });
 
 

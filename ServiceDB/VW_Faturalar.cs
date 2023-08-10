@@ -9,27 +9,27 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public class Lab
+    public class VW_Faturalar
     {
-
         Connection connection = new Connection();
         Command command = new Command();
-        public List<LabDTO> Lists(string sqlstring)
+        public List<VW_FaturalarDTO> Lists(string sqlstring)
         {
             SqlCommand listcommand = command.ProccesSql(sqlstring);
             SqlDataReader sqlDataReader = listcommand.ExecuteReader();
-            List<LabDTO> list = new List<LabDTO>();
+            List<VW_FaturalarDTO> list = new List<VW_FaturalarDTO>();
             while (sqlDataReader.Read())
             {
 
-                list.Add(new LabDTO
+                list.Add(new VW_FaturalarDTO
                 {
-                    LabID = (int)sqlDataReader["LabID"],
-                    LabDurum = sqlDataReader["LabDurum"].ToString(),
-                    LabTestAdi = sqlDataReader["LabTestAdi"].ToString(),
-                    LabAdı = sqlDataReader["LabAdı"].ToString(),
-                    DoktorID= (int)sqlDataReader["DoktorID"],
-                    Iletisim= sqlDataReader["Iletisim"].ToString(),
+                    FaturaID = sqlDataReader["FaturaID"].ToString(),
+                    AdiSoyadi = sqlDataReader["AdiSoyadi"].ToString(),
+                    HastaID = (int)sqlDataReader["HastaID"],
+                    Tarih = sqlDataReader.GetDateTime(2),
+                    Ucret = (decimal)sqlDataReader["Ucret"],
+         
+
                 });
 
 

@@ -59,6 +59,10 @@ namespace Service
                     userid = dTOs1.FirstOrDefault().hastaid;
                     username = dTOs1.FirstOrDefault().AdiSoyadi.ToString();
                     break;
+                case 3:
+                    userid = 0;
+                    username = "lab";
+                    break;
                 default:
                     break;
             }
