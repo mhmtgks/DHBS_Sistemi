@@ -31,13 +31,37 @@
 
 
     }
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" ></script>
+    <head>
+    @if (TempData["AlertMessage"] != null)
+    {
+        if (TempData["AlertMessage"] == "Gider ekleme Başarısız")
+        {
 
+                <body onload="failed()" >
+                    </body>
+        }
+        else
+        {
+                <body onload="success()" >
+                    </body>
+
+        }
+
+
+    }
+    
+    
+    </head>
 
 
 
 </script>
     <body>
-
+    @using (Html.BeginForm("MaasY", "Sayfalar", FormMethod.Post))
+    {
+        <button style="margin-left:550px;" class="btn btn-primary btn-success" value="-1"  name="id"> Toplu Maaş Ödemesi</button>
+    }
 
     <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px;">
         <thead>
@@ -80,8 +104,9 @@
                         @Html.Label(item.SonÖdenmeTarihi.Day.ToString()+"/"+item.SonÖdenmeTarihi.Month.ToString()+"/"+item.SonÖdenmeTarihi.Year.ToString()+"    "+item.SonÖdenmeTarihi.Hour.ToString()+":"+item.SonÖdenmeTarihi.Minute.ToString())
                     </td>
                     <td>
-                        <button id="btnekle" class="btn btn-primary btn-sm" onclick="getRowDatax(this)" data-toggle="modal" data-target="#exampleModal">Detay</button>
-
+                        @using (Html.BeginForm("MaasY","Sayfalar",FormMethod.Post)){
+                        <button id="btnekle" class="btn btn-primary btn-sm" name="id" value="@item.CalisanID" >Ödeme Yap</button>
+                        }
                     </td>
                 </tr>
 
@@ -90,3 +115,19 @@
         </tbody>
     </table>
     </body>
+
+<style>
+    /* Custom CSS to move the search bar to the right */
+    div.dataTables_wrapper div.dataTables_filter {
+        margin-left: 480px;
+    }
+
+    div.dataTables_wrapper div.dataTables_length {
+        margin-left: 90px;
+    }
+
+    div.dataTables_info {
+        visibility: hidden;
+    }
+
+</style>

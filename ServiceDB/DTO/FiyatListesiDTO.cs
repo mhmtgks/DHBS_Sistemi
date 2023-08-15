@@ -12,6 +12,8 @@ namespace Service.DTO
 
         public int ProsedurID { get; set; }
         public string Adi { get; set; }
+     
         public Decimal Ucreti { get; set; }
+
     }
 }

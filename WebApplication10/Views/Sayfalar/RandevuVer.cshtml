@@ -8,6 +8,23 @@
 <script defer src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script defer src="~/js/script.js"></script>
 <head>
+    @if (TempData["AlertMessage"] != null)
+    {
+        if (TempData["AlertMessage"] == "Randevu Alma Başarısız")
+        {
+
+            <body onload="failed()">
+            </body>
+        }
+        else
+        {
+            <body onload="success()">
+            </body>
+
+        }
+
+
+    }
 </head>
     <body>
     <h2 style="text-align:center;margin-top:-250px;">Randevu AL</h2>

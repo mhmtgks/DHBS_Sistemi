@@ -1,4 +1,5 @@
 ﻿using Data;
+using Service.DTO;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -18,6 +19,15 @@ namespace Service
             SqlCommand insertcommand = command.ProccesSql(sqlstring);
             insertcommand.ExecuteNonQuery();
             connection.ConnectEnd();
+        }
+        public string executeSTR(string sqlstring)
+        {
+
+            SqlCommand listcommand = command.ProccesSql(sqlstring);
+            SqlDataReader sqlDataReader = listcommand.ExecuteReader();
+            List<LabDTO> list = new List<LabDTO>();
+            return sqlDataReader[0].ToString();
+
         }
     }
 }

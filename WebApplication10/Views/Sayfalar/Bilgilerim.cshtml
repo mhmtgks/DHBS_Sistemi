@@ -1,0 +1,71 @@
+﻿@using Service;
+@using Service.DTO;
+@{
+    Layout = "~/Views/Shared/_Layout_Hasta.cshtml";
+    ViewBag.Title = "Bilgilerim";
+}
+@if (TempData["AlertMessage"] != null)
+{
+    if (TempData["AlertMessage"] == "Güncelleme işlemi Başarısız")
+    {
+
+        <body onload="failed()">
+        </body>
+    }
+    else
+    {
+        <body onload="success()">
+        </body>
+
+    }
+
+
+}
+
+<body>
+    @{
+
+        Hasta hasta1 = new Hasta();
+    }
+   
+    <div style="margin-left:610px; margin-top:-150px;">
+        @foreach (var item in hasta1.Lists("select * from Hasta where HastaID=" + idExtractor.userid)){
+        @using (Html.BeginForm("Bilgilerim", "Sayfalar", FormMethod.Post))
+        {
+            <label style="visibility:hidden;" > HastaID</label>
+                <div style="visibility:hidden;" class="input-group">
+                <span class="fa fa-envelope" aria-hidden="true"></span>
+                <input id="hastaid" type="text" required="" name="HastaID" value="@item.hastaid" readonly />
+            </div>
+            <label> TC</label>
+            <div class="input-group">
+                <span class="fa fa-envelope" aria-hidden="true"></span>
+                    <input id="TC" type="text" required="" name="TC" style="background-color:darkgray" value="@item.TC" readonly />
+            </div>
+            <label> AdiSoyadi</label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                    <input id="adi" type="text" required="" style="background-color:darkgray" name="AdiSoyadi" value="@item.AdiSoyadi" readonly />
+            </div>
+            <label> Iletisim</label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                    <input id="iletisim" type="text" required="" name="Iletisim" value="@item.Iletisim" />
+            </div>
+            <label> DoğumTarihi(aa/gg/yyyy)</label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                    <input id="dogumtarihi" type="datetime" style="background-color:darkgray"  name="DogumTarihi" value="@item.DogumTarihi" readonly />
+            </div>
+            <label> Cinsiyet</label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                    <input id="cinsiyet" style="background-color:darkgray" type="text" required="" name="Cinsiyet" value="@item.Cinsiyet" readonly />
+            </div>
+            <button style="margin-top:30px; margin-left:50px;" class="btn btn-danger btn-block" type="submit">Güncelle</button>
+        }
+        }
+            
+
+    </div>
+</body>

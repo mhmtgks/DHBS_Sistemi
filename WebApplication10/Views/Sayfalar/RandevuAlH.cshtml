@@ -1,4 +1,5 @@
 ﻿@using Service;
+@using Service.DTO;
 @{
     Layout = "~/Views/Shared/_Layout_Hasta.cshtml";
     ViewBag.Title = "Randevu Al";
@@ -17,195 +18,397 @@
     <title>DHBS Sistemi</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
-    <script src="/jss.js"></script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-    <!-- Bootstrap core CSS -->
-    <link href="/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="/dashboard.css" rel="stylesheet">
-    <style type="text/css">
-        /* Chart.js */
-        -webkit-keyframes chartjs-render-animation {
-            from
-
-        {
-            opacity: 0.99
-        }
-
-        to {
-            opacity: 1
-        }
-
-        }
-
-        keyframes chartjs-render-animation {
-            from
-
-        {
-            opacity: 0.99
-        }
-
-        to {
-            opacity: 1
-        }
-
-        }
-
-        .chartjs-render-monitor {
-            -webkit-animation: chartjs-render-animation 0.001s;
-            animation: chartjs-render-animation 0.001s;
-        }
-    </style>
     <head>
+        <script>
+        function strdiv() {
+            let element1 = document.getElementById("saatler");
+            let hidden1 = element1.getAttribute("hidden");
 
+            if (hidden1) {
+                element1.removeAttribute("hidden");
+
+
+            } else {
+                element1.setAttribute("hidden", "hidden");
+            }
+
+        }
+
+        </script>
+        <script>
+
+        function date1(value) {
+            var tarih1 = document.getElementById("Tarih");
+            tarih1.value = value;
+            
+        }
+        </script>
+
+    @if (TempData["AlertMessage"] != null)
+    {
+        if (TempData["AlertMessage"].ToString() == "Randevu Alma İşlemi Başarısız")
+        {
+
+            <body onload="failed()">
+            </body>
+        }
+        else
+        {
+            <body onload="success()">
+            </body>
+
+        }
+
+
+    }
 </head>
 <body>
-<h1 style="margin-top:-150px;margin-left:650px;">Randevu Al</h1>
+    @{
+        List<RandevuTarihDTO> lst = new List<RandevuTarihDTO>();
+        string str2 = "visibility:hidden";
+        string str1 = " margin-top:-170px; visibilty:visible;";
+        DateTime today = DateTime.Today;
+        byte count = 0;
+        DateTime[] futureDates = new DateTime[7];
+        for (int i = 0; i < 7; i++)
+        {
+            futureDates[i] = today.AddDays(i + 1);
+        }
+        if (TempData["Doktorid"] != null)
+        {
+            str1 = "margin-top:-170px; visibility:hidden;";
+            str2 = "margin-top:-340px;";
 
-    <div style="margin-left: 150px;">
-    <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px;">
-        <thead>
-            <tr>
-                <th class="th-sm">
-                    Doktor Adı
-                </th>
-                <th class="th-sm">
-                    Uzmanllık
-                </th>
-                <th class="th-sm">
-                    
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-                @{
-                    
-                    VW_Doktorlar hasta1 = new VW_Doktorlar();
-            }
-            @foreach (var item in hasta1.Lists("select * from vw_Doktorlar"))
-            {
+            RandevuTarih randevu = new RandevuTarih();
+           
+            lst = randevu.Lists("exec sp_boşrandevubul " + TempData["Doktorid"]);
+        }
+        else
+        {
+
+            
+        }
+
+    }
+    <div  style="@str1">
+        <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px;">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.Label(item.AdiSoyadi.ToString())
-                    </td>
-                    <td>
-                        @Html.Label(item.Uzmanlık.ToString())
-                    </td>
-                    <td>
-                            <button type="button" class="btn btn-primary" style="background-color:cornflowerblue; border-color:cornflowerblue" onclick="getRowData(this)" data-toggle="modal" data-target="#exampleModal">İŞLEM EKLE</button>
-                    </td>
+                    <th class="th-sm">
+                        Doktor Adı
+                    </th>
+                    <th class="th-sm">
+                        Uzmanlık
+                    </th>
+                    <th class="th-sm">
+                    </th>
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @{
+                    VW_Doktorlar dr = new VW_Doktorlar();
+                }
+                @foreach (var item in dr.Lists("select * from VW_Doktorlar"))
+                {
+                    <tr>
+                        <td>
+                            <label>@item.AdiSoyadi</label>
+                        </td>
+                        <td>
+                            <label>@item.Uzmanlık</label>
+                        </td>
+                        <td>
 
-        </tbody>
-    </table>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            @using (Html.BeginForm("RandevuAlH","Sayfalar",FormMethod.Post))
+                            {
+                                
+                                <button id="btnekle" class="btn btn-primary btn-sm" name="doktorid" value="@item.DoktorID">Doktor Seç</button>
+                            }
+                         
+
+                        </td>
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+
+
+
+
+
+
+    </div>
+
+
+
+
+<div id="saatler" style="@str2">
+        @{
+
+        }
+
+        <label style="margin-top:-180px; margin-left:100px">@TempData["Uzmanlık"]</label>
+        <label style="margin-top:0px; margin-left:0px">  --  Diş Hekimi @TempData["drAdi"]</label>
+    <nav style="margin-left:150px; margin-top:0px;">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-0-tab" data-bs-toggle="tab" data-bs-target="#nav-0" type="button" role="tab" aria-controls="nav-0" aria-selected="true">@futureDates[0].ToString("dd/MM/yyyy") </button>
+            <button class="nav-link" id="nav-1-tab" data-bs-toggle="tab" data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-1" aria-selected="false">@futureDates[1].ToString("dd/MM/yyyy") </button>
+            <button class="nav-link" id="nav-2-tab" data-bs-toggle="tab" data-bs-target="#nav-2" type="button" role="tab" aria-controls="nav-2" aria-selected="false">@futureDates[2].ToString("dd/MM/yyyy") </button>
+            <button class="nav-link" id="nav-3-tab" data-bs-toggle="tab" data-bs-target="#nav-3" type="button" role="tab" aria-controls="nav-3" aria-selected="false">@futureDates[3].ToString("dd/MM/yyyy") </button>
+            <button class="nav-link" id="nav-4-tab" data-bs-toggle="tab" data-bs-target="#nav-4" type="button" role="tab" aria-controls="nav-4" aria-selected="false">@futureDates[4].ToString("dd/MM/yyyy") </button>
+            <button class="nav-link" id="nav-5-tab" data-bs-toggle="tab" data-bs-target="#nav-5" type="button" role="tab" aria-controls="nav-5" aria-selected="false">@futureDates[5].ToString("dd/MM/yyyy") </button>
+            <button class="nav-link" id="nav-6-tab" data-bs-toggle="tab" data-bs-target="#nav-6" type="button" role="tab" aria-controls="nav-6" aria-selected="false">@futureDates[6].ToString("dd/MM/yyyy") </button>
+ </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent" style="margin-left:150px; margin-top:0px;">
+        <div class="tab-pane fade show active" id="nav-0" role="tabpanel" aria-labelledby="nav-0-tab">
+            <div class="container">
+                <div class="row row-cols-6">
+                    @{count=0;
+                        }
+                    @foreach (var item in lst)
+                    {
+                        if (item.Tarih.Day == futureDates[0].Day)
+                        {
+                            count++;
+                                <div style="margin-top:25px;" class="col"><button class=" btn btn-warning" onclick="date1(this.value)" data-toggle="modal" data-target="#exampleModal" value="@item.Tarih">@item.Tarih.ToString("HH:mm") </button></div>
+                        }
+                    }
+                    @if (count == 0)
+                    {
+                        <label>Bugün için uygun Randevu Bulunmamaktadır</label>
+
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-1" role="tabpanel" aria-labelledby="nav-1-tab">
+            <div class="container">
+                <div class="row row-cols-6">
+                    @{
+                        count = 0;
+                    }
+                    @foreach(var item in lst){
+                        if (item.Tarih.Day == futureDates[1].Day)
+                        {
+                            count++;
+                                <div style="margin-top:25px;" class="col"><button class=" btn btn-warning" onclick="date1(this.value)" data-toggle="modal" data-target="#exampleModal" value="@item.Tarih">@item.Tarih.ToString("HH:mm") </button></div>
+                        }
+                    }
+                    @if (count == 0)
+                    {
+                        <label>Bugün için uygun Randevu Bulunmamaktadır</label>
+
+                    }
+                </div>
+            </div>
+        
+        </div>
+        <div class="tab-pane fade" id="nav-2" role="tabpanel" aria-labelledby="nav-2-tab">
+            <div class="container">
+                <div class="row row-cols-6">
+                    @{
+                        count = 0;
+                    }
+                    @foreach (var item in lst)
+                    {
+                        if (item.Tarih.Day == futureDates[2].Day)
+                        {
+                            count++;
+                                <div style="margin-top:25px;" class="col"><button class=" btn btn-warning" onclick="date1(this.value)" data-toggle="modal" data-target="#exampleModal" value="@item.Tarih">@item.Tarih.ToString("HH:mm") </button></div>
+                        }
+                    }
+                    @if (count == 0)
+                    {
+                        <label>Bugün için uygun Randevu Bulunmamaktadır</label>
+
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-3" role="tabpanel" aria-labelledby="nav-3-tab">
+            <div class="container">
+                <div class="row row-cols-6">
+                    @{
+                        count = 0;
+                    }
+                    @foreach (var item in lst)
+                    {
+                        if (item.Tarih.Day == futureDates[3].Day)
+                        {
+                            count++;
+                                <div style="margin-top:25px;" class="col"><button class=" btn btn-warning" onclick="date1(this.value)" data-toggle="modal" data-target="#exampleModal" value="@item.Tarih">@item.Tarih.ToString("HH:mm") </button></div>
+                        }
+                    }
+                    @if (count == 0)
+                    {
+                        <label>Bugün için uygun Randevu Bulunmamaktadır</label>
+
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-4" role="tabpanel" aria-labelledby="nav-4-tab">
+            <div class="container">
+                <div class="row row-cols-6">
+                    @{
+                        count = 0;
+                    }
+                    @foreach (var item in lst)
+                    {
+                        if (item.Tarih.Day == futureDates[4].Day)
+                        {
+                            count++;
+                                <div style="margin-top:25px;" class="col"><button class=" btn btn-warning" onclick="date1(this.value)" data-toggle="modal" data-target="#exampleModal" value="@item.Tarih">@item.Tarih.ToString("HH:mm") </button></div>
+                        }
+                    }
+                    @if (count == 0)
+                    {
+                        <label>Bugün için uygun Randevu Bulunmamaktadır</label>
+
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-5" role="tabpanel" aria-labelledby="nav-5-tab">
+            <div class="container">
+                <div class="row row-cols-6">
+                    @{
+                        count = 0;
+                    }
+                    @foreach (var item in lst)
+                    {
+                        if (item.Tarih.Day == futureDates[5].Day)
+                        {
+                            count++;
+                                <div style="margin-top:25px;" class="col"><button class=" btn btn-warning" onclick="date1(this.value)" data-toggle="modal" data-target="#exampleModal" value="@item.Tarih">@item.Tarih.ToString("HH:mm") </button></div>
+                        }
+                    }
+                    @if (count == 0)
+                    {
+                        <label>Bugün için uygun Randevu Bulunmamaktadır</label>
+
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-6" role="tabpanel" aria-labelledby="nav-6-tab">
+            <div class="container">
+                <div class="row row-cols-6">
+                    @{
+                        count = 0;
+                    }
+                    @foreach (var item in lst)
+                    {
+                        
+                        if (item.Tarih.Day == futureDates[6].Day)
+                        {
+                            count++;
+                                <div style="margin-top:25px;" class="col"><button class=" btn btn-warning" onclick="date1(this.value)" data-toggle="modal" data-target="#exampleModal" value="@item.Tarih">@item.Tarih.ToString("HH:mm") </button></div>
+                        }
+
+
+                    }
+                    @if(count==0){
+                        <label>Bugün için uygun Randevu Bulunmamaktadır</label>
+
+                    }
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-2" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Randevu Al</h5>
+                    <h5 class="modal-title" id="exampleModalLabel1">Randevu Al</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                        <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px;">
-                            <thead>
-                                <tr>
-                                    <th class="th-sm">
-                                        Doktor Adı
-                                    </th>
-                                    <th class="th-sm">
-                                        Uzmanllık
-                                    </th>
-                                    <th class="th-sm">
+                <div class="modal-body"> 
+                    @{
+                        VW_Doktorlar dr1 = new VW_Doktorlar();
 
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    VW_Doktorlar hasta12 = new VW_Doktorlar();
-                                }
-                                @foreach (var item in hasta12.Lists("select * from vw_Doktorlar"))
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.Label(item.AdiSoyadi.ToString())
-                                        </td>
-                                        <td>
-                                            @Html.Label(item.Uzmanlık.ToString())
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary" style="background-color:cornflowerblue; border-color:cornflowerblue" onclick="getRowData(this)" data-toggle="modal" data-target="#exampleModal1">İŞLEM EKLE</button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                    }
+                    @try{
+                        if (TempData["Doktorid"] == null) { TempData["Doktorid"] = 0; }
+                        @foreach (var item in dr1.Lists("select * from VW_Doktorlar where DoktorID="+TempData["Doktorid"].ToString()))
+                    {
+                        
+
+                        
                    
+                    @using (Html.BeginForm("RandevuAlH", "Sayfalar", FormMethod.Post))
+                    {<div style="margin-top=-50px; margin-left:130px;">
+                        <div class="input-group">
+                            <span class="fa fa-envelope" aria-hidden="true"></span>
+                                        <textarea id="label" style="visibility:hidden" type="text" required="" name="HastaID" readonly>@idExtractor.userid</textarea>
+                        </div>
+                     <label> Hasta Adı</label>
+                        <div class="input-group">
+                            <span class="fa fa-envelope" aria-hidden="true"></span>
+                                        <textarea id="label1" style="resize:none" type="text" required="" name="" readonly>@idExtractor.username</textarea>
+                        </div>
+                        <div class="input-group">
+                            <span class="fa fa-envelope" aria-hidden="true"></span>
+                                        <textarea id="label" style="visibility:hidden" type="text" required="" name="DoktorID" readonly>@TempData["Doktorid"]</textarea>
+                        </div>
+                        <label style="margin-top:-50px; display:block;"> Doktor Adı</label>
+                        <div class="input-group">
+                            <span class="fa fa-envelope" aria-hidden="true"></span>
+                                        <textarea id="label1" style="resize:none" type="text" required="" name="" readonly>@item.AdiSoyadi</textarea>
+                        </div>
+                        <label> Bölüm Adı</label>
+                        <div class="input-group">
+                            <span class="fa fa-envelope" aria-hidden="true"></span>
+                                        <textarea id="label1" style="resize:none" type="text" required="" name="" readonly>@item.Uzmanlık</textarea>
+                        </div>
+                        <label> Randevu Tarihi</label>
+                        <div class="input-group">
+                            <span class="fa fa-envelope" aria-readonly="true"></span>
+                                        <textarea id="Tarih" style="resize:none; user-select: none;" type="text" required="" name="Tarih" readonly></textarea>
+                        </div>
+
+                        <button style="margin-top:50px; margin-left:40px" name="type" value="1">Kaydet</button>
+
+                        </div>
+                    }
+                    }
+                    }catch{
+
+                    }
+
                 </div>
             </div>
         </div>
     </div>
 
-        <div class="modal fade" id="exampleModal1" tabindex="-2" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel1">Randevu Al</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px;">
-                            <thead>
-                                <tr>
-                                    <th class="th-sm">
-                                        Doktor Adı
-                                    </th>
-                                    <th class="th-sm">
-                                        Uzmanllık
-                                    </th>
-                                    <th class="th-sm">
 
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    VW_Doktorlar hasta2 = new VW_Doktorlar();
-                                }
-                                @foreach (var item in hasta2.Lists("select * from vw_Doktorlar"))
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.Label(item.AdiSoyadi.ToString())
-                                        </td>
-                                        <td>
-                                            @Html.Label(item.Uzmanlık.ToString())
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary" style="background-color:cornflowerblue; border-color:cornflowerblue" onclick="test()" data-toggle="modal" data-target="#exampleModal">İŞLEM EKLE</button>
-                                        </td>
-                                    </tr>
-                                }
 
-                            </tbody>
-                        </table>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-</div>
+
 </body>
+
+<style>
+    /* Custom CSS to move the search bar to the right */
+    div.dataTables_wrapper div.dataTables_filter {
+        margin-left: 480px;
+    }
+
+    div.dataTables_wrapper div.dataTables_length {
+        margin-left: 90px;
+    }
+</style>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
 <script src="../../assets/js/vendor/popper.min.js"></script>
@@ -219,9 +422,3 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.1/dist/Chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-<script>
-    function test(){
-        $('#exampleModal1').modal('hide');
-        $('#exampleModal').modal('hide');
-    }
-</script>

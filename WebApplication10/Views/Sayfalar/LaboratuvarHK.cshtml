@@ -3,40 +3,12 @@
     ViewBag.Title = "Laboratuvar";
 }
 @using Service;
+
 <head>
 
     <h2 style="text-align:center;margin-top:-250px;">Laboratuvar</h2>
-    @if (TempData["AlertMessage"] != null)
-    {
-        if (TempData["AlertMessage"] == "Lab Güncelleme başarısız")
-        {
-            <div style="margin-left:80px;" class="alert alert-danger">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
-                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                </svg>
-                @TempData["AlertMessage"]
-            </div>
-        }
-        else
-        {
-            <div style="margin-left:80px;" class=" alert alert-success">
-                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                    </symbol>
-                </svg>
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
-
-                @TempData["AlertMessage"]
-
-            </div>
-
-        }
-
-
-    }
 </head>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script defer src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script defer src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script defer src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
@@ -95,25 +67,30 @@
     }
 </style>
 <script>
-    function getRowData(button) {
+
+    function lb(button) {
         var row = button.parentNode.parentNode;
 
         var cells = row.getElementsByTagName("td");
 
         var data1 = cells[0].innerText;
-        var data2 = cells[3].innerText;
-
-        var lbl = document.getElementById("label1");
-        var lbl1 = document.getElementById("label2");
-
-        lbl.innerText = data1;
-        lbl1.innerText = data2;
-
-
-
+        $.ajax({
+            type: "POST",
+            url: "/Sayfalar/labid",
+            data: { value: data1 },
+            success: function (response) {
+                console.log("TempData value set successfully.");
+                setTimeout(ajaxrpt, 5000);
+            },
+            error: function (error) {
+                console.error("Error setting TempData value:", error);
+                setTimeout(lb, 5000);
+            }
+        });
 
 
     }
+    //
 
 
 </script>
@@ -133,6 +110,9 @@
                 </th>
                 <th class="th-sm">
                     Durum
+                </th>
+                <th class="th-sm">
+                    Iletisim
                 </th>
                 <th class="th-sm">
 
@@ -160,7 +140,10 @@
                         @Html.Label(item.LabDurum.ToString())
                     </td>
                     <td>
-                        <button id="btnekle" class="btn btn-primary btn-sm" onclick="getRowData(this)" data-toggle="modal" data-target="#exampleModal">Durum Güncelle</button>
+                        @Html.Label(item.Iletisim.ToString())
+                    </td>
+                    <td>
+                        <button id="btnekle" class="btn btn-primary btn-sm" onclick="lb(this)" data-toggle="modal" data-target="#exampleModal">Detay</button>
 
                     </td>
                 </tr>
@@ -173,27 +156,22 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">Islem Ekle</h5>
+                    <h5 class="modal-title" id="exampleModalLabel1">Lab Detay</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div style="margin-left:110px; margin-top:0px;">
-                        @using (Html.BeginForm("LaboratuvarHK", "Sayfalar", FormMethod.Post))
-                        {
-                            <label> Lab ID</label>
-                            <div class="input-group">
-                                <span class="fa fa-envelope" aria-hidden="true"></span>
-                                <textarea id="label1" style="resize:none" type="text" required="" name="LabID"></textarea>
-                            </div>
-                            <label> Lab Durum</label>
-                            <div class="input-group">
-                                <span class="fa fa-lock" aria-hidden="true"></span>
-                                <textarea id="label2" style="resize:none" type="text" required="" name="LabDurum"></textarea>
-                            </div>
-                            <button class="btn btn-danger btn-block" style="display:inline-block; margin-top:15px;">Güncelle</button>
-                        }
+
+
+                        <label style="display:block">@TempData["labid"]</label>
+                        <label style="display:block">Hasta Adı :</label>
+                        <label style="">@TempData["HastaAdi"]</label>
+                        <label style="display:block">Hasta İletişim:</label>
+                        <label style="">@TempData["HastaIletisim"]</label>
+
+
 
                     </div>
 
@@ -216,4 +194,9 @@
     div.dataTables_wrapper div.dataTables_length {
         margin-left: 90px;
     }
+
+    div.dataTables_info {
+        visibility: hidden;
+    }
+
 </style>

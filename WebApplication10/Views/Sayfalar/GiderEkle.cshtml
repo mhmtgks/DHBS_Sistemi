@@ -1,0 +1,190 @@
+﻿@using Service;
+
+@{
+    Layout = "~/Views/Shared/_Layout_Yonetici.cshtml";
+    ViewBag.Title = "Gider Ekle";
+}
+<body>
+    <script defer src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script defer src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script defer src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script defer src="~/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+
+    <title>DHBS Sistemi</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
+    <script src="/jss.js"></script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/dashboard.css" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+        -webkit-keyframes chartjs-render-animation {
+            from
+
+        {
+            opacity: 0.99
+        }
+
+        to {
+            opacity: 1
+        }
+
+        }
+
+        keyframes chartjs-render-animation {
+            from
+
+        {
+            opacity: 0.99
+        }
+
+        to {
+            opacity: 1
+        }
+
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+    @if (TempData["AlertMessage"] != null)
+    {
+        if (TempData["AlertMessage"] == "Gider ekleme Başarısız")
+        {
+
+            <body onload="failed()">
+            </body>
+        }
+        else
+        {
+            <body onload="success()">
+            </body>
+
+        }
+
+
+    }
+
+  
+    <h2 style="margin-left:60px; margin-top:-150px;">Giderler</h2>
+    <table id="tablox" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px; margin-top:50px;">
+        <thead>
+            <tr>
+                <th class="th-sm">
+                    Gider ID
+                </th>
+                <th class="th-sm">
+                    Açıklama
+                </th>
+                <th class="th-sm">
+                    Tutar
+                </th>
+                <th class="th-sm">
+                    Tarih
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                Gider gider = new Gider();
+            }
+            @foreach (var item in gider.Lists("select * from Gider"))
+            {
+                <tr>
+                    <td>
+                        @Html.Label(item.GiderID.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.Aciklama.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.GiderTutari.ToString())
+                    </td>
+                    <td>
+                        @Html.Label(item.Tarih.Day.ToString()+"/"+item.Tarih.Month.ToString()+"/"+item.Tarih.Year.ToString()+"    "+item.Tarih.Hour.ToString()+":"+item.Tarih.Minute.ToString())
+                    </td>
+                </tr>
+
+            }
+
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Gider Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div style="margin-left:110px; margin-top:0px;">
+                            @using (Html.BeginForm("GiderEkle", "Sayfalar", FormMethod.Post))
+                            {
+                                <label>Gider Açıklaması </label>
+                                <div class="input-group">
+                                    <span class="fa fa-envelope" aria-hidden="true"></span>
+                                    <textarea id="" style="resize:none" type="text" required="" placeholder="Açıklama Girmediniz" name="Aciklama"></textarea>
+                                </div>
+                                <label> Gider Tutarı</label>
+                                <div class="input-group">
+                                    <span class="fa fa-lock" aria-hidden="true"></span>
+                                    <textarea id="label2" style="resize:none" type="text" required="" placeholder="Tutar Girmediniz" name="GiderTutari"></textarea>
+                                </div>
+
+
+
+                                <button id="btnkaydet" class="btn btn-danger btn-block" type="submit" style="display:block; margin-top:20px; margin-left:50px;">Kaydet</button>
+
+                            }
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <button style="margin-left:1150px; margin-top:-1250px;" class="btn btn-primary btn-success" data-toggle="modal" data-target="#exampleModal2"> Gider Ekle</button>
+</body>
+
+<style>
+    /* Custom CSS to move the search bar to the right */
+
+    div.dataTables_wrapper div.dataTables_filter {
+        visibility: hidden;
+        margin-left:-150px;
+        margin-top:-150px;
+    }
+
+    div.dataTables_wrapper div.dataTables_length {
+        visibility: hidden;
+    }
+
+    div.dataTables_info {
+        visibility: hidden;
+    }
+
+</style>

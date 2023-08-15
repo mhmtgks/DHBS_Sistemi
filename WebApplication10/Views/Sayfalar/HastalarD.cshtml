@@ -26,13 +26,12 @@
         
         document.getElementById("myLabel").textContent = data1;
         // ... Diğer işlemler ...
-    }
+   
     setInterval(function () {
         oTable = $('#tablodetay').dataTable();
-
-
-        oTable.fnFilter(document.getElementById("myLabel").textContent,0);
-    }, 1)
+        oTable.fnFilter("^"+document.getElementById("myLabel").textContent+"$",0,true,false);
+        }, 1)
+    }
 
 </script>
 <meta charset="utf-8">
@@ -226,7 +225,7 @@
         visibility: hidden;
     }
 
-    #tablodetay_filter {
+    div.dataTables_info {
         visibility: hidden;
     }
 </style>

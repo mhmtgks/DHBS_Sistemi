@@ -37,6 +37,7 @@
 
 
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
@@ -91,9 +92,27 @@
     }
 </style>
 <head>
+
+    @if (TempData["AlertMessage"] != null)
+    {
+        if(TempData["AlertMessage"] == "Gider ekleme Başarısız")
+        {
+
+            <body onload="failed()">
+            </body>
+        }
+        else
+        {
+            <body onload="success()">
+            </body>
+
+        }
+
+
+    }
     <h1 style="margin-left:150px;"> Mali Durum </h1>
 
-    <table id="tablo3" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px; margin-top:-40px;">
+    <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px; margin-top:-40px;">
         <thead>
             <tr>
                 <th class="th-sm">
@@ -135,6 +154,10 @@
                     <td>
 
                         <button id="btsil" class="btn btn-primary btn-warning" data-toggle="modal" data-target="#exampleModal" onclick="getRowData123(this)">Detay</button>
+                        @using (Html.BeginForm("MaliDurumY","Sayfalar",FormMethod.Post))
+                        {
+                        <button id="bt" class="btn btn-primary btn-danger" value="@item.FaturaID" name="id" >Sil</button>
+                        }
                     </td>
                 </tr>
 
@@ -297,7 +320,7 @@
         visibility: hidden;
     }
 
-    #mytable_info.dataTables_info {
+    div.dataTables_info {
         visibility: hidden;
     }
 
