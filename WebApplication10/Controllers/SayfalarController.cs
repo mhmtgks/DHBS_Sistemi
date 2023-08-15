@@ -618,5 +618,33 @@ namespace DHBS_Sistemi.Controllers
 
             }
         }
+        public IActionResult IzinYonetimi()
+        {
+
+
+            return View();
+        }
+        [HttpPost]
+        public IActionResult IzinYonetimi(int DoktorID,DateTime BaslangicTarihi,DateTime BitisTarihi)
+        {
+
+            try
+            {
+                string strbaslangic = BaslangicTarihi.ToString("yyyy/MM/dd") + " " + BaslangicTarihi.ToString("HH") + ":" + BaslangicTarihi.ToString("mm");
+                string strbitis = BitisTarihi.ToString("yyyy/MM/dd") + " " + BitisTarihi.ToString("HH") + ":" + BitisTarihi.ToString("mm");
+                executer.execute("Update YillikIzin set BaslangicTarihi='" + strbaslangic + "',BitisTarihi='"+ strbitis + "' where DoktorID=" + DoktorID);
+                TempData["AlertMessage"] = "İzin ekleme Başarılı";
+                return View();
+
+
+
+            }
+            catch
+            {
+                TempData["AlertMessage"] = "İzin ekleme Başarısız";
+                return View();
+
+            }
+        }
     }
 }
