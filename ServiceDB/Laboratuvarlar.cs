@@ -1,36 +1,34 @@
-﻿using System;
+﻿using Data;
+using Service.DTO;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using Data;
-using Service.DTO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Service
 {
-    public class Hasta
+    public class Laboratuvarlar
     {
+
         Connection connection = new Connection();
         Command command = new Command();
-        public List<HastaDTO> Lists(string sqlstring)
+        public List<LaboratuvarlarDTO> Lists(string sqlstring)
         {
             SqlCommand listcommand = command.ProccesSql(sqlstring);
             SqlDataReader sqlDataReader = listcommand.ExecuteReader();
-            List<HastaDTO> list = new List<HastaDTO>();
+            List<LaboratuvarlarDTO> list = new List<LaboratuvarlarDTO>();
             while (sqlDataReader.Read())
             {
 
-                list.Add(new HastaDTO
+                list.Add(new LaboratuvarlarDTO
                 {
-                    hastaid = (int)sqlDataReader["HastaID"],
-                    TC = sqlDataReader["TC"].ToString(),
-                    AdiSoyadi = sqlDataReader["AdiSoyadi"].ToString(),
+
+                    LabAdresi = sqlDataReader["LabAdresi"].ToString(),
+                    LabAdı = sqlDataReader["LabAdı"].ToString(),
                     Iletisim = sqlDataReader["Iletisim"].ToString(),
-                    DogumTarihi = sqlDataReader.GetDateTime(4),
-                    Cinsiyet = sqlDataReader["Cinsiyet"].ToString(),
-                    Status = sqlDataReader["Status"].ToString(),
-                    Email = sqlDataReader["Email"].ToString(),
-                    Adres = sqlDataReader["Adres"].ToString(),
-                    IslemiYapan = (int)sqlDataReader["IslemiYapan"],
-                    KayıtTarihi = sqlDataReader.GetDateTime(6),
+
 
                 });
 
@@ -63,6 +61,5 @@ namespace Service
             connection.ConnectEnd();
             //throw new NotImplementedException();
         }
-
     }
 }

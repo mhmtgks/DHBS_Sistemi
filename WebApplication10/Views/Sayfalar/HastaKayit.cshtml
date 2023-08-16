@@ -20,12 +20,12 @@
             var cells = row.getElementsByTagName("td");
 
             // Verilere erişmek için sütun indekslerini kullanabilirsiniz (örneğin, cells[0].innerText sütun 1'in içeriğini verir)
-            var data1 = cells[0].innerText;
-            var data2 = cells[1].innerText;
-            var data3 = cells[2].innerText;
-            var data4 = cells[3].innerText;
-            var data5 = cells[4].innerText;
-            var data6 = cells[5].innerText;
+            var data1 = cells[].innerText;
+            var data2 = cells[0].innerText;
+            var data3 = cells[1].innerText;
+            var data4 = cells[2].innerText;
+            var data5 = cells[3].innerText;
+            var data6 = cells[4].innerText;
 
             var lbl1 = document.getElementById("hastaid");
             var lbl2 = document.getElementById("TC");
@@ -135,11 +135,10 @@
 </head>
 <body >
    
-    <h2 style="text-align:center;margin-top:-250px;">Hasta Kayıt Sistemi</h2>
+    <h2 style="text-align:center;margin-top:-150px;">Hasta Kayıt Sistemi</h2>
     <div>
-        <button style="margin-left:1150px; margin-top:0px;" onclick="updatetable1()"> Hasta Güncelle </button>
     </div>
-    <div id="divsakla" style="margin-left:550px; margin-top:10px;">
+    <div id="divsakla" style="margin-left:550px; margin-top:20px;">
         @using (Html.BeginForm("HastaKayit", "Sayfalar", FormMethod.Post))
         {
             <label> TC</label>
@@ -152,11 +151,6 @@
                 <span class="fa fa-lock" aria-hidden="true"></span>
                 <input type="text" placeholder="Ad Soyad Girin" required="" name="AdiSoyadi" />
             </div>
-            <label> Iletisim</label>
-            <div class="input-group">
-                <span class="fa fa-lock" aria-hidden="true"></span>
-                <input type="text" placeholder="Iletisim" required="" name="Iletisim" />
-            </div>
             <label> DoğumTarihi(aa/gg/yyyy)</label>
             <div class="input-group">
                 <span class="fa fa-lock" aria-hidden="true"></span>
@@ -166,6 +160,21 @@
             <div class="input-group">
                 <span class="fa fa-lock" aria-hidden="true"></span>
                 <input type="text" placeholder="Cinsiyet" required="" name="Cinsiyet" />
+            </div>
+            <label> Iletisim Numarası </label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                <input type="text" placeholder="Iletisim" required="" name="Iletisim" />
+            </div>
+            <label> Adres </label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                <input type="text" placeholder="Adres" required="" name="Adres" />
+            </div>
+            <label> Email Adresi </label>
+            <div class="input-group">
+                <span class="fa fa-lock" aria-hidden="true"></span>
+                <input type="text" placeholder="Email" required="" name="Email" />
             </div>
             <button class="btn btn-danger btn-block" type="submit">Kaydet</button>
         }
@@ -179,9 +188,7 @@
     <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px; margin-top:50px;">
         <thead>
             <tr>
-                <th class="th-sm">
-                    ID
-                </th>
+
                 <th class="th-sm">
                     TC
                 </th>
@@ -198,6 +205,12 @@
                     Cinsiyet
                 </th>
                 <th class="th-sm">
+                        Adres
+                </th>
+                <th class="th-sm">
+                        Mail
+                 </th>
+                <th class="th-sm">
 
                 </th>
             </tr>
@@ -209,9 +222,6 @@
             @foreach (var item in hasta1.Lists("select * from Hasta where Status='Active'"))
             {
                 <tr>
-                    <td>
-                        @Html.Label(item.hastaid.ToString())
-                    </td>
                     <td>
                         @Html.Label(item.TC.ToString())
                     </td>
@@ -227,6 +237,12 @@
                     </td>
                     <td>
                         @Html.Label(item.Cinsiyet.ToString())
+                    </td>
+                     <td>
+                            @Html.Label(item.Email.ToString())
+                    </td>
+                    <td>
+                            @Html.Label(item.Adres.ToString())
                     </td>
                     <td>
                         <button id="btnekle" class="btn btn-primary btn-sm" onclick="getRowData(this)" data-toggle="modal" data-target="#exampleModal">Güncelle</button>

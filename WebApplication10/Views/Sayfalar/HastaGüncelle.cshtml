@@ -1,7 +1,7 @@
 ﻿@using Service;
 @{
     Layout = "~/Views/Shared/_Layout_HastaKayit.cshtml";
-    ViewBag.Title = "Hasta Güncelle";
+    ViewBag.Title = "Hastalar";
 }
 <html lang="tr">
 <head>
@@ -19,12 +19,12 @@
             var cells = row.getElementsByTagName("td");
 
             // Verilere erişmek için sütun indekslerini kullanabilirsiniz (örneğin, cells[0].innerText sütun 1'in içeriğini verir)
-            var data1 = cells[0].innerText;
-            var data2 = cells[1].innerText;
-            var data3 = cells[2].innerText;
-            var data4 = cells[3].innerText;
-            var data5 = cells[4].innerText;
-            var data6 = cells[5].innerText;
+            var data1 = document.getElementById("btgün").value;
+            var data2 = cells[0].innerText;
+            var data3 = cells[1].innerText;
+            var data4 = cells[2].innerText;
+            var data5 = cells[3].innerText;
+            var data6 = cells[4].innerText;
 
             var lbl1 = document.getElementById("hastaid");
             var lbl2 = document.getElementById("TC");
@@ -46,7 +46,6 @@
 
             // Satırdaki verileri çekmek için <td> öğelerini buluyoruz
             var cells = row.getElementsByTagName("td");
-
             // Verilere erişmek için sütun indekslerini kullanabilirsiniz (örneğin, cells[0].innerText sütun 1'in içeriğini verir)
             var data1 = cells[0].innerText;
 
@@ -55,6 +54,29 @@
             lbls.value = data1;
 
             // ... Diğer işlemler ...
+        }
+        function getRowDataD(button) {
+            // Butona tıklanan satırdaki verileri almak için ebeveyn (<tr>) öğesini buluyoruz
+            var row = button.parentNode.parentNode;
+
+            // Satırdaki verileri çekmek için <td> öğelerini buluyoruz
+            var cells = row.getElementsByTagName("td");
+
+            // Verilere erişmek için sütun indekslerini kullanabilirsiniz (örneğin, cells[0].innerText sütun 1'in içeriğini verir)
+            var data1 = cells[0].innerText;
+            $.ajax({
+                type: "POST",
+                url: "/Sayfalar/HastaIDHK",
+                data: { value: data1 },
+                success: function (response) {
+                    console.log("TempData value set successfully.");
+                },
+                error: function (error) {
+                    console.error("Error setting TempData value:", error);
+                }
+            });
+            
+
         }
     </script>
     <meta charset="utf-8">
@@ -142,9 +164,6 @@
             <thead>
                 <tr>
                     <th class="th-sm">
-                        ID
-                    </th>
-                    <th class="th-sm">
                         TC
                     </th>
                     <th class="th-sm">
@@ -168,31 +187,33 @@
                 @{
                     Hasta hasta1 = new Hasta();
                 }
-                @foreach (var item in hasta1.Lists("select * from Hasta where Status='Active'"))
+                @foreach (var itemx in hasta1.Lists("select * from Hasta where Status='Active'"))
                 {
                     <tr>
                         <td>
-                            @Html.Label(item.hastaid.ToString())
+                            @Html.Label(itemx.TC.ToString())
                         </td>
                         <td>
-                            @Html.Label(item.TC.ToString())
+                            @Html.Label(itemx.AdiSoyadi.ToString())
                         </td>
                         <td>
-                            @Html.Label(item.AdiSoyadi.ToString())
+                            @Html.Label(itemx.Iletisim.ToString())
                         </td>
                         <td>
-                            @Html.Label(item.Iletisim.ToString())
-                        </td>
-                        <td>
-                            @Html.Label(item.DogumTarihi.Day.ToString()+"/"+item.DogumTarihi.Month.ToString()+"/"+item.DogumTarihi.Year.ToString())
+                            @Html.Label(itemx.DogumTarihi.Day.ToString()+"/"+itemx.DogumTarihi.Month.ToString()+"/"+itemx.DogumTarihi.Year.ToString())
 
                         </td>
                         <td>
-                            @Html.Label(item.Cinsiyet.ToString())
+                            @Html.Label(itemx.Cinsiyet.ToString())
                         </td>
                         <td>
-                            <button id="btnekle" class="btn btn-primary btn-sm" onclick="getRowData(this)" data-toggle="modal" data-target="#exampleModal">Güncelle</button>
-                            <button id="btsil" class="btn btn-primary btn-warning" onclick="getRowData1(this)" data-toggle="modal" data-target="#exampleModal2">Sil</button>
+                            <button id="btgün" class="btn btn-primary btn-sm" onclick="getRowData(this)" value="@itemx.hastaid" data-toggle="modal" data-target="#exampleModal">Güncelle</button>
+                            <button id="sil" class="btn btn-primary btn-danger" onclick="getRowData1(this)" value="@itemx.hastaid" data-toggle="modal" data-target="#exampleModal2">Sil</button>
+                           <div style="display:inline; " > @using (Html.BeginForm("RandevularHK", "Sayfalar", FormMethod.Post))
+                            {
+                                    <button style="width: 120px; height: 30px; display: block;margin-top: 2px;" class="btn btn-primary btn-warning" value="@itemx.TC" name="TC">Randevu Ekle</button>
+                            }
+                            </div>
                         </td>
                     </tr>
 
@@ -201,7 +222,6 @@
             </tbody>
         </table>
     </div>
-
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -215,20 +235,16 @@
                     <div style="margin-left:110px; margin-top:0px;">
                         @using (Html.BeginForm("HastaGüncelle", "Sayfalar", FormMethod.Post))
                         {
-                            <label> HastaID</label>
-                            <div class="input-group">
-                                <span class="fa fa-envelope" aria-hidden="true"></span>
-                                <input id="hastaid" type="text" required="" name="HastaID" readonly />
-                            </div>
+
                             <label> TC</label>
                             <div class="input-group">
                                 <span class="fa fa-envelope" aria-hidden="true"></span>
-                                <input id="TC" type="text" required="" name="TC" />
+                                <input id="TC" type="text" required="" name="TC" readonly />
                             </div>
                             <label> AdiSoyadi</label>
                             <div class="input-group">
                                 <span class="fa fa-lock" aria-hidden="true"></span>
-                                <input id="adi" type="text" required="" name="AdiSoyadi" />
+                                <input id="adi" type="text" required="" name="AdiSoyadi" readonly />
                             </div>
                             <label> Iletisim</label>
                             <div class="input-group">
@@ -238,14 +254,20 @@
                             <label> DoğumTarihi(aa/gg/yyyy)</label>
                             <div class="input-group">
                                 <span class="fa fa-lock" aria-hidden="true"></span>
-                                <input id="dogumtarihi" type="datetime" name="DogumTarihi" />
+                                <input id="dogumtarihi" type="datetime" name="DogumTarihi" readonly />
                             </div>
                             <label> Cinsiyet</label>
                             <div class="input-group">
                                 <span class="fa fa-lock" aria-hidden="true"></span>
-                                <input id="cinsiyet" type="text" required="" name="Cinsiyet" />
+                                <input id="cinsiyet" type="text" required="" name="Cinsiyet" readonly />
+                            </div>
+                            <label style="visibility:hidden"> HastaID</label>
+                            <div style="visibility:hidden" class="input-group">
+                                <span class="fa fa-envelope" aria-hidden="true"></span>
+                                <input id="hastaid" type="text" required="" name="HastaID" readonly />
                             </div>
                             <button class="btn btn-danger btn-block" type="submit">Güncelle</button>
+
                         }
 
                     </div>
@@ -270,9 +292,9 @@
                             <label> Silmek istediğinize emin misiniz?</label>
                             <div class="input-group">
                                 <span class="fa fa-envelope" aria-hidden="true"></span>
-                                <input id="hastaidsil" type="text" required="" name="HastaID" style="visibility:hidden;" readonly />
+                                <input id="hastaidsil" type="text" required="" name="TC" style="visibility:hidden;" readonly />
                             </div>
-                            <button style="margin-left:100px;" class="btn btn-danger btn-block" type="submit">Sil</button>
+                            <button style="margin-left:100px;" class="btn btn-danger btn-block" type="submit">Onayla</button>
                         }
 
                     </div>
@@ -285,7 +307,7 @@
 <style>
     /* Custom CSS to move the search bar to the right */
     div.dataTables_wrapper div.dataTables_filter {
-        margin-left: 480px;
+        margin-left: -340px;
         margin-top: -250px;
     }
 

@@ -74,8 +74,8 @@
         string str1 = " margin-top:-170px; visibilty:visible;";
         DateTime today = DateTime.Today;
         byte count = 0;
-        DateTime[] futureDates = new DateTime[7];
-        for (int i = 0; i < 7; i++)
+        DateTime[] futureDates = new DateTime[10];
+        for (int i = 0; i < 10; i++)
         {
             futureDates[i] = today.AddDays(i + 1);
         }
@@ -165,6 +165,9 @@
             <button class="nav-link" id="nav-4-tab" data-bs-toggle="tab" data-bs-target="#nav-4" type="button" role="tab" aria-controls="nav-4" aria-selected="false">@futureDates[4].ToString("dd/MM/yyyy") </button>
             <button class="nav-link" id="nav-5-tab" data-bs-toggle="tab" data-bs-target="#nav-5" type="button" role="tab" aria-controls="nav-5" aria-selected="false">@futureDates[5].ToString("dd/MM/yyyy") </button>
             <button class="nav-link" id="nav-6-tab" data-bs-toggle="tab" data-bs-target="#nav-6" type="button" role="tab" aria-controls="nav-6" aria-selected="false">@futureDates[6].ToString("dd/MM/yyyy") </button>
+            <button class="nav-link" id="nav-7-tab" data-bs-toggle="tab" data-bs-target="#nav-7" type="button" role="tab" aria-controls="nav-7" aria-selected="false">@futureDates[7].ToString("dd/MM/yyyy") </button>
+            <button class="nav-link" id="nav-8-tab" data-bs-toggle="tab" data-bs-target="#nav-8" type="button" role="tab" aria-controls="nav-8" aria-selected="false">@futureDates[8].ToString("dd/MM/yyyy") </button>
+            <button class="nav-link" id="nav-9-tab" data-bs-toggle="tab" data-bs-target="#nav-9" type="button" role="tab" aria-controls="nav-9" aria-selected="false">@futureDates[9].ToString("dd/MM/yyyy") </button>
  </div>
     </nav>
     <div class="tab-content" id="nav-tabContent" style="margin-left:150px; margin-top:0px;">
@@ -323,6 +326,72 @@
                 </div>
             </div>
         </div>
+            <div class="tab-pane fade" id="nav-7" role="tabpanel" aria-labelledby="nav-7-tab">
+                <div class="container">
+                    <div class="row row-cols-6">
+                        @{
+                            count = 0;
+                        }
+                        @foreach (var item in lst)
+                        {
+                            if (item.Tarih.Day == futureDates[7].Day)
+                            {
+                                count++;
+                                <div style="margin-top:25px;" class="col"><button class=" btn btn-warning" onclick="date1(this.value)" data-toggle="modal" data-target="#exampleModal" value="@item.Tarih">@item.Tarih.ToString("HH:mm") </button></div>
+                            }
+                        }
+                        @if (count == 0)
+                        {
+                            <label>Bugün için uygun Randevu Bulunmamaktadır</label>
+
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-8" role="tabpanel" aria-labelledby="nav-8-tab">
+                <div class="container">
+                    <div class="row row-cols-6">
+                        @{
+                            count = 0;
+                        }
+                        @foreach (var item in lst)
+                        {
+                            if (item.Tarih.Day == futureDates[8].Day)
+                            {
+                                count++;
+                                <div style="margin-top:25px;" class="col"><button class=" btn btn-warning" onclick="date1(this.value)" data-toggle="modal" data-target="#exampleModal" value="@item.Tarih">@item.Tarih.ToString("HH:mm") </button></div>
+                            }
+                        }
+                        @if (count == 0)
+                        {
+                            <label>Bugün için uygun Randevu Bulunmamaktadır</label>
+
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-9" role="tabpanel" aria-labelledby="nav-9-tab">
+                <div class="container">
+                    <div class="row row-cols-6">
+                        @{
+                            count = 0;
+                        }
+                        @foreach (var item in lst)
+                        {
+                            if (item.Tarih.Day == futureDates[9].Day)
+                            {
+                                count++;
+                                <div style="margin-top:25px;" class="col"><button class=" btn btn-warning" onclick="date1(this.value)" data-toggle="modal" data-target="#exampleModal" value="@item.Tarih">@item.Tarih.ToString("HH:mm") </button></div>
+                            }
+                        }
+                        @if (count == 0)
+                        {
+                            <label>Bugün için uygun Randevu Bulunmamaktadır</label>
+
+                        }
+                    </div>
+                </div>
+            </div>
         
     </div>
     </div>

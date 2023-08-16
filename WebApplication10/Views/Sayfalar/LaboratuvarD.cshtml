@@ -90,19 +90,7 @@
         var cells = row.getElementsByTagName("td");
 
         var data1 = cells[0].innerText;
-    $.ajax({
-        type: "POST",
-        url: "/Sayfalar/labid",
-        data: { value: data1 },
-        success: function (response) {
-            console.log("TempData value set successfully.");
-                setTimeout(ajaxrpt, 5000);
-        },
-        error: function (error) {
-            console.error("Error setting TempData value:", error);
-                setTimeout(lb, 5000);
-        }
-    });
+
     
     
     }
@@ -116,7 +104,7 @@
         <thead>
             <tr>
                 <th class="th-sm">
-                    Lab ID
+                    Lab Adı
                 </th>
                 <th class="th-sm">
                     Test Adı
@@ -128,7 +116,7 @@
                     Durum
                 </th>
                 <th class="th-sm">
-                    Iletisim
+                    Lab Iletisim
                 </th>
                 <th class="th-sm">
                    
@@ -138,32 +126,46 @@
         </thead>
         <tbody>
             @{
+                string stylelab = "";
                 Lab hasta1 = new Lab();
             }
             @foreach(var item in hasta1.Lists("select * from Lab where DoktorID="+idExtractor.userid))
             {
+                if (item.LabDurum == "Kabul Edildi")
+                {
+                    stylelab = "background-color:lawngreen ";
+                }
+                else if (item.LabDurum == "Gönderildi")
+                {
+                    stylelab = "background-color:yellow ";
+                }
+                else
+                {
+                    stylelab = "";
+                }
                 <tr>
-                    <td>
-                        @Html.Label(item.LabID.ToString())
+                    <td style="@stylelab">
+                        <label >@item.LabAdı</label>
+                       
                     </td>
-                    <td>
+                    <td style="@stylelab">
                         @Html.Label(item.LabTestAdi.ToString())
                     </td>
-                    <td>
+                    <td style="@stylelab">
                         @Html.Label(item.LabAdı.ToString())
                     </td>
-                    <td>
+                    <td style="@stylelab">
                         @Html.Label(item.LabDurum.ToString())
                     </td>
-                    <td>
+                    <td style="@stylelab">
                         @Html.Label(item.Iletisim.ToString())
                     </td>
-                    <td>
-                        <button id="btnekle" class="btn btn-primary btn-sm" onclick="lb(this)" data-toggle="modal" data-target="#exampleModal">Detay</button>
+                    <td style="@stylelab">
+                       
 
                     </td>
                 </tr>
-
+                
             }
 
         </tbody>

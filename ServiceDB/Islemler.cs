@@ -31,6 +31,7 @@ namespace Service
                     Adi_SoyadiH = sqlDataReader["adhasta"].ToString(),
                     Adi_SoyadiD = sqlDataReader["AdiSoyadi"].ToString(),
                     IslemAciklamasi = sqlDataReader["IslemAciklamasi"].ToString(),
+                    DrAciklaması = sqlDataReader["DrAciklaması"].ToString(),
                     Tarih = sqlDataReader.GetDateTime(5),
                     CalisanID = (int)sqlDataReader["CalisanID"]
                  

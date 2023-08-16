@@ -14,6 +14,8 @@ namespace Service.DTO
         public DateTime DogumTarihi { get; set;}
         public DateTime KayıtTarihi { get; set; }
         public string Cinsiyet { get; set;}
+        public string Email { get; set;}
+        public string Adres { get; set;}
         public string Status { get; set;}
     }
 }

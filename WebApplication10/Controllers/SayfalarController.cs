@@ -14,6 +14,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components.Routing;
 using NuGet.Common;
+using Newtonsoft.Json.Linq;
 
 namespace DHBS_Sistemi.Controllers
 {
@@ -46,7 +47,7 @@ namespace DHBS_Sistemi.Controllers
                 {
                     Hasta hastacommand = new Hasta();
                     hastacommand.insert("update Hasta set TC='" + hasta.TC + "',AdiSoyadi='" + hasta.AdiSoyadi + "',Iletisim='" + hasta.Iletisim
-                        + "',DogumTarihi='" + hasta.DogumTarihi + "',Status='" + "Active" + "',Cinsiyet='" + hasta.Cinsiyet + "' where HastaID=" + hasta.hastaid);
+                        + "',DogumTarihi='" + hasta.DogumTarihi + "',Status='" + "Active" + "',Cinsiyet='" + hasta.Cinsiyet + "' where TC=" + hasta.TC);
                     TempData["AlertMessage"] = "Hasta Başarı ile güncellendi";
                     return View();
                 }
@@ -87,9 +88,11 @@ namespace DHBS_Sistemi.Controllers
         {
             try
             {
+
+                string strtime = DateTime.UtcNow.ToString("yyyy/MM/dd") + " " + DateTime.UtcNow.ToString("HH") + ":" + DateTime.UtcNow.ToString("mm");
                 Hasta hastacommand = new Hasta();
                 hastacommand.insert("insert into Hasta values('" + hasta.TC + "','" + hasta.AdiSoyadi + "','" + hasta.Iletisim
-                    + "','" + hasta.DogumTarihi + "','" + "Active" + "','" + DateTime.UtcNow + "','" + hasta.Cinsiyet + "'," + idExtractor.userid + ")");
+                    + "','" + hasta.DogumTarihi + "','" + "Active" + "','" + strtime + "','" + hasta.Cinsiyet + "'," + idExtractor.userid + ",'"+hasta.Email+"','"+hasta.Adres+"')");
                 return true;
             }
             catch {
@@ -111,6 +114,61 @@ namespace DHBS_Sistemi.Controllers
             return View();
 
         }
+        [CustomValidationHK]
+        [HttpPost]
+        public IActionResult RandevularHK([FromForm] RandevuDTO randevuDTO, int doktorid, byte type, string TC)
+        {//type 0 ilk giriş type 1 insert
+            if(TempData["TChid"] == null && TC!=null)
+            {
+                HastaDTO hasta = new HastaDTO();
+                Hasta cmd = new Hasta();
+                foreach (var item in cmd.Lists("select * from Hasta where TC='"+ TC+"'"))
+                {
+                    TempData["TChid"] = item.hastaid;
+                    TempData["TCname"] = item.AdiSoyadi;
+
+                }
+
+                return View();
+
+            }
+            else {
+
+                if (type == 0)
+                {
+                    TempData["Doktorid"] = doktorid;
+                    VW_Doktorlar dr2 = new VW_Doktorlar();
+                    if (doktorid != null || doktorid == 0)
+                    {
+
+                        foreach (var item in dr2.Lists("select * from vw_Doktorlar where DoktorID=" + doktorid))
+                        {
+                            TempData["Uzmanlık"] = item.Uzmanlık;
+                            TempData["drAdi"] = item.AdiSoyadi;
+
+                        }
+                    }
+                    return View();
+                }
+                else if (type == 1)
+                {
+                    string strtime = randevuDTO.Tarih.ToString("yyyy/MM/dd") + " " + randevuDTO.Tarih.ToString("HH") + ":" + randevuDTO.Tarih.ToString("mm");
+                    Randevu randevu1 = new Randevu();
+                    randevu1.insert("insert into Randevu values(" + randevuDTO.HastaID + "," + randevuDTO.DoktorID + ",1,'" + strtime + "','Online')");
+                    TempData["AlertMessage"] = "Randevu Alma İşlemi Başarılı";
+                    return View();
+
+                }
+                else
+                {
+                    TempData["AlertMessage"] = "Randevu Alma İşlemi Başarısız";
+                    return View();
+
+                } }
+            return View();
+
+        }
+      
         [CustomValidationHK]
         public IActionResult IslemlerHK()
         {
@@ -213,7 +271,7 @@ namespace DHBS_Sistemi.Controllers
 
         [CustomValidationDoktor]
         [HttpPost]
-        public IActionResult IslemEkleD([FromForm] IslemEkle ıslemEkle)
+        public IActionResult IslemEkleD([FromForm] IslemEkle ıslemEkle,string draciklaması,string labadı)
         {
             try
             {
@@ -228,14 +286,14 @@ namespace DHBS_Sistemi.Controllers
                     {
                         ıslemEkle.doktorid = idExtractor.userid;
                         ıslemEkle.islab = 0;
-                        executer.execute("exec sp_islemekletransaction " + ıslemEkle.doktorid + "," + ıslemEkle.hastaid + "," + ıslemEkle.prosedurid + ",0," + idExtractor.userid);
+                        executer.execute("exec sp_islemekletransaction " + ıslemEkle.doktorid + "," + ıslemEkle.hastaid + "," + ıslemEkle.prosedurid + ",0," + idExtractor.userid+",'"+draciklaması+"','1'");
                         TempData["AlertMessage"] = "İşlem Başarı ile eklendi";
                     }
                     else
                     {
                         ıslemEkle.doktorid = idExtractor.userid;
                         ıslemEkle.islab = 1;
-                        executer.execute("exec sp_islemekletransaction " + ıslemEkle.doktorid + "," + ıslemEkle.hastaid + "," + ıslemEkle.prosedurid + ",1," + idExtractor.userid);
+                        executer.execute("exec sp_islemekletransaction " + ıslemEkle.doktorid + "," + ıslemEkle.hastaid + "," + ıslemEkle.prosedurid + ",1," + idExtractor.userid + ",'" + draciklaması + "','"+labadı+"'");
                         TempData["AlertMessage"] = "İşlem ve Lab Başarı ile eklendi";
 
 
@@ -252,13 +310,21 @@ namespace DHBS_Sistemi.Controllers
 
         [CustomValidationDoktor]
         [HttpPost]
-        public IActionResult IslemlerD([FromForm] IslemlerDTO ıslemlerDTO)
+        public IActionResult IslemlerD([FromForm] IslemlerDTO ıslemlerDTO,int tip)
         {
-
-
-            executer.execute("delete from Islem where IslemID=" + ıslemlerDTO.IslemID);
-            TempData["AlertMessage"] = "İşlem Başarı ile Silindi";
+            if (tip == 0) {
+                executer.execute("delete from Islem where IslemID=" + ıslemlerDTO.IslemID);
+                TempData["AlertMessage"] = "İşlem Başarı ile Silindi";
+                return View();
+            }else if (tip == 1)
+            {
+                executer.execute("update Islem set DrAciklaması='"+ıslemlerDTO.DrAciklaması+"' where IslemID=" + ıslemlerDTO.IslemID);
+                TempData["AlertMessage"] = "İşlem Başarı ile Silindi";
+                return View();
+            }
             return View();
+
+
 
         }
         [CustomValidationUser]
@@ -479,6 +545,25 @@ namespace DHBS_Sistemi.Controllers
 
             return View();
         }
+        [CustomValidationUser]
+        [HttpPost]
+        public IActionResult randevuHasta([FromForm] RandevuDTO ds)
+        {
+            try
+            {
+
+                string strtarih = ds.Tarih.ToString("yyyy/MM/dd") + " " + ds.Tarih.ToString("HH") + ":" + ds.Tarih.ToString("mm");
+                executer.execute("delete from Randevu where HastaID='" + ds.HastaID + "' and Tarih='" + strtarih + "'");
+                TempData["AlertMessage"] = "Randevu silme başarılı";
+                return View();
+            }
+            catch
+            {
+                TempData["AlertMessage"] = "Randevu silme Başarısız";
+                return View();
+
+            }
+        }
         public IActionResult Ziyaretlerim()
         {
 
@@ -497,7 +582,7 @@ namespace DHBS_Sistemi.Controllers
             try {
 
                 Hasta hastacommand = new Hasta();
-                hastacommand.insert("update Hasta set Iletisim='" + hastaDTO.Iletisim + "'" + "where HastaID=" + hastaDTO.hastaid);
+                hastacommand.insert("update Hasta set Iletisim='" + hastaDTO.Iletisim + "',Adres='"+hastaDTO.Adres +"',Email='"+hastaDTO.Email+"' where HastaID=" + hastaDTO.hastaid);
                 TempData["AlertMessage"] = "Güncelleme işlemi Başarılı";
                 return View();
             }
@@ -553,6 +638,23 @@ namespace DHBS_Sistemi.Controllers
 
             return Ok();
         }
+        public IActionResult HastaIDHK(string value)
+        {
+
+
+            Hasta hasta = new Hasta();
+            foreach (var item in hasta.Lists("select h.HastaID,h.TC,h.AdiSoyadi,h.Iletisim,h.DogumTarihi,h.Status,h.KayıtTarihi,h.Cinsiyet,h.IslemiYapan from hasta h join Islem I on I.HastaID=h.HastaID join Lab L on I.IslemID=L.LabID where h.TC='" + value+"'"))
+            {
+               
+                TempData["Hastaid"] = item.hastaid;
+                
+            }
+
+
+            return Ok();
+        }
+
+        
         public IActionResult HastaGüncelle()
         {
 
@@ -569,14 +671,14 @@ namespace DHBS_Sistemi.Controllers
                 {
                     Hasta hastacommand = new Hasta();
                     hastacommand.insert("update Hasta set TC='" + hasta.TC + "',AdiSoyadi='" + hasta.AdiSoyadi + "',Iletisim='" + hasta.Iletisim
-                        + "',DogumTarihi='" + hasta.DogumTarihi + "',Status='" + "Active" + "',Cinsiyet='" + hasta.Cinsiyet + "' where HastaID=" + hasta.hastaid);
+                        + "',DogumTarihi='" + hasta.DogumTarihi + "',Status='" + "Active" + "',Cinsiyet='" + hasta.Cinsiyet + "' where TC='" + hasta.TC+"'");
                     TempData["AlertMessage"] = "Hasta Başarı ile güncellendi";
                     return View();
                 }
-                else if (hasta.hastaid != 0 && hasta.AdiSoyadi == null)
+                else if (hasta.hastaid == 0 && hasta.AdiSoyadi == null)
                 {
                     Hasta hastacommand = new Hasta();
-                    hastacommand.delete("update Hasta set Status='Passive' where HastaID=" + hasta.hastaid);
+                    hastacommand.delete("update Hasta set Status='Passive' where TC='" + hasta.TC+"'");
                     TempData["AlertMessage"] = "Hasta Başarı ile Silindi";
                     return View();
                 }
@@ -645,6 +747,43 @@ namespace DHBS_Sistemi.Controllers
                 return View();
 
             }
+        }
+        public IActionResult RandevuGRNThk()
+        {
+
+
+            return View();
+        }
+        [HttpPost]
+        public IActionResult RandevuGRNThk([FromForm] RandevuDTO ds)
+        {
+            try {
+                Hasta hasta = new Hasta();
+                foreach (var item in hasta.Lists("select * from Hasta where TC='" + ds.TC+"'"))
+                {
+
+                    ds.HastaID = item.hastaid;
+
+                }
+
+           
+
+                string strtarih = ds.Tarih.ToString("yyyy/MM/dd") + " " + ds.Tarih.ToString("HH") + ":" + ds.Tarih.ToString("mm");
+                executer.execute("delete from Randevu where HastaID='" + ds.HastaID + "' and Tarih='" + strtarih + "'");
+                TempData["AlertMessage"] = "Randevu silme başarılı";
+                return View();
+            
+            }
+            catch
+            {
+                TempData["AlertMessage"] = "Randevu silme Başarısız";
+                return View();
+
+            }
+            
+
+
+            return View();
         }
     }
 }

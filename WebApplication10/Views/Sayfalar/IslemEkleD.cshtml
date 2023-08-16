@@ -99,7 +99,7 @@
 
         if (hidden1) {
             element1.removeAttribute("hidden");
-            elem2.setAttribute("style", "width: 750px; height: 490px; ")
+            elem2.setAttribute("style", "width: 750px; height: 690px; ")
           
         } else {
             elem2.removeAttribute("style");
@@ -212,19 +212,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div style="margin-left:110px; margin-top:0px;">
+                    <div style="margin-left:110px; margin-top:30px;">
                         @using (Html.BeginForm("IslemEkleD", "Sayfalar", FormMethod.Post))
                         {
 
                             <label> ID</label>
                             <div class="input-group">
                                 <span class="fa fa-envelope" aria-hidden="true"></span>
-                                <textarea id="label1" style="resize:none" type="text" required="" name="hastaid"> Kişi Seçmediniz</textarea>
+                                <textarea id="label1" style="resize:none" type="text" required="" name="hastaid" readonly> Kişi Seçmediniz</textarea>
                             </div>
                             <label> AdiSoyadi</label>
-                            <div class="input-group">
+                            <div class="input-group" style="width: 190px;">
                                 <span class="fa fa-lock" aria-hidden="true"></span>
-                                <textarea id="label2" style="resize:none" type="text" required="" name=""> Kişi Seçmediniz</textarea>
+                                <textarea id="label2" style="resize:none" type="text" required="" name="" readonly> Kişi Seçmediniz</textarea>
                             </div>
                             <label style="margin-top:15px; display:block"> İşlem</label>
 
@@ -237,23 +237,37 @@
                                     <option value="@item1.ProsedurID" name="prosedurid">@Html.Label(item1.Adi.ToString())</option>
                                 }
                             </select>
+                            <label style="    display: block;"> Doktor Açıklaması</label>
+                            <div class="input-group">
+                                <span class="fa fa-lock" aria-hidden="true"></span>
+                                <textarea id="labeldr" placeholder="Doktor Açıklaması" style="resize:none;display:block;" type="text" required="" name="draciklaması"></textarea>
+                            </div>
                             <input id="comboinput" name="prosedurid" style="visibility:hidden; margin-right:-100px;" />
                             <button id="btnkaydet" class="btn btn-danger btn-block" onclick="combovalue()" type="submit" style="display:block; margin-top:20px; margin-left:90px;">Kaydet</button>
                             <button class="btn btn-danger btn-block" style="display:inline-block; margin-top:-60px;">Çıkış Ver</button>
                         }
                         <button id="bt" class="btn btn-danger btn-block" onclick="showof()"  style="display:block ;margin-left: 200px; margin-top:-350px; margin-bottom:400px;">Lab</button>
                     </div>
-                    <div id="divlab" hidden="hidden" style="margin-left:420px; margin-top:-350px;">
+                    <div id="divlab" hidden="hidden" style="margin-left:420px; margin-top:-550px;">
                         @using (Html.BeginForm("IslemEkleD", "Sayfalar", FormMethod.Post))
                         {
 
-                            <label style="margin-top:-310px;"> Lab Adı</label>
+                            <label style="margin-top:-310px;">Laboratuvar Açıklaması</label>
                             <div class="input-group">
                                 <span class="fa fa-envelope" aria-hidden="true"></span>
-                                <textarea id="3" style="resize:none" type="text" required="" name="LabAdı"> </textarea>
+                                <textarea id="3" style="resize:none" type="text" required="" name="draciklaması"> </textarea>
                             </div>
+                            <label style="margin-top:15px; display:block"> Gönderilecek Laboratuvar</label>
+                            <select id="ComboBox4" style="height: 60px;width: 176px; margin-top:10px;">
+                                @{
+                                    Laboratuvarlar lb = new Laboratuvarlar();
+                                }
+                                @foreach (var item1 in lb.Lists("select * from Laboratuvarlar"))
+                                {
+                                    <option value="@item1.LabAdı" name="">@Html.Label(item1.LabAdı.ToString())</option>
+                                }
+                            </select>
                             <label style="margin-top:15px; display:block">  Lab İşlem</label>
-
                             <select id="ComboBox2" style="height: 60px;width: 176px; margin-top:10px;">
                                 @{
                                     FiyatListesi fiyatListesi2 = new FiyatListesi();
@@ -270,6 +284,7 @@
                             </div>
                             <input id="inputlab" name="islab" style="visibility:hidden; margin-right:-100px;" />
                             <input id="comboinput1" name="prosedurid" style="visibility:hidden; margin-right:-100px;" />
+                            <input id="comboinput4" name="labadı" style="visibility:hidden; margin-right:-100px;" />
                             <button id="btnkaydet" class="btn btn-warning btn-block" onclick="combovalue1()" type="submit" style="display:block; margin-left:50px; margin-top:-50px;" >Lab Kaydet</button>
                         }
 
@@ -307,8 +322,11 @@
         var inp4 = document.getElementById("inputlab");
         inp4.value = 1;
         inp3.value = selectedOptionValue1;
+        var comboBox4 = document.getElementById("ComboBox4");
+        var selectedOptionValue4 = comboBox4.value;
+        var inp5 = document.getElementById("comboinput4");
+        inp5.value = selectedOptionValue4;
     }
-
 </script>
 
 
