@@ -1,11 +1,6 @@
 ﻿new DataTable('#tablo1');
 new DataTable('#tablo3');
 new DataTable('#tablox');
-
-
-
-
-
     function combovalue(){
     var comboBox = document.getElementById("ComboBox");
     var selectedOptionValue = comboBox.value;

@@ -4,99 +4,7 @@
     Layout = "~/Views/Shared/_Layout_Doktor.cshtml";
     ViewBag.Title = "İşlemler";
 }
-<script defer src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script defer src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script defer src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script>
-    function ıslemvalue1(button) {
-        var row = button.parentNode.parentNode;
 
-        var cells = row.getElementsByTagName("td");
-
-        var data1 = cells[0].innerText;
-        var data2 = cells[1].innerText;
-        var data3 = cells[2].innerText;
-        var data7 = cells[3].innerText;
-
-        var lbl1=document.getElementById("input1");
-        var lbl2=document.getElementById("input2");
-        var lbl3=document.getElementById("input3");
-
-        var lbl4 = document.getElementById("input4");
-        var lbl5 = document.getElementById("input5");
-        var lbl6 = document.getElementById("input6");
-        var lbl7 = document.getElementById("input7");
-
-        lbl1.value=data1;
-        lbl2.value=data2;
-        lbl3.value=data3;
-
-        lbl4.value = data1;
-        lbl5.value = data2;
-        lbl6.value = data3;
-        lbl7.value = data7;
-
-    }
-
-
-</script>
-
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
-<link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
-
-<title>DHBS Sistemi</title>
-
-<link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
-<script src="/jss.js"></script>
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-<!-- Bootstrap core CSS -->
-<link href="/bootstrap.min.css" rel="stylesheet">
-
-<!-- Custom styles for this template -->
-<link href="/dashboard.css" rel="stylesheet">
-<style type="text/css">
-    /* Chart.js */
-    -webkit-keyframes chartjs-render-animation {
-        from
-
-    {
-        opacity: 0.99
-    }
-
-    to {
-        opacity: 1
-    }
-
-    }
-
-    keyframes chartjs-render-animation {
-        from
-
-    {
-        opacity: 0.99
-    }
-
-    to {
-        opacity: 1
-    }
-
-    }
-
-    .chartjs-render-monitor {
-        -webkit-animation: chartjs-render-animation 0.001s;
-        animation: chartjs-render-animation 0.001s;
-    }
-</style>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<head>
-    <script defer src="~/js/script.js"></script>
     @if (TempData["AlertMessage"] != null)
     {
         if (TempData["AlertMessage"] == "Gider ekleme Başarısız")
@@ -114,12 +22,14 @@
 
 
     }
-</head>
 
-<body>
+<div class="pagetitle">
+    <h1>İşlem Görüntüleme</h1>
+</div>
+
 
     <div style="margin-top:100px">
-        <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left: 250px; margin-top: -150px;  width: 1000px;">
+        <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap">
         <thead>
             <tr>
                     <th class="th-sm">
@@ -219,20 +129,35 @@
                     </div>
                     <div class="modal-body">
                         <div style="margin-top:0px">
-                            <div style="margin-bottom: 0px;margin-left: 100px;">
+                            <div style="margin-bottom: 0px;margin-left: 0px;">
                                 @using (Html.BeginForm("IslemlerD", "Sayfalar", FormMethod.Post))
                                 {
-
-                                    <label style="display:block;">İşlem ID</label>
-                                    <input style="display:block;" id="input4" name="IslemID" />
-                                    <label style="display:block;"> Hasta Adı</label>
-                                    <input id="input5" name="Adi_SoyadiH" style="display:inline-block;" />
-                                    <label style="display:block;"> İşlem Açıklaması</label>
-                                    <input id="input6" name="" style="display:inline-block;" readonly />
-                                    <label style="display:block;"> Doktor Açıklaması</label>
-                                    <input id="input7" name="DrAciklaması" style="display:inline-block;" />
-                                    <button name="tip" value="1" class="btn btn-danger btn-block" type="submit" style=" margin-left:70px;margin-top:30px; display:block">Güncelle</button>
-
+                                <div class="card">
+                                    <div class="card-body" >
+                                        <h5 class="card-title">İşlem Güncelleme</h5>
+                                        <label> İşlem ID</label>
+                                        <div class="col-12">
+                                            <span class="fa fa-envelope" aria-hidden="true"></span>
+                                            <input class="form-control" id="input4" name="IslemID" type="text"  readonly />
+                                        </div>
+                                        <label> Hasta Adı</label>
+                                        <div class="col-12">
+                                            <span class="fa fa-lock" aria-hidden="true"></span>
+                                            <input class="form-control" id="input5" name="Adi_SoyadiH" type="text" disabled />
+                                        </div>
+                                        <label> İşlem Açıklaması</label>
+                                        <div class="col-12">
+                                            <span class="fa fa-lock" aria-hidden="true"></span>
+                                            <input class="form-control" id="input6" type="text" name="" readonly />
+                                        </div>
+                                        <label> Doktor Açıklaması</label>
+                                        <div class="col-12">
+                                            <span class="fa fa-lock" aria-hidden="true"></span>
+                                            <input class="form-control" id="input7" name="DrAciklaması"  />
+                                        </div>
+                                        <button style="margin-left:150px; margin-top:20px;" class="btn btn-danger btn-block" name="tip" value="1" type="submit">Güncelle</button>
+                                    </div>
+                                </div>
 
                                 }
                             </div>
@@ -243,19 +168,15 @@
             </div>
         </div>
     </div>
-
-
-</body>
 <style>
     /* Custom CSS to move the search bar to the right */
     div.dataTables_wrapper div.dataTables_filter {
         margin-left: 480px;
-        margin-top:-140px;
+
     }
 
     #tablo1_filter {
         margin-left: 190px;
-        margin-top: -140px;
     }
     #tablo1_lenght{
         visibility:hidden;
@@ -264,3 +185,42 @@
 
 
 </style>
+
+@section SayfaiciJS{
+
+    <script>
+        function ıslemvalue1(button) {
+            var row = button.parentNode.parentNode;
+
+            var cells = row.getElementsByTagName("td");
+
+            var data1 = cells[0].innerText;
+            var data2 = cells[1].innerText;
+            var data3 = cells[2].innerText;
+            var data7 = cells[3].innerText;
+
+            var lbl1 = document.getElementById("input1");
+            var lbl2 = document.getElementById("input2");
+            var lbl3 = document.getElementById("input3");
+
+            var lbl4 = document.getElementById("input4");
+            var lbl5 = document.getElementById("input5");
+            var lbl6 = document.getElementById("input6");
+            var lbl7 = document.getElementById("input7");
+
+            lbl1.value = data1;
+            lbl2.value = data2;
+            lbl3.value = data3;
+
+            lbl4.value = data1;
+            lbl5.value = data2;
+            lbl6.value = data3;
+            lbl7.value = data7;
+
+        }
+
+
+    </script>
+
+
+}

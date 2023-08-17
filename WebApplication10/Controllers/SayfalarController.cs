@@ -785,5 +785,9 @@ namespace DHBS_Sistemi.Controllers
 
             return View();
         }
+        public IActionResult CikisVer() 
+        {
+            return View(); 
+        }  
     }
 }

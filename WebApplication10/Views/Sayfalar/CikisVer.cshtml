@@ -1,0 +1,185 @@
+﻿@using Service;
+
+@{
+    Layout = "~/Views/Shared/_Layout_Doktor.cshtml";
+    ViewBag.Title = "Çıkış Ver";
+}
+
+@if (TempData["AlertMessage"] != null)
+{
+    if (TempData["AlertMessage"] == "Gider ekleme Başarısız")
+    {
+
+        <body onload="failed()">
+        </body>
+    }
+    else
+    {
+        <body onload="success()">
+        </body>
+
+    }
+
+
+}
+
+<div class="pagetitle">
+    <h1>Çıkış Görüntüle</h1>
+</div>
+
+<div style="margin-top:100px">
+<table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap">
+    <thead>
+            <textarea hidden="hidden" id="myLabel1"></textarea>
+        <tr>
+            <th class="th-sm">
+                İşlem Grubu
+            </th>
+            <th class="th-sm">
+                Hasta Adı Soyadı
+            </th>
+            <th class="th-sm">
+               TC Kimlik Numarası
+            </th>
+
+            <th class="th-sm">
+                Hasta Iletişim Numarası
+            </th>
+            <th class="th-sm">
+                
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            vw_cikisverAnaKisim anakisim = new vw_cikisverAnaKisim();
+        }
+        @foreach (var item in anakisim.Lists("select * from vw_cikisverAnaKisim"))
+        {
+            <tr>
+                    <td>
+                        @Html.Label(item.IslemGrubuID.ToString())
+                    </td>
+                <td>
+                    @Html.Label(item.AdiSoyadi.ToString())
+                </td>
+                <td>
+                    @Html.Label(item.TC.ToString())
+                </td>
+                <td>
+                    @Html.Label(item.Iletisim.ToString())
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal1" onclick="ıslemvalue1(this)" value="@item.IslemGrubuID" >Çıkış Ver </button>
+                        <button id="" type="submit" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" onclick="getRowDatacikis(this)">İşlemleri Görüntüle </button>
+                        <button id="mylabel" type="submit" hidden="hidden" disabled>İşlemleri Görüntüle </button>
+                </td>
+            </tr>
+
+        }
+
+    </tbody>
+
+</table>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Hastanın İşlemleri</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <table id="tabloara" class="table table-striped table-bordered dt-resposive nowrap">
+                        
+                    <thead>
+                        <tr>
+                            <th class="th-sm">
+                                Islem Grubu ID
+                            </th>
+                            <th class="th-sm">
+                               Doktor Adı
+                            </th>
+                            <th class="th-sm">
+                                İşlem Açıklaması
+                            </th>
+                            <th class="th-sm">
+                                Tarih
+                            </th>
+
+                            <th class="th-sm">
+                                Doktor Notu
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            vw_cikisverAraTablo arakisim = new vw_cikisverAraTablo();
+                        }
+                        @foreach (var item in arakisim.Lists("select * from vw_cikisverAraTablo"))
+                        {
+                            <tr>
+                                <td>
+                                    @Html.Label(item.IslemGrubuID.ToString())
+                                </td>
+                                <td>
+                                    @Html.Label(item.DoktorAdi.ToString())
+                                </td>
+                                <td>
+                                    @Html.Label(item.IslemAciklamasi.ToString())
+                                </td>
+                                <td>
+                                    @Html.Label(item.Tarih.Day.ToString()+"/"+item.Tarih.Month.ToString()+"/"+item.Tarih.Year.ToString())
+                                </td>
+                                <td>
+                                    @Html.Label(item.DrAciklamasi.ToString())
+                                </td>
+                            </tr>
+                        }
+
+                 </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+@section SayfaiciJS{
+    <script>
+        function getRowDatacikis(button) {
+            var row = button.parentNode.parentNode;
+            var cells = row.getElementsByTagName("td");
+            var data1 = cells[0].innerText;
+            document.getElementById("mylabel").innerText = data1;
+            setInterval(function () {
+                oTable = $('#tabloara').dataTable();
+                oTable.fnFilter("^" + document.getElementById("mylabel").innerText + "$", 0, true, false);
+            }, 1)
+        }
+
+    </script>
+
+
+}
+<style>
+     #tabloara_filter{
+        visibility: hidden;
+      
+     }
+
+    #tabloara_length {
+        visibility: hidden;
+    }
+
+    #tabloara_info {
+        visibility: hidden;
+    }
+
+    #tabloara_paginate {
+        visibility: hidden;
+    }
+</style>

@@ -17,7 +17,7 @@ namespace DHBS_Sistemi.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Login", "KimlikDoğrulama");
         }
 
         public IActionResult Privacy()
@@ -33,7 +33,7 @@ namespace DHBS_Sistemi.Controllers
         public IActionResult SignOut()
         {
             HttpContext.Session.SetString("Token", "");
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "KimlikDoğrulama");
         }
     }
 }

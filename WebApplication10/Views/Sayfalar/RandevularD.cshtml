@@ -5,69 +5,9 @@
     ViewBag.Title = "Randevular";
 }
 
-<head>
-    <h2 style="text-align:center;margin-top:-250px;">Randevular</h2>
-    </head>
-
-    <script defer src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script defer src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script defer src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    <script defer src="~/js/script.js"></script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
-
-    <title>DHBS Sistemi</title>
-
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
-    <script src="/jss.js"></script>
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-    <!-- Bootstrap core CSS -->
-    <link href="/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="/dashboard.css" rel="stylesheet">
-    <style type="text/css">
-        /* Chart.js */
-        -webkit-keyframes chartjs-render-animation {
-            from
-
-        {
-            opacity: 0.99
-        }
-
-        to {
-            opacity: 1
-        }
-
-        }
-
-        keyframes chartjs-render-animation {
-            from
-
-        {
-            opacity: 0.99
-        }
-
-        to {
-            opacity: 1
-        }
-
-        }
-
-        .chartjs-render-monitor {
-            -webkit-animation: chartjs-render-animation 0.001s;
-            animation: chartjs-render-animation 0.001s;
-        }
-    </style>
-
-<body>
+<div class="pagetitle">
+    <h1>Randevular</h1>
+</div>
     <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px;">
         <thead>
             <tr>
@@ -91,7 +31,7 @@
             @{
                 Randevu hasta2 = new Randevu();
             }
-            @foreach (var item in hasta2.Lists("select * from vw_randevu where DoktorID="+idExtractor.userid))
+            @foreach (var item in hasta2.Lists("select * from vw_randevu where Getdate()<Tarih and DoktorID="+idExtractor.userid))
             {
                 <tr>
                     <td>
@@ -113,9 +53,6 @@
 
         </tbody>
     </table>
-
-
-</body>
 <style>
     /* Custom CSS to move the search bar to the right */
     div.dataTables_wrapper div.dataTables_filter {

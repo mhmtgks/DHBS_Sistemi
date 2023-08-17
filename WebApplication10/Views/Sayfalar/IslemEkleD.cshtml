@@ -9,113 +9,6 @@
     Layout = "~/Views/Shared/_Layout_Doktor.cshtml";
     ViewBag.Title = "Islem Ekle";
 }
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script defer src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script defer src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script defer src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script defer src="~/js/script.js"></script>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
-<link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
-
-<title>DHBS Sistemi</title>
-
-<link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
-<script src="/jss.js"></script>
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-<!-- Bootstrap core CSS -->
-<link href="/bootstrap.min.css" rel="stylesheet">
-
-<!-- Custom styles for this template -->
-<link href="/dashboard.css" rel="stylesheet">
-<style type="text/css">
-    /* Chart.js */
-    -webkit-keyframes chartjs-render-animation {
-        from
-
-    {
-        opacity: 0.99
-    }
-
-    to {
-        opacity: 1
-    }
-
-    }
-
-    keyframes chartjs-render-animation {
-        from
-
-    {
-        opacity: 0.99
-    }
-
-    to {
-        opacity: 1
-    }
-
-    }
-
-    .chartjs-render-monitor {
-        -webkit-animation: chartjs-render-animation 0.001s;
-        animation: chartjs-render-animation 0.001s;
-    }
-</style>
-<script>
-    function getRowData(button) {
-     var row = button.parentNode.parentNode;
-
-    var cells = row.getElementsByTagName("td");
-
-     var data1 = cells[0].innerText;
-    var data2 = cells[1].innerText;
-    var data3 = cells[2].innerText;
-    var data4 = cells[3].innerText;
-    var data5 = cells[4].innerText;
-
-    var lbl = document.getElementById("label1");
-    var lbl1 = document.getElementById("label2");    
-    var lbl3 = document.getElementById("label3");
-
-    lbl.innerText = data1;
-    lbl1.innerText = data3;
-    lbl3.innerText = data1;
-
-
-
-
-    }
-    function showof(){
-        let element1 = document.getElementById("divlab");
-        let hidden1 = element1.getAttribute("hidden");
-        let elem2 = document.getElementById("content");
-        let sty1 = elem2.getAttribute("style");
-
-        if (hidden1) {
-            element1.removeAttribute("hidden");
-            elem2.setAttribute("style", "width: 750px; height: 690px; ")
-          
-        } else {
-            elem2.removeAttribute("style");
-            element1.setAttribute("hidden", "hidden");
-        }
-
-
-
-    }
-   
-
-</script>
-
-<head>
-
-    <h2 style="text-align:center;margin-top:-250px;">İşlem Ekle</h2>
     @if (TempData["AlertMessage"] != null)
     {
         if (TempData["AlertMessage"] == "İşlem ekleme başarısız")
@@ -133,14 +26,8 @@
 
 
     }
-</head>
-<body >
 
-
-   
-
-
-    <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px;">
+    <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap">
         <thead>
             <tr>
                 <th class="th-sm">
@@ -204,7 +91,7 @@
     </table>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div id="content" class="modal-content">
+            <div id="content" class="modal-content" style="width:950px;margin-left:-150px;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel1">Islem Ekle</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -212,83 +99,97 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div style="margin-left:110px; margin-top:30px;">
+                    <div style="margin-left:0px; margin-top:30px;">
                         @using (Html.BeginForm("IslemEkleD", "Sayfalar", FormMethod.Post))
                         {
-
-                            <label> ID</label>
-                            <div class="input-group">
-                                <span class="fa fa-envelope" aria-hidden="true"></span>
-                                <textarea id="label1" style="resize:none" type="text" required="" name="hastaid" readonly> Kişi Seçmediniz</textarea>
-                            </div>
-                            <label> AdiSoyadi</label>
-                            <div class="input-group" style="width: 190px;">
-                                <span class="fa fa-lock" aria-hidden="true"></span>
-                                <textarea id="label2" style="resize:none" type="text" required="" name="" readonly> Kişi Seçmediniz</textarea>
-                            </div>
-                            <label style="margin-top:15px; display:block"> İşlem</label>
-
-                            <select id="ComboBox" style="height: 60px;width: 176px; margin-top:10px;">
-                                @{
-                                    FiyatListesi fiyatListesi1 = new FiyatListesi();
-                                }
-                                @foreach (var item1 in fiyatListesi1.Lists("select * from FiyatListesi where Islab=0"))
-                                {
-                                    <option value="@item1.ProsedurID" name="prosedurid">@Html.Label(item1.Adi.ToString())</option>
-                                }
-                            </select>
-                            <label style="    display: block;"> Doktor Açıklaması</label>
-                            <div class="input-group">
-                                <span class="fa fa-lock" aria-hidden="true"></span>
-                                <textarea id="labeldr" placeholder="Doktor Açıklaması" style="resize:none;display:block;" type="text" required="" name="draciklaması"></textarea>
-                            </div>
-                            <input id="comboinput" name="prosedurid" style="visibility:hidden; margin-right:-100px;" />
-                            <button id="btnkaydet" class="btn btn-danger btn-block" onclick="combovalue()" type="submit" style="display:block; margin-top:20px; margin-left:90px;">Kaydet</button>
-                            <button class="btn btn-danger btn-block" style="display:inline-block; margin-top:-60px;">Çıkış Ver</button>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Hastaya İşlem Ekleme</h5>
+                                <label> ID</label>
+                                <div class="col-12">
+                                    <span class="fa fa-envelope" aria-hidden="true"></span>
+                                    <input class="form-control" id="label1" type="text" required="" name="hastaid" readonly />
+                                </div>
+                                <label> AdiSoyadi</label>
+                                <div class="col-12">
+                                    <span class="fa fa-lock" aria-hidden="true"></span>
+                                    <input class="form-control" id="label2" type="text" required="" name="" readonly />
+                                </div>
+                                <label> İşlem</label>
+                                <div class="col-12">
+                                    <select id="ComboBox" class="form-select">
+                                        @{
+                                            FiyatListesi fiyatListesi1 = new FiyatListesi();
+                                        }
+                                        @foreach (var item1 in fiyatListesi1.Lists("select * from FiyatListesi where Islab=0"))
+                                        {
+                                            <option value="@item1.ProsedurID" name="prosedurid">@Html.Label(item1.Adi.ToString())</option>
+                                        }
+                                    </select>
+                                </div>
+                                <label> Doktor Açıklaması</label>
+                                <div class="col-12">
+                                    <span class="fa fa-lock" aria-hidden="true"></span>
+                                    <input class="form-control" id="labeldr" type="datetime" name="draciklaması" readonly />
+                                </div>
+                                <input id="comboinput" name="prosedurid" style="visibility:hidden; margin-right:-100px;" />
+                                <button id="btnkaydet" class="col-12 btn btn-danger btn-block" onclick="combovalue()" type="submit">Kaydet</button>
+                                 </div>
+                        </div>
                         }
-                        <button id="bt" class="btn btn-danger btn-block" onclick="showof()"  style="display:block ;margin-left: 200px; margin-top:-350px; margin-bottom:400px;">Lab</button>
-                    </div>
-                    <div id="divlab" hidden="hidden" style="margin-left:420px; margin-top:-550px;">
-                        @using (Html.BeginForm("IslemEkleD", "Sayfalar", FormMethod.Post))
-                        {
+                    @using (Html.BeginForm("IslemEkleD", "Sayfalar", FormMethod.Post))
+                    {
+                        <div class="card">
+                            <div class="card-body" style="height: 200px;">
+                                <h5 class="card-title">Hastaya Laboratuvar Ekleme</h5>
+                        <div class="row g-3">
+                        <div class="col-md-4">
+                        <label>Laboratuvar Açıklaması</label>                        
+                            <span class="fa fa-envelope" aria-hidden="true"></span>
+                                        <input class="form-control" id="3" style="resize:none" type="text" required="" name="draciklaması"> </input>
+                        </div>
 
-                            <label style="margin-top:-310px;">Laboratuvar Açıklaması</label>
-                            <div class="input-group">
-                                <span class="fa fa-envelope" aria-hidden="true"></span>
-                                <textarea id="3" style="resize:none" type="text" required="" name="draciklaması"> </textarea>
-                            </div>
-                            <label style="margin-top:15px; display:block"> Gönderilecek Laboratuvar</label>
-                            <select id="ComboBox4" style="height: 60px;width: 176px; margin-top:10px;">
-                                @{
-                                    Laboratuvarlar lb = new Laboratuvarlar();
-                                }
-                                @foreach (var item1 in lb.Lists("select * from Laboratuvarlar"))
-                                {
-                                    <option value="@item1.LabAdı" name="">@Html.Label(item1.LabAdı.ToString())</option>
-                                }
-                            </select>
-                            <label style="margin-top:15px; display:block">  Lab İşlem</label>
-                            <select id="ComboBox2" style="height: 60px;width: 176px; margin-top:10px;">
-                                @{
-                                    FiyatListesi fiyatListesi2 = new FiyatListesi();
-                                }
-                                @foreach (var item2 in fiyatListesi2.Lists("select * from FiyatListesi where Islab=1"))
-                                {
-                                    <option value="@item2.ProsedurID" name="prosedurid">@Html.Label(item2.Adi.ToString())</option>
-                                }
-                            </select>
-                            <label style="visibility:hidden;"> Hasta ID</label>
-                            <div style="visibility:hidden; class="input-group">
-                                <span class="fa fa-envelope" aria-hidden="true"></span>
-                                <textarea id="label3" style="resize:none" type="text" required="" name="hastaid"> Kişi Seçmediniz</textarea>
-                            </div>
-                            <input id="inputlab" name="islab" style="visibility:hidden; margin-right:-100px;" />
-                            <input id="comboinput1" name="prosedurid" style="visibility:hidden; margin-right:-100px;" />
-                            <input id="comboinput4" name="labadı" style="visibility:hidden; margin-right:-100px;" />
-                            <button id="btnkaydet" class="btn btn-warning btn-block" onclick="combovalue1()" type="submit" style="display:block; margin-left:50px; margin-top:-50px;" >Lab Kaydet</button>
-                        }
+                        <div class="col-md-4">
+                        <label > Gönderilecek Laboratuvar</label>
+                                        <select class="form-select" id="ComboBox4">
+                            @{
+                                Laboratuvarlar lb = new Laboratuvarlar();
+                            }
+                            @foreach (var item1 in lb.Lists("select * from Laboratuvarlar"))
+                            {
+                                <option value="@item1.LabAdı" name="">@Html.Label(item1.LabAdı.ToString())</option>
+                            }
+                        </select>
+                        </div>
 
-                    </div>
+
+                        <div class="col-md-4">
+                        <label>  Lab İşlem</label>
+                                        <select class="form-select" id="ComboBox2">
+                            @{
+                                FiyatListesi fiyatListesi2 = new FiyatListesi();
+                            }
+                            @foreach (var item2 in fiyatListesi2.Lists("select * from FiyatListesi where Islab=1"))
+                            {
+                                <option value="@item2.ProsedurID" name="prosedurid">@Html.Label(item2.Adi.ToString())</option>
+                            }
+                        </select>
+                        </div>
+                        <button id="btnkaydet" class="btn btn-warning btn-block" onclick="combovalue1()" type="submit" >Laboratuvar Kaydet</button>
+
+                        <div style="visibility:hidden; class="input-group">
+                            <span class="fa fa-envelope" aria-hidden="true"></span>
+                            <textarea id="label3" style="resize:none" type="text" required="" name="hastaid"> Kişi Seçmediniz</textarea>
+                        </div>
+                        <input id="inputlab" name="islab" style="visibility:hidden; margin-right:-100px;" />
+                        <input id="comboinput1" name="prosedurid" style="visibility:hidden; margin-right:-100px;" />
+                        <input id="comboinput4" name="labadı" style="visibility:hidden; margin-right:-100px;" />
+                         </div>
+                            </div>
+                        </div>
+                    }
+
+                        </div>
 
                 </div>
             </div>
@@ -311,9 +212,8 @@
         </div>
     </div>
 
+@section SayfaiciJS{
 
-
-</body>
 <script>
     function combovalue1() {
         var comboBox1 = document.getElementById("ComboBox2");
@@ -328,8 +228,53 @@
         inp5.value = selectedOptionValue4;
     }
 </script>
+    <script>
+        function getRowData(button) {
+            var row = button.parentNode.parentNode;
+
+            var cells = row.getElementsByTagName("td");
+
+            var data1 = cells[0].innerText;
+            var data2 = cells[1].innerText;
+            var data3 = cells[2].innerText;
+            var data4 = cells[3].innerText;
+            var data5 = cells[4].innerText;
+
+            var lbl = document.getElementById("label1");
+            var lbl1 = document.getElementById("label2");
+            var lbl3 = document.getElementById("label3");
+
+            lbl.value = data1;
+            lbl1.value = data3;
+            lbl3.value = data1;
 
 
+
+
+        }
+        function showof() {
+            let element1 = document.getElementById("divlab");
+            let hidden1 = element1.getAttribute("hidden");
+            let elem2 = document.getElementById("content");
+            let sty1 = elem2.getAttribute("style");
+
+            if (hidden1) {
+                element1.removeAttribute("hidden");
+                elem2.setAttribute("style", "width: 750px; height: 690px; ")
+
+            } else {
+                elem2.removeAttribute("style");
+                element1.setAttribute("hidden", "hidden");
+            }
+
+
+
+        }
+
+
+    </script>
+
+}
 
 <style>
     /* Custom CSS to move the search bar to the right */
@@ -341,24 +286,6 @@
         margin-left: 90px;
     }
 </style>
-<script>
-
-
-
-</script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-<script src="../../assets/js/vendor/popper.min.js"></script>
-<script src="../../dist/js/bootstrap.min.js"></script>
-
-<!-- Icons -->
-<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
-<script>feather.replace()</script>
-
-<!-- Graphs -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.1/dist/Chart.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 
 
