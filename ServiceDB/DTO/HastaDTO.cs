@@ -1,5 +1,6 @@
 ﻿
 
+using System;
 using System.Data.SqlTypes;
 
 namespace Service.DTO
@@ -17,5 +18,9 @@ namespace Service.DTO
         public string Email { get; set;}
         public string Adres { get; set;}
         public string Status { get; set;}
+
+        public static IEnumerable<HastaDTO> Listele() { List<HastaDTO> hasta = new List<HastaDTO>(); return hasta; }
     }
+
+    
 }

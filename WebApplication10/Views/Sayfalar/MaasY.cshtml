@@ -3,11 +3,6 @@
     Layout = "~/Views/Shared/_Layout_Yonetici.cshtml";
     ViewBag.Title = "Maaş Yöneticisi";
 }
-<script defer src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script defer src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script defer src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script defer src="~/js/script.js"></script>
-<html lang="tr">
 <script>
     function getRowDatax(button) {
         var row = button.parentNode.parentNode;
@@ -32,7 +27,7 @@
 
     }
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" ></script>
-    <head>
+  
     @if (TempData["AlertMessage"] != null)
     {
         if (TempData["AlertMessage"] == "Gider ekleme Başarısız")
@@ -52,12 +47,11 @@
     }
     
     
-    </head>
 
 
 
 </script>
-    <body>
+   
     @using (Html.BeginForm("MaasY", "Sayfalar", FormMethod.Post))
     {
         <button style="margin-left:550px;" class="btn btn-primary btn-success" value="-1"  name="id"> Toplu Maaş Ödemesi</button>
@@ -114,8 +108,6 @@
 
         </tbody>
     </table>
-    </body>
-
 <style>
     /* Custom CSS to move the search bar to the right */
     div.dataTables_wrapper div.dataTables_filter {

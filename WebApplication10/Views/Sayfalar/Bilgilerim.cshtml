@@ -22,61 +22,155 @@
 
 }
 
-<body>
-    @{
 
-        Hasta hasta1 = new Hasta();
-    }
-   
-    <div style="margin-left:610px; margin-top:-150px;">
-        @foreach (var item in hasta1.Lists("select * from Hasta where HastaID=" + idExtractor.userid)){
-        @using (Html.BeginForm("Bilgilerim", "Sayfalar", FormMethod.Post))
-        {
-            <label style="visibility:hidden;" > HastaID</label>
-                <div style="visibility:hidden;" class="input-group">
-                <span class="fa fa-envelope" aria-hidden="true"></span>
-                <input id="hastaid" type="text" required="" name="HastaID" value="@item.hastaid" readonly />
-            </div>
-            <label> TC</label>
-            <div class="input-group">
-                <span class="fa fa-envelope" aria-hidden="true"></span>
-                    <input id="TC" type="text" required="" name="TC" style="background-color:darkgray" value="@item.TC" readonly />
-            </div>
-            <label> AdiSoyadi</label>
-            <div class="input-group">
-                <span class="fa fa-lock" aria-hidden="true"></span>
-                    <input id="adi" type="text" required="" style="background-color:darkgray" name="AdiSoyadi" value="@item.AdiSoyadi" readonly />
-            </div>
-            <label> Iletisim</label>
-            <div class="input-group">
-                <span class="fa fa-lock" aria-hidden="true"></span>
-                    <input id="iletisim" type="text" required="" name="Iletisim" value="@item.Iletisim" />
-            </div>
-            <label> DoğumTarihi(aa/gg/yyyy)</label>
-            <div class="input-group">
-                <span class="fa fa-lock" aria-hidden="true"></span>
-                    <input id="dogumtarihi" type="datetime" style="background-color:darkgray"  name="DogumTarihi" value="@item.DogumTarihi" readonly />
-            </div>
-            <label> Cinsiyet</label>
-            <div class="input-group">
-                <span class="fa fa-lock" aria-hidden="true"></span>
-                    <input id="cinsiyet" style="background-color:darkgray" type="text" required="" name="Cinsiyet" value="@item.Cinsiyet" readonly />
-            </div>
-                <label> Email</label>
-                <div class="input-group">
-                    <span class="fa fa-lock" aria-hidden="true"></span>
-                    <input id="cinsiyet"  type="text" required="" name="Email" value="@item.Email"  />
+
+<div class="pagetitle">
+    <h1>Bilgilerim</h1>
+</div><!-- End Page Title -->
+
+<section class="section profile">
+    <div class="row">
+
+        <div class="col-xl-12">
+
+            <div class="card">
+                <div class="card-body pt-3">
+                    <!-- Bordered Tabs -->
+                    <ul class="nav nav-tabs nav-tabs-bordered">
+
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Bilgilerim</button>
+                        </li>
+
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Bilgilerimi Güncelle</button>
+                        </li>
+                        @*<li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                        </li>*@
+
+                    </ul>
+                    <div class="tab-content pt-2">
+
+                        <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Adı Soyadı</div>
+                                <div class="col-lg-9 col-md-8">@idExtractor.username</div>
+                            </div>
+                            @{
+                                Hasta hasta2 = new Hasta();
+                            }
+                             @foreach (var item in hasta2.Lists("select * from Hasta where HastaID=" + idExtractor.userid)){
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">TC</div>
+                                <div class="col-lg-9 col-md-8">@item.TC</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Telefon Numarası</div>
+                                    <div class="col-lg-9 col-md-8">@item.Iletisim</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Doğum Tarihi</div>
+                                <div class="col-lg-9 col-md-8">@item.DogumTarihi.ToShortDateString()</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Cinsiyet</div>
+                                    <div class="col-lg-9 col-md-8">@item.Cinsiyet</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Adres</div>
+                                    <div class="col-lg-9 col-md-8">@item.Adres</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Email</div>
+                                <div class="col-lg-9 col-md-8">@item.Email</div>
+                            </div>}
+
+                        </div>
+
+                        <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+
+
+                            @{
+
+                                Hasta hasta1 = new Hasta();
+                            }
+                            
+                        @foreach (var item in hasta1.Lists("select * from Hasta where HastaID=" + idExtractor.userid))
+                        {
+                            @using (Html.BeginForm("Bilgilerim", "Sayfalar", FormMethod.Post))
+                            {
+
+                                <div class="row mb-3">
+                                    <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Adı Soyadı</label>
+                                    <div class="col-md-8 col-lg-9">
+                                            <input name="AdiSoyadi" type="text" class="form-control" id="fullName" value="@item.AdiSoyadi" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="about" class="col-md-4 col-lg-3 col-form-label">TC</label>
+                                    <div class="col-md-8 col-lg-9">
+                                            <input readonly name="TC" class="form-control" id="about" value="@item.TC">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="company" class="col-md-4 col-lg-3 col-form-label">Telefon Numarası</label>
+                                    <div class="col-md-8 col-lg-9">
+                                            <input name="Iletisim" type="text" class="form-control" id="company" value="@item.Iletisim">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="Job" class="col-md-4 col-lg-3 col-form-label">Doğum Tarihi</label>
+                                    <div class="col-md-8 col-lg-9">
+                                            <input readonly name="DogumTarihi" type="text" class="form-control" id="Job" value="@item.DogumTarihi.ToShortDateString()">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="Country" class="col-md-4 col-lg-3 col-form-label">Cinsiyet</label>
+                                    <div class="col-md-8 col-lg-9">
+                                            <input readonly name="Cinsiyet" type="text" class="form-control" id="Country" value="@item.Cinsiyet">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="Address" class="col-md-4 col-lg-3 col-form-label">Adres</label>
+                                    <div class="col-md-8 col-lg-9">
+                                            <input name="Adres" type="text" class="form-control" id="Address" value="@item.Adres">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                    <div class="col-md-8 col-lg-9">
+                                            <input name="Email" type="text" class="form-control" id="Phone" value="@item.Email">
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" name="HastaID" value="@idExtractor.userid" class="btn btn-primary">Değişiklikleri Kaydet</button>
+                                </div>
+                            }
+                            }
+
+                        </div>
+
+
+                    </div>
+
                 </div>
-                <label> Adres</label>
-                <div class="input-group">
-                    <span class="fa fa-lock" aria-hidden="true"></span>
-                    <input id="cinsiyet"  type="text" required="" name="Adres" value="@item.Adres"  />
-                </div>
+            </div>
 
-            <button style="margin-top:30px; margin-left:50px;" class="btn btn-danger btn-block" type="submit">Güncelle</button>
-        }
-        }
-            
-
+        </div>
     </div>
-</body>
+</section>
+
+

@@ -1,4 +1,6 @@
 ﻿@using Service;
+@using Service.DTO;
+@model IEnumerable<IslemlerDTO>;
 
 @{
     Layout = "~/Views/Shared/_Layout_Doktor.cshtml";
@@ -26,6 +28,23 @@
 <div class="pagetitle">
     <h1>İşlem Görüntüleme</h1>
 </div>
+@using (Html.BeginForm("IslemlerD", "Sayfalar", FormMethod.Post))
+{
+    <div class="row g-3">
+        <div class="col-md-3">
+            <input id="tcsearch" class="form-control" type="text" name="id" placeholder=" Hasta ID ile Filtrele...">
+        </div>
+        <div class="col-md-3">
+            <input id="tarih" class="form-control" type="text" name="Adi" placeholder=" Ad ile Filtrele...">
+        </div>
+        <div class="col-md-3">
+            <input id="tarih" class="form-control" type="text" name="islemid" placeholder=" İşlem ID ile Filtrele...">
+        </div>
+        <div class="col-md-3">
+            <button name="tip" class="form-control" value="5" style="background-color:lightgrey" id="searchButton">Filtrele</button>
+        </div>
+    </div>
+}
 
 
     <div style="margin-top:100px">
@@ -53,10 +72,8 @@
             </tr>
         </thead>
         <tbody>
-            @{
-                Islemler ıslemler = new Islemler();
-            }
-            @foreach (var item in ıslemler.Lists("select I.HastaID, I.IslemGrubuID,I.IslemID,[Adı Soyadı] as adhasta,I.IslemAciklamasi,Tarih,c.CalisanID,c.AdiSoyadi,I.DrAciklaması from vw_IslemlerDR I join Calisan c on c.AdiSoyadi=I.AdiSoyadi where c.CalisanID="+idExtractor.userid))
+
+            @foreach (var item in Model)
             {
                 <tr>
                     <td>
@@ -90,9 +107,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel1">Hasta İşlemleri</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div style="margin-top:0px">
@@ -123,9 +138,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel1">Hasta İşlemleri</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div style="margin-top:0px">

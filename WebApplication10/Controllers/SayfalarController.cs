@@ -173,7 +173,20 @@ namespace DHBS_Sistemi.Controllers
         public IActionResult IslemlerHK()
         {
 
-            return View();
+            List<HastaDTO> hastas = new List<HastaDTO>();
+            Hasta hasta = new Hasta();
+            hastas = hasta.Lists("select * from Hasta where Status='Active'");
+            return View(hastas);
+
+        }
+        [CustomValidationHK]
+        [HttpPost]
+        public IActionResult IslemlerHK(string TC,string Adi)
+        {
+            List<HastaDTO> hastas = new List<HastaDTO>();
+            Hasta hasta3 = new Hasta();
+            hastas = hasta3.Lists("select * from Hasta where TC like '%" + TC + "%' and AdiSoyadi like '%" + Adi + "%'");
+            return View(hastas);
 
         }
         [CustomValidationHK]
@@ -230,10 +243,13 @@ namespace DHBS_Sistemi.Controllers
         [CustomValidationDoktor]
         public IActionResult IslemlerD()
         {
-
-            return View();
+            List<IslemlerDTO> hastas = new List<IslemlerDTO>();
+            Islemler hasta = new Islemler();
+            hastas = hasta.Lists("select I.HastaID, I.IslemGrubuID,I.IslemID,[Adı Soyadı] as adhasta,I.IslemAciklamasi,Tarih,c.CalisanID,c.AdiSoyadi,I.DrAciklaması from vw_IslemlerDR I join Calisan c on c.AdiSoyadi=I.AdiSoyadi where c.CalisanID=" + idExtractor.userid);
+            return View(hastas);
 
         }
+
         [CustomValidationDoktor]
         public IActionResult LaboratuvarD()
         {
@@ -277,8 +293,7 @@ namespace DHBS_Sistemi.Controllers
             {
                 if (ıslemEkle.prosedurid == 0 && ıslemEkle.islab == 0) {
 
-                    executer.execute("UPDATE IslemGrubu SET IslemDurumu = 0 WHERE HastaID = '" + ıslemEkle.hastaid + "'");
-                    TempData["AlertMessage"] = " Başarı ile Çıkış verildi";
+
                 }
                 else
                 {
@@ -310,19 +325,30 @@ namespace DHBS_Sistemi.Controllers
 
         [CustomValidationDoktor]
         [HttpPost]
-        public IActionResult IslemlerD([FromForm] IslemlerDTO ıslemlerDTO,int tip)
+        public IActionResult IslemlerD([FromForm] IslemlerDTO ıslemlerDTO, int tip, string id, string Adi, int islemid)
         {
-            if (tip == 0) {
+            if (tip == 5)
+            {
+                List<IslemlerDTO> hastas = new List<IslemlerDTO>();
+                Islemler hasta3 = new Islemler();
+                hastas = hasta3.Lists("select I.HastaID, I.IslemGrubuID,I.IslemID,[Adı Soyadı] as adhasta,I.IslemAciklamasi,Tarih,c.CalisanID,c.AdiSoyadi,I.DrAciklaması from vw_IslemlerDR I join Calisan c on c.AdiSoyadi=I.AdiSoyadi where [Adı Soyadı] like '%" + Adi + "%' and str(I.HastaID) like '%" + id + "%' and str(I.IslemID) like '%" + islemid + "%' and c.CalisanID=" + idExtractor.userid);
+                return View(hastas);
+            }
+            else if (tip == 0)
+            {
                 executer.execute("delete from Islem where IslemID=" + ıslemlerDTO.IslemID);
                 TempData["AlertMessage"] = "İşlem Başarı ile Silindi";
                 return View();
-            }else if (tip == 1)
+            }
+            else if (tip == 1)
             {
-                executer.execute("update Islem set DrAciklaması='"+ıslemlerDTO.DrAciklaması+"' where IslemID=" + ıslemlerDTO.IslemID);
+                executer.execute("update Islem set DrAciklaması='" + ıslemlerDTO.DrAciklaması + "' where IslemID=" + ıslemlerDTO.IslemID);
                 TempData["AlertMessage"] = "İşlem Başarı ile Silindi";
                 return View();
             }
-            return View();
+            else { 
+                return View();
+        }
 
 
 
@@ -658,15 +684,30 @@ namespace DHBS_Sistemi.Controllers
         public IActionResult HastaGüncelle()
         {
 
+                List<HastaDTO> hastas = new List<HastaDTO>();
+                Hasta hasta = new Hasta();
+                hastas = hasta.Lists("select * from Hasta where Status='Active'");
+                return View(hastas);
+        
 
-            return View();
+
         }
         [HttpPost]
-        public IActionResult HastaGüncelle([FromForm] HastaDTO hasta)
+        public IActionResult HastaGüncelle([FromForm] HastaDTO hasta, int tip, string TC,string Adi)
         {
 
             try
             {
+                if(tip==1)
+                {
+                    
+                        List<HastaDTO> hastas = new List<HastaDTO>();
+                        Hasta hasta3 = new Hasta();
+                        hastas = hasta3.Lists("select * from Hasta where TC like '%"+TC+ "%' and AdiSoyadi like '%"+Adi+"%'");
+                        return View(hastas);
+
+                    
+                }
                 if (hasta.hastaid != 0 && hasta.AdiSoyadi != null)
                 {
                     Hasta hastacommand = new Hasta();
@@ -785,9 +826,20 @@ namespace DHBS_Sistemi.Controllers
 
             return View();
         }
+        [CustomValidationDoktor]
         public IActionResult CikisVer() 
         {
             return View(); 
-        }  
+        }
+        [CustomValidationDoktor]
+        [HttpPost]
+        public IActionResult CikisVer([FromForm] IslemEkle ıslemEkle)
+        {
+
+            executer.execute("UPDATE IslemGrubu SET IslemDurumu = 0 WHERE HastaID = '" + ıslemEkle.hastaid + "'");
+            TempData["AlertMessage"] = " Başarı ile Çıkış verildi";
+            return View();
+        }
+
     }
 }

@@ -1,4 +1,6 @@
 ﻿@using Service;
+@using Service.DTO;
+@model IEnumerable<HastaDTO>;
 @{
     Layout = "~/Views/Shared/_Layout_HastaKayit.cshtml";
     ViewBag.Title = "Hastalar";
@@ -22,6 +24,20 @@
 <div class="pagetitle">
     <h1>Hasta Güncelleme</h1>
 </div>
+        @using (Html.BeginForm("HastaGüncelle", "Sayfalar", FormMethod.Post))
+        {
+              <div class="row g-3">   
+            <div class="col-md-5">
+                <input id="tcsearch" class="form-control" type="text" name="TC" placeholder=" TC Filtrele...">
+            </div>
+            <div class="col-md-5">
+                <input id="tarih" class="form-control"  type="text" name="Adi" placeholder=" Ad ile Filtrele...">
+            </div>
+            <div class="col-md-2">
+                <button name="tip" class="form-control" value="5" style="background-color:lightgrey" id="searchButton">Filtrele</button>
+            </div>
+            </div>
+        }
 
     <div id="divtablo">
         <table id="tablo1" class="table table-hover">
@@ -48,10 +64,9 @@
                 </tr>
             </thead>
             <tbody>
-                @{
-                    Hasta hasta1 = new Hasta();
-                }
-                @foreach (var itemx in hasta1.Lists("select * from Hasta where Status='Active'"))
+            @try
+            {
+                @foreach (var itemx in Model)
                 {
                     <tr>
                         <td>
@@ -64,7 +79,7 @@
                             @Html.Label(itemx.Iletisim.ToString())
                         </td>
                         <td>
-                            @Html.Label(itemx.DogumTarihi.Day.ToString()+"/"+itemx.DogumTarihi.Month.ToString()+"/"+itemx.DogumTarihi.Year.ToString())
+                            @Html.Label(itemx.DogumTarihi.Year.ToString()+"-"+itemx.DogumTarihi.ToString("MM")+"-"+itemx.DogumTarihi.ToString("dd"))
 
                         </td>
                         <td>
@@ -73,15 +88,20 @@
                         <td>
                             <button id="btgün" style="height: 38px;" class="btn btn-primary btn-sm" onclick="getRowData(this)" value="@itemx.hastaid" data-toggle="modal" data-target="#exampleModal">Güncelle</button>
                             <button id="sil" style="width: 60px;" class="btn btn-primary btn-danger" onclick="getRowData1(this)" value="@itemx.hastaid" data-toggle="modal" data-target="#exampleModal2">Sil</button>
-                           <div style="display:block;" > @using (Html.BeginForm("RandevularHK", "Sayfalar", FormMethod.Post))
-                            {
+                            <div style="display:block;" > @using (Html.BeginForm("RandevularHK", "Sayfalar", FormMethod.Post))
+                                {
                                     <button style="width: 140px; height: 37px; display: block;margin-top: 2px;" class="btn btn-primary btn-warning" value="@itemx.TC" name="TC">Randevu Ekle</button>
-                            }
+                                }
                             </div>
                         </td>
                     </tr>
 
                 }
+            }catch{
+
+
+
+}
 
             </tbody>
         </table>
@@ -91,9 +111,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel1">Hasta Kayıt Güncelle</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     
@@ -149,9 +167,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel1">Hasta Sil</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div style="margin-left:110px; margin-top:0px;">
@@ -175,6 +191,7 @@
 <style>
     /* Custom CSS to move the search bar to the right */
     div.dataTables_wrapper div.dataTables_filter {
+        visibility: hidden;
     }
 
     div.dataTables_wrapper div.dataTables_length {
@@ -256,6 +273,21 @@
 
         }
     </script>
+
+    <script>
+
+        $(document).ready(function () {
+            var table = $('#tablo1').DataTable();
+            $('#searchDateButton').on('click', function () {
+                var customDate = $('#customDateFilter').val();
+                console.log(customDate);
+                table.column(3).search(customDate, true, false).draw();
+            });
+        });
+    </script>
+
+
+
 
 
 }
