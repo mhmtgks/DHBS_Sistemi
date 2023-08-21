@@ -20,7 +20,6 @@ namespace DHBS_Sistemi.Models
         {
             if (HK_.Validate(tkn))
             {
-
                 return Url="AnaSayfa";
 
             }

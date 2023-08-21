@@ -1,10 +1,10 @@
 ﻿@using Service;
 @using Service.DTO;
+@model IEnumerable<HastaDTO>;
 @{
 
     IslemEkle ıslemEkle = new IslemEkle();
 }
-@model Service.DTO.GirisDTO
 @{
     Layout = "~/Views/Shared/_Layout_Doktor.cshtml";
     ViewBag.Title = "Islem Ekle";
@@ -27,7 +27,25 @@
 
     }
 
-    <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap">
+<div class="pagetitle">
+    <h1>İşlem Ekle</h1>
+</div>
+@using (Html.BeginForm("IslemEkleD", "Sayfalar", FormMethod.Post))
+{
+    <div class="row g-3">
+        <div class="col-md-5">
+            <input id="tcsearch" class="form-control" type="text" name="TC" placeholder=" TC Filtrele...">
+        </div>
+        <div class="col-md-5">
+            <input id="tarih" class="form-control" type="text" name="Adi" placeholder=" Ad ile Filtrele...">
+        </div>
+        <div class="col-md-2">
+            <button name="tip" class="form-control" value="5" style="background-color:lightgrey" id="searchButton">Filtrele</button>
+        </div>
+    </div>
+}
+
+<table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-top:30px;">
         <thead>
             <tr>
                 <th class="th-sm">
@@ -54,10 +72,8 @@
             </tr>
         </thead>
         <tbody>
-            @{
-                Hasta hasta1 = new Hasta();
-            }
-            @foreach (var item in hasta1.Lists("select * from Hasta where Status='Active'"))
+
+            @foreach (var item in Model)
             {
                 <tr>
                     <td>
@@ -275,11 +291,19 @@
 <style>
     /* Custom CSS to move the search bar to the right */
     div.dataTables_wrapper div.dataTables_filter {
-        margin-left: 480px;
+        display: none;
     }
 
     div.dataTables_wrapper div.dataTables_length {
-        margin-left: 90px;
+        display: none;
+    }
+
+    div.dataTables_info {
+        display: none;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: .3rem .3rem;
     }
 </style>
 

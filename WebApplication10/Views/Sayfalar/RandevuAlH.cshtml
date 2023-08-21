@@ -5,30 +5,7 @@
     ViewBag.Title = "Randevu Al";
 }
 
-        <script>
-        function strdiv() {
-            let element1 = document.getElementById("saatler");
-            let hidden1 = element1.getAttribute("hidden");
 
-            if (hidden1) {
-                element1.removeAttribute("hidden");
-
-
-            } else {
-                element1.setAttribute("hidden", "hidden");
-            }
-
-        }
-
-        </script>
-        <script>
-
-        function date1(value) {
-            var tarih1 = document.getElementById("Tarih");
-            tarih1.value = value;
-            
-        }
-        </script>
 
     @if (TempData["AlertMessage"] != null)
     {
@@ -61,7 +38,7 @@
         }
         if (TempData["Doktorid"] != null)
         {
-            str1 = " visibility:hidden;";
+            str1 = " display:none;";
             str2 = "";
 
             RandevuTarih randevu = new RandevuTarih();
@@ -75,6 +52,9 @@
         }
 
     }
+<div class="pagetitle">
+    <h1>Randevu Al</h1>
+</div>
     <div  style="@str1">
         <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" >
             <thead>
@@ -432,11 +412,42 @@
 <style>
     /* Custom CSS to move the search bar to the right */
     div.dataTables_wrapper div.dataTables_filter {
-        margin-left: 480px;
+        display: none;
     }
 
     div.dataTables_wrapper div.dataTables_length {
-        margin-left: 90px;
-        visibility:hidden;
+        display: none;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: .3rem .3rem;
     }
 </style>
+
+
+@section SayfaiciJS{
+<script>
+    function strdiv() {
+        let element1 = document.getElementById("saatler");
+        let hidden1 = element1.getAttribute("hidden");
+
+        if (hidden1) {
+            element1.removeAttribute("hidden");
+
+
+        } else {
+            element1.setAttribute("hidden", "hidden");
+        }
+
+    }
+
+</script>
+<script>
+
+    function date1(value) {
+        var tarih1 = document.getElementById("Tarih");
+        tarih1.value = value;
+
+    }
+</script>
+}

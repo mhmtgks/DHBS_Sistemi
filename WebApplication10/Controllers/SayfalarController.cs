@@ -22,17 +22,89 @@ namespace DHBS_Sistemi.Controllers
     public class SayfalarController : Controller
     {
         Executer executer = new Executer();
-
+        
         private static string Mtoken = "";
 
-        [CustomValidationUser]
+        [CustomValidationHK]
         public IActionResult YöneticiAnaSayfa()
         {
-            return View();
-
+            List<VW_FaturalarDTO> hastas = new List<VW_FaturalarDTO>();
+            VW_Faturalar hasta = new VW_Faturalar();
+            hastas = hasta.Lists("select FaturaID, vf.AdiSoyadi, Tarih, Ucret, vf.HastaID from vw_Faturalar vf join Hasta h on h.HastaID = vf.HastaID where vf.FaturaID not in (select FaturaID from Odeme)");
+            return View(hastas);
 
         }
+
+
         [CustomValidationHK]
+        [HttpPost]
+        public IActionResult YöneticiAnaSayfa([FromForm] GiderDTO gider, string id, int tip, string faturaid, string Adi, string dates)
+        {
+            List<VW_FaturalarDTO> hastas = new List<VW_FaturalarDTO>();
+            VW_Faturalar hasta = new VW_Faturalar();
+            hastas = hasta.Lists("select FaturaID, vf.AdiSoyadi, Tarih, Ucret, vf.HastaID from vw_Faturalar vf join Hasta h on h.HastaID = vf.HastaID where vf.FaturaID not in (select FaturaID from Odeme)");
+            try
+            {
+
+
+                if (tip == 5)
+                {
+
+                    if (dates != null)
+                    {
+                        VW_Faturalar hasta1 = new VW_Faturalar();
+                        string[] tarih = parse(dates);
+                        if (tarih[0] != tarih[1])
+                        {
+                            hastas = hasta1.Lists("select FaturaID,vf.AdiSoyadi,Tarih,Ucret,vf.HastaID from vw_Faturalar vf join Hasta h on h.HastaID=vf.HastaID where vf.FaturaID not in (select FaturaID from Odeme) and vf.FaturaID like'%" + faturaid + "%' and vf.AdiSoyadi like'%" + Adi + "%' and vf.Tarih between '" + tarih[0] + "' and '" + tarih[1] + "'");
+                        }
+                        else
+                        {
+                            hastas = hasta1.Lists("select FaturaID,vf.AdiSoyadi,Tarih,Ucret,vf.HastaID from vw_Faturalar vf join Hasta h on h.HastaID=vf.HastaID where vf.FaturaID not in (select FaturaID from Odeme) and vf.FaturaID like'%" + faturaid + "%' and vf.AdiSoyadi like'%" + Adi + "%'");
+                        }
+                    }
+                    else
+                    {
+                        VW_Faturalar hasta2 = new VW_Faturalar();
+                        hastas = hasta2.Lists("select FaturaID,vf.AdiSoyadi,Tarih,Ucret,vf.HastaID from vw_Faturalar vf join Hasta h on h.HastaID=vf.HastaID where vf.FaturaID not in (select FaturaID from Odeme) and vf.FaturaID like'%" + faturaid + "%' and vf.AdiSoyadi like'%" + Adi + "%'");
+
+                    }
+
+
+                    return View(hastas);
+                }
+                else
+                {
+                    if (id != null)
+                    {
+                        string strtime = DateTime.UtcNow.ToString("yyyy/MM/dd") + " " + DateTime.UtcNow.ToString("HH") + ":" + DateTime.UtcNow.ToString("mm");
+                        executer.execute("insert into Odeme values('" + id + "','"+strtime+"',1,"+14+")");
+                        TempData["AlertMessage"] = "Gider ekleme Başarılı";
+                        VW_Faturalar hasta13 = new VW_Faturalar();
+                        hastas = hasta13.Lists("select FaturaID, vf.AdiSoyadi, Tarih, Ucret, vf.HastaID from vw_Faturalar vf join Hasta h on h.HastaID = vf.HastaID where vf.FaturaID not in (select FaturaID from Odeme)");
+
+                        return View(hastas);
+                    }
+                    else
+                    {
+                        return View(hastas);
+                    }
+                }
+
+
+            }
+            catch
+            {
+                List<VW_FaturalarDTO> hastas1 = new List<VW_FaturalarDTO>();
+                VW_Faturalar hasta1 = new VW_Faturalar();
+                hastas1 = hasta1.Lists("select FaturaID, vf.AdiSoyadi, Tarih, Ucret, vf.HastaID from vw_Faturalar vf join Hasta h on h.HastaID = vf.HastaID where vf.FaturaID not in (select FaturaID from Odeme)");
+                TempData["AlertMessage"] = "Gider ekleme Başarısız";
+                return View(hastas1);
+
+            }
+            return View(hastas);
+        }
+            [CustomValidationHK]
         public IActionResult HastaKayit()
         {
             return View();
@@ -193,23 +265,45 @@ namespace DHBS_Sistemi.Controllers
         public IActionResult LaboratuvarHK()
         {
 
-            return View();
+            List<LabDTO> hastas = new List<LabDTO>();
+            Lab lab = new Lab();
+            hastas = lab.Lists("select * from Lab");
+            return View(hastas);
         }
         [CustomValidationHK]
         [HttpPost]
-        public IActionResult LaboratuvarHK([FromForm] LabDTO labDTO)
+        public IActionResult LaboratuvarHK([FromForm] LabDTO labDTO,int tip,string Durum)
         {
+
             try
             {
-                Lab lab = new Lab();
-                lab.update("Update Lab set LabDurum='" + labDTO.LabDurum + "'where LabID='" + labDTO.LabID + "'");
-                TempData["AlertMessage"] = "Lab Başarı ile güncellendi";
-                return View();
+                List<LabDTO> hastas1 = new List<LabDTO>();
+                Lab lab1 = new Lab();
+                hastas1 = lab1.Lists("select * from Lab");
+                if (tip == 5)
+                {
+                    List<LabDTO> hastas = new List<LabDTO>();
+                    Lab lab = new Lab();
+                    hastas = lab.Lists("select * from Lab where LabDurum like '%" + Durum + "%'");
+                    return View(hastas);
+
+                }
+                else
+                {
+
+                    Lab lab = new Lab();
+                    lab.update("Update Lab set LabDurum='" + labDTO.LabDurum + "'where LabID='" + labDTO.LabID + "'");
+                    TempData["AlertMessage"] = "Lab Başarı ile güncellendi";
+                    return View(hastas1);
+                }
             }
             catch
             {
                 TempData["AlertMessage"] = "Lab Güncelleme Başarısız";
-                return View();
+                List<LabDTO> hastas = new List<LabDTO>();
+                Lab lab = new Lab();
+                hastas = lab.Lists("select * from Lab");
+                return View(hastas);
             }
         }
         [CustomValidationDoktor]
@@ -221,9 +315,39 @@ namespace DHBS_Sistemi.Controllers
         [CustomValidationDoktor]
         public IActionResult RandevularD()
         {
+            List<RandevuDTO> hastas = new List<RandevuDTO>();
+            Randevu hasta = new Randevu();
+            hastas = hasta.Lists("select * from vw_randevu where Getdate()<Tarih and DoktorID=" + idExtractor.userid);
+            return View(hastas);
+        }
+        [CustomValidationDoktor]
+        [HttpPost]
+        public IActionResult RandevularD(int tip, string Tarih, string Adi,string dates)
+        {
+            List<RandevuDTO> hastas = new List<RandevuDTO>();
+            if (dates != null)
+            {
+               
+                Randevu hasta1 = new Randevu();
+                string[] tarih = parse(dates);
+                if (tarih[0] != tarih[1])
+                {
+                    hastas = hasta1.Lists("select * from vw_randevu where DoktorID=" + idExtractor.userid + " and AdiSoyadi like '%" + Adi + "%' and Tarih between '" + tarih[0] + "' and '" + tarih[1] + "'");
+                }
+                else
+                {
+                    hastas = hasta1.Lists("select * from vw_randevu where DoktorID=" + idExtractor.userid + " and AdiSoyadi like '%" + Adi + "%'");
 
-            return View();
-
+                }
+                return View(hastas);
+            }
+            else
+            {
+                
+                Randevu hasta = new Randevu();
+                hastas = hasta.Lists("select * from vw_randevu where DoktorID=" + idExtractor.userid + " and AdiSoyadi like '%" + Adi + "%'");
+                return View(hastas);
+            }
         }
 
 
@@ -238,7 +362,19 @@ namespace DHBS_Sistemi.Controllers
         [CustomValidationDoktor]
         public IActionResult HastalarD()
         {
-            return View();
+            List<HastaDTO> hastas = new List<HastaDTO>();
+            Hasta hasta = new Hasta();
+            hastas = hasta.Lists("select * from Hasta where Status='Active'");
+            return View(hastas);
+        }
+        [CustomValidationDoktor]
+        [HttpPost]
+        public IActionResult HastalarD(int tip, string TC, string Adi)
+        {
+            List<HastaDTO> hastas = new List<HastaDTO>();
+            Hasta hasta = new Hasta();
+            hastas = hasta.Lists("select * from Hasta where TC like '%" + TC + "%' and AdiSoyadi like '%" + Adi + "%'");
+            return View(hastas);
         }
         [CustomValidationDoktor]
         public IActionResult IslemlerD()
@@ -253,23 +389,44 @@ namespace DHBS_Sistemi.Controllers
         [CustomValidationDoktor]
         public IActionResult LaboratuvarD()
         {
-            return View();
+            List<LabDTO> hastas = new List<LabDTO>();
+            Lab lab = new Lab();
+            hastas = lab.Lists("select * from Lab");
+            return View(hastas);
         }
         [CustomValidationDoktor]
         [HttpPost]
-        public IActionResult LaboratuvarD([FromForm] LabDTO labDTO)
+        public IActionResult LaboratuvarD([FromForm] LabDTO labDTO, int tip, string Durum, string Adi)
         {
             try
             {
-                Lab lab = new Lab();
-                lab.update("Update Lab set LabDurum='" + labDTO.LabDurum + "'where LabID='" + labDTO.LabID + "'");
-                TempData["AlertMessage"] = "Lab Başarı ile güncellendi";
-                return View();
+                List<LabDTO> hastas1 = new List<LabDTO>();
+                Lab lab1 = new Lab();
+                hastas1 = lab1.Lists("select * from Lab");
+                if (tip == 5) 
+                {
+                    List<LabDTO> hastas = new List<LabDTO>();
+                    Lab lab = new Lab();
+                    hastas = lab.Lists("select * from Lab where LabDurum like '%"+Durum+ "%'");
+                    return View(hastas);
+
+                }
+                else
+                {
+
+                    Lab lab = new Lab();
+                    lab.update("Update Lab set LabDurum='" + labDTO.LabDurum + "'where LabID='" + labDTO.LabID + "'");
+                    TempData["AlertMessage"] = "Lab Başarı ile güncellendi";
+                    return View(hastas1);
+                }
             }
             catch
             {
                 TempData["AlertMessage"] = "Lab Güncelleme Başarısız";
-                return View();
+                List<LabDTO> hastas = new List<LabDTO>();
+                Lab lab = new Lab();
+                hastas = lab.Lists("select * from Lab");
+                return View(hastas);
             }
 
         }
@@ -277,7 +434,10 @@ namespace DHBS_Sistemi.Controllers
         [CustomValidationDoktor]
         public IActionResult IslemEkleD()
         {
-            return View();
+            List<HastaDTO> hastas = new List<HastaDTO>();
+            Hasta hasta = new Hasta();
+            hastas = hasta.Lists("select * from Hasta where Status='Active'");
+            return View(hastas);
         }
 
         public IActionResult FiyatListesi()
@@ -287,68 +447,100 @@ namespace DHBS_Sistemi.Controllers
 
         [CustomValidationDoktor]
         [HttpPost]
-        public IActionResult IslemEkleD([FromForm] IslemEkle ıslemEkle,string draciklaması,string labadı)
+        public IActionResult IslemEkleD([FromForm] IslemEkle ıslemEkle,string draciklaması,string labadı, int tip, string TC, string Adi,int hastaid)
         {
+            List<HastaDTO> hastas = new List<HastaDTO>();
+            Hasta hasta = new Hasta();
+            hastas = hasta.Lists("select * from Hasta where Status='Active'");
             try
             {
-                if (ıslemEkle.prosedurid == 0 && ıslemEkle.islab == 0) {
 
-
-                }
-                else
+                if (tip==5)
                 {
-                    if (ıslemEkle.islab == 0)
-                    {
-                        ıslemEkle.doktorid = idExtractor.userid;
-                        ıslemEkle.islab = 0;
-                        executer.execute("exec sp_islemekletransaction " + ıslemEkle.doktorid + "," + ıslemEkle.hastaid + "," + ıslemEkle.prosedurid + ",0," + idExtractor.userid+",'"+draciklaması+"','1'");
-                        TempData["AlertMessage"] = "İşlem Başarı ile eklendi";
+                    
+                    if(TC == null) { TC = " TC like '%%' "; } else { TC = " TC = '" + TC + "' "; }
+                    Hasta hasta1 = new Hasta();
+                    hastas = hasta1.Lists("select * from Hasta where" + TC + " and AdiSoyadi like '%" + Adi + "%'");
+                    return View(hastas);
+                }
+                else {
+                    if (ıslemEkle.prosedurid == 0 && ıslemEkle.islab == 0) {
+
+
                     }
                     else
                     {
-                        ıslemEkle.doktorid = idExtractor.userid;
-                        ıslemEkle.islab = 1;
-                        executer.execute("exec sp_islemekletransaction " + ıslemEkle.doktorid + "," + ıslemEkle.hastaid + "," + ıslemEkle.prosedurid + ",1," + idExtractor.userid + ",'" + draciklaması + "','"+labadı+"'");
-                        TempData["AlertMessage"] = "İşlem ve Lab Başarı ile eklendi";
+                        if (ıslemEkle.islab == 0)
+                        {
+                            ıslemEkle.doktorid = idExtractor.userid;
+                            ıslemEkle.islab = 0;
+                            executer.execute("exec sp_islemekletransaction " + ıslemEkle.doktorid + "," + ıslemEkle.hastaid + "," + ıslemEkle.prosedurid + ",0," + idExtractor.userid + ",'" + draciklaması + "','1'");
+                            TempData["AlertMessage"] = "İşlem Başarı ile eklendi";
+                            return View(hastas);
+                        }
+                        else
+                        {
+                            ıslemEkle.doktorid = idExtractor.userid;
+                            ıslemEkle.islab = 1;
+                            executer.execute("exec sp_islemekletransaction " + ıslemEkle.doktorid + "," + ıslemEkle.hastaid + "," + ıslemEkle.prosedurid + ",1," + idExtractor.userid + ",'" + draciklaması + "','" + labadı + "'");
+                            TempData["AlertMessage"] = "İşlem ve Lab Başarı ile eklendi";
 
-
-                    }
-                }
+                            return View(hastas);
+                        }
+                    } }
             }
             catch
             {
                 TempData["AlertMessage"] = "İşlem ekleme başarısız";
-                return View();
+                return View(hastas);
             }
-            return View();
+            return View(hastas);
         }
 
         [CustomValidationDoktor]
         [HttpPost]
-        public IActionResult IslemlerD([FromForm] IslemlerDTO ıslemlerDTO, int tip, string id, string Adi, int islemid)
+        public IActionResult IslemlerD([FromForm] IslemlerDTO ıslemlerDTO, int tip, string id, string Adi, int islemid, string dates)
         {
+            List<IslemlerDTO> hastas = new List<IslemlerDTO>();
+            Islemler hasta = new Islemler();
+            hastas = hasta.Lists("select I.HastaID, I.IslemGrubuID,I.IslemID,[Adı Soyadı] as adhasta,I.IslemAciklamasi,Tarih,c.CalisanID,c.AdiSoyadi,I.DrAciklaması from vw_IslemlerDR I join Calisan c on c.AdiSoyadi=I.AdiSoyadi where c.CalisanID=" + idExtractor.userid);
+
             if (tip == 5)
             {
-                List<IslemlerDTO> hastas = new List<IslemlerDTO>();
-                Islemler hasta3 = new Islemler();
-                hastas = hasta3.Lists("select I.HastaID, I.IslemGrubuID,I.IslemID,[Adı Soyadı] as adhasta,I.IslemAciklamasi,Tarih,c.CalisanID,c.AdiSoyadi,I.DrAciklaması from vw_IslemlerDR I join Calisan c on c.AdiSoyadi=I.AdiSoyadi where [Adı Soyadı] like '%" + Adi + "%' and str(I.HastaID) like '%" + id + "%' and str(I.IslemID) like '%" + islemid + "%' and c.CalisanID=" + idExtractor.userid);
-                return View(hastas);
+                if (dates != null)
+                {
+                    Islemler hasta1 = new Islemler();
+                    string[] tarih = parse(dates);
+                    if (tarih[0] != tarih[1])
+                    {
+                        hastas = hasta1.Lists("select I.HastaID, I.IslemGrubuID,I.IslemID,[Adı Soyadı] as adhasta,I.IslemAciklamasi,Tarih,c.CalisanID,c.AdiSoyadi,I.DrAciklaması from vw_IslemlerDR I join Calisan c on c.AdiSoyadi=I.AdiSoyadi where [Adı Soyadı] like '%" + Adi + "%' and str(I.HastaID) like '%" + id + "%' and str(I.IslemID) like '%" + islemid + "%' and c.CalisanID=" + idExtractor.userid + "and Tarih between '" + tarih[0] + "' and '" + tarih[1] + "'");
+                    }
+                    else {
+                        hastas = hasta1.Lists("select I.HastaID, I.IslemGrubuID,I.IslemID,[Adı Soyadı] as adhasta,I.IslemAciklamasi,Tarih,c.CalisanID,c.AdiSoyadi,I.DrAciklaması from vw_IslemlerDR I join Calisan c on c.AdiSoyadi=I.AdiSoyadi where [Adı Soyadı] like '%" + Adi + "%' and str(I.HastaID) like '%" + id + "%' and str(I.IslemID) like '%" + islemid + "%' and c.CalisanID=" + idExtractor.userid);
+                    }
+                }
+                else
+                {
+                    Islemler hasta2 = new Islemler();
+                    hastas = hasta2.Lists("select I.HastaID, I.IslemGrubuID,I.IslemID,[Adı Soyadı] as adhasta,I.IslemAciklamasi,Tarih,c.CalisanID,c.AdiSoyadi,I.DrAciklaması from vw_IslemlerDR I join Calisan c on c.AdiSoyadi=I.AdiSoyadi where [Adı Soyadı] like '%" + Adi + "%' and str(I.HastaID) like '%" + id + "%' and str(I.IslemID) like '%" + islemid + "%' and c.CalisanID=" + idExtractor.userid);
+                }
+                    return View(hastas);
             }
             else if (tip == 0)
             {
                 executer.execute("delete from Islem where IslemID=" + ıslemlerDTO.IslemID);
                 TempData["AlertMessage"] = "İşlem Başarı ile Silindi";
-                return View();
+                return View(hastas);
             }
             else if (tip == 1)
             {
                 executer.execute("update Islem set DrAciklaması='" + ıslemlerDTO.DrAciklaması + "' where IslemID=" + ıslemlerDTO.IslemID);
                 TempData["AlertMessage"] = "İşlem Başarı ile Silindi";
-                return View();
+                return View(hastas);
             }
-            else { 
-                return View();
-        }
+            else {
+                return View(hastas);
+            }
 
 
 
@@ -433,59 +625,82 @@ namespace DHBS_Sistemi.Controllers
         public IActionResult CalisanY()
         {
 
-            return View();
+            List<CalisanDTO> hastas = new List<CalisanDTO>();
+            Calisan hasta = new Calisan();
+            hastas = hasta.Lists("select * from Calisan");
+            return View(hastas);
         }
         [HttpPost]
         [CustomValidationYonetici]
-        public IActionResult CalisanY([FromForm] CalisanDTO calisanDTO, int tip, VW_DoktorlarDTO dto)
+        public IActionResult CalisanY([FromForm] CalisanDTO calisanDTO, int tip, VW_DoktorlarDTO dto, string TC, string Adi,string unvan)
         {
             // 1 silme 2 güncelleme
 
+            List<CalisanDTO> hastas = new List<CalisanDTO>();
+            Calisan hasta = new Calisan();
+            hastas = hasta.Lists("select * from Calisan");
+
+
             try
             {
-                if (calisanDTO.CalisanID != 0 && tip == 2)
+                if (tip == 5) 
                 {
-                    Calisan calisancommand = new Calisan();
-                    calisancommand.insert("update Calisan set TC='" + calisanDTO.TC + "',AdiSoyadi='" + calisanDTO.AdiSoyadi + "',Adres='" + calisanDTO.Adres
-                        + "',Ünvan='" + calisanDTO.Ünvan + "'where CalisanID=" + calisanDTO.CalisanID);
-                    TempData["AlertMessage"] = "Çalışan Başarı ile güncellendi";
-                    return View();
-                }
-                else if (calisanDTO.CalisanID != 0 && tip == 1)
-                {
-                    Calisan calisancommand = new Calisan();
-                    calisancommand.delete("delete from Calisan where CalisanID=" + calisanDTO.CalisanID);
-                    TempData["AlertMessage"] = "Çalışan Başarı ile silindi";
-                    return View();
-                }
-                else if (dto.Uzmanlık != null)
-                {
-                    executer.execute("exec sp_doktorekle '" + calisanDTO.AdiSoyadi + "','" + calisanDTO.TC + "','" + calisanDTO.Adres + "','" + calisanDTO.Ünvan + "','" + dto.Uzmanlık + "'");
-                    return View();
+
+                    List<CalisanDTO> hastas1 = new List<CalisanDTO>();
+                    Calisan hasta1 = new Calisan();
+                    hastas1 = hasta1.Lists("select * from Calisan where Ünvan like '%"+unvan+"%' and AdiSoyadi like '%"+Adi+"%' and TC like '%"+TC+"%'");
+                    return View(hastas1);
                 }
                 else
                 {
-
-                    if (CalisanKayıtYap(calisanDTO) == true)
+                    if (calisanDTO.CalisanID != 0 && tip == 2)
                     {
-                        TempData["AlertMessage"] = "Çalışan Başarı ile eklendi";
-                        return View();
+                        Calisan calisancommand = new Calisan();
+                        calisancommand.insert("update Calisan set TC='" + calisanDTO.TC + "',AdiSoyadi='" + calisanDTO.AdiSoyadi + "',Adres='" + calisanDTO.Adres
+                            + "',Ünvan='" + calisanDTO.Ünvan + "'where CalisanID=" + calisanDTO.CalisanID);
+                        TempData["AlertMessage"] = "Çalışan Başarı ile güncellendi";
+                        return View(hastas);
+                    }
+                    else if (calisanDTO.CalisanID != 0 && tip == 1)
+                    {
+                        Calisan calisancommand = new Calisan();
+                        calisancommand.delete("delete from Calisan where CalisanID=" + calisanDTO.CalisanID);
+                        TempData["AlertMessage"] = "Çalışan Başarı ile silindi";
+                        return View(hastas);
+                    }
+                    else if (dto.Uzmanlık != null)
+                    {
+                        executer.execute("exec sp_doktorekle '" + calisanDTO.AdiSoyadi + "','" + calisanDTO.TC + "','" + calisanDTO.Adres + "','" + calisanDTO.Ünvan + "','" + dto.Uzmanlık + "'");
+                        return View(hastas);
                     }
                     else
                     {
-                        TempData["AlertMessage"] = "Çalışan ekleme Başarısız";
-                        return View();
-                    }
 
+                        if (CalisanKayıtYap(calisanDTO) == true)
+                        {
+                            TempData["AlertMessage"] = "Çalışan Başarı ile eklendi";
+                            return View(hastas);
+                        }
+                        else
+                        {
+                            TempData["AlertMessage"] = "Çalışan ekleme Başarısız";
+                            return View(hastas);
+                        }
+
+                    }
                 }
             }
             catch
             {
+
+                List<CalisanDTO> hastas1 = new List<CalisanDTO>();
+                Calisan hasta1 = new Calisan();
+                hastas1 = hasta1.Lists("select * from Calisan");
                 TempData["AlertMessage"] = "İşlem Başarısız";
-                return View();
+                return View(hastas);
 
             }
-
+            return View(hastas);
 
 
         }
@@ -507,81 +722,189 @@ namespace DHBS_Sistemi.Controllers
         [CustomValidationYonetici]
         public IActionResult MaliDurumY()
         {
-
-            return View();
+            List<VW_FaturalarDTO> hastas = new List<VW_FaturalarDTO>();
+            VW_Faturalar hasta = new VW_Faturalar();
+            hastas = hasta.Lists("select * from vw_Faturalar");
+            return View(hastas);
         }
         [HttpPost]
         [CustomValidationYonetici]
-        public IActionResult MaliDurumY([FromForm] GiderDTO gider, string id)
+        public IActionResult MaliDurumY([FromForm] GiderDTO gider, string id, int tip, string faturaid, string Adi,string dates)
         {
 
+            List<VW_FaturalarDTO> hastas = new List<VW_FaturalarDTO>();
+            VW_Faturalar hasta = new VW_Faturalar();
+            hastas = hasta.Lists("select * from vw_Faturalar");
             try
             {
-                if (id != null)
-                {
-                    executer.execute("delete from Fatura where FaturaID='" + id + "'");
-                    TempData["AlertMessage"] = "Gider ekleme Başarılı";
-                    return View();
-                }
-                else {
 
-                    Gider hastacommand = new Gider();
-                    hastacommand.insert("insert into Gider values(1," + gider.GiderTutari + ",'" + DateTime.UtcNow + "','" + gider.Aciklama + "')");
-                    TempData["AlertMessage"] = "Gider ekleme Başarılı";
-                    return View();
+
+                if (tip == 5)
+                {
+
+                    if (dates != null)
+                    {
+                        VW_Faturalar hasta1 = new VW_Faturalar();
+                        string[] tarih = parse(dates);
+                        if (tarih[0] != tarih[1])
+                        {
+                            hastas = hasta1.Lists("select * from vw_Faturalar where FaturaID like'%" + faturaid + "%' and AdiSoyadi like'%" + Adi + "%' and Tarih between '" + tarih[0] + "' and '" + tarih[1] + "'");
+                        }
+                        else
+                        {
+                            hastas = hasta1.Lists("select * from vw_Faturalar where FaturaID like'%" + faturaid + "%' and AdiSoyadi like'%" + Adi + "%'");
+                        }
+                    }
+                    else {
+                        VW_Faturalar hasta2 = new VW_Faturalar();
+                        hastas = hasta2.Lists("select * from vw_Faturalar where FaturaID like'%" + faturaid + "%' and AdiSoyadi like'%" + Adi + "%'");
+                        
+                    }
+
+                    
+                    return View(hastas);
+                }
+                else
+                {
+                    if (id != null)
+                    {
+                        executer.execute("delete from Fatura where FaturaID='" + id + "'");
+                        TempData["AlertMessage"] = "Gider ekleme Başarılı";
+                        return View(hastas);
+                    }
+                    else
+                    {
+
+                        Gider hastacommand = new Gider();
+                        hastacommand.insert("insert into Gider values(1," + gider.GiderTutari + ",'" + DateTime.UtcNow + "','" + gider.Aciklama + "')");
+                        TempData["AlertMessage"] = "Gider ekleme Başarılı";
+                        return View(hastas);
+                    }
                 }
 
 
             }
             catch
             {
+                List<VW_FaturalarDTO> hastas1 = new List<VW_FaturalarDTO>();
+                VW_Faturalar hasta1 = new VW_Faturalar();
+                hastas1 = hasta1.Lists("select * from vw_Faturalar");
                 TempData["AlertMessage"] = "Gider ekleme Başarısız";
-                return View();
+                return View(hastas1);
 
             }
-
+            return View(hastas);
         }
         [CustomValidationYonetici]
         public IActionResult MaasY()
         {
-
-            return View();
+            List<VW_MaaslarDTO> hastas = new List<VW_MaaslarDTO>();
+            VW_Maaslar hasta = new VW_Maaslar();
+            hastas = hasta.Lists("select * from vw_Maaslar");
+            return View(hastas);
         }
         [CustomValidationYonetici]
         [HttpPost]
-        public IActionResult MaasY(int id)
+        public IActionResult MaasY(int id, int tip, int calisanid, string Adi,string dates)
         {
-            if (id > 0) {
-                executer.execute("exec sp_MaasOde " + id);
-                TempData["AlertMessage"] = "Gider ekleme Başarısz";
-                return View();
+            List<VW_MaaslarDTO> hastas = new List<VW_MaaslarDTO>();
+            VW_Maaslar hasta = new VW_Maaslar();
+            hastas = hasta.Lists("select * from vw_Maaslar");
+
+            if (tip == 5) {
+
+                if (dates != null)
+                {
+                    VW_Maaslar hasta2 = new VW_Maaslar();
+                    string[] tarih = parse(dates);
+                    if (tarih[0] != tarih[1])
+                    {
+                        hastas = hasta2.Lists("select * from vw_Maaslar where AdiSoyadi like'%" + Adi + "%' and sonödenmetarihi between '" + tarih[0] +"' and '" + tarih[1]+"'");
+                    }
+                    else
+                    {
+                        hastas = hasta2.Lists("select * from vw_Maaslar where AdiSoyadi like'%" + Adi + "%'");
+                    }
+                }
+                else
+                {
+
+
+                    VW_Maaslar hasta1 = new VW_Maaslar();
+                    if (calisanid == 0) { hastas = hasta1.Lists("select * from vw_Maaslar where AdiSoyadi like'%" + Adi + "%'"); }
+                    else { hastas = hasta1.Lists("select * from vw_Maaslar where AdiSoyadi like'%" + Adi + "%'"); }
+                }
+                    return View(hastas);
             }
             else
             {
-                TempData["AlertMessage"] = "Gider ekleme Başarısı";
-                executer.execute("exec sp_TumMaasOde ");
-                return View();
+                if (id > 0)
+                {
+                    executer.execute("exec sp_MaasOde " + id);
+                    TempData["AlertMessage"] = "Gider ekleme Başarısz";
+                    return View(hastas);
+                }
+                else
+                {
+                    TempData["AlertMessage"] = "Gider ekleme Başarısı";
+                    executer.execute("exec sp_TumMaasOde ");
+                    return View(hastas);
+                }
             }
 
         }
         [AllowAnonymous]
         public IActionResult randevuHasta()
         {
-
-
-            return View();
+            List<RandevuHastaDTO> hastas = new List<RandevuHastaDTO>();
+            RandevuHasta hasta = new RandevuHasta();
+            hastas = hasta.Lists("select RandevuID,HastaID,R.DoktorID,R.TC,R.AdiSoyadi,Tarih,Uzmanlık,C.AdiSoyadi as dradi from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID join Calisan C on c.CalisanID=D.DoktorID where Tarih<Getdate() and R.HastaID=" + idExtractor.userid);
+            return View(hastas);
         }
         [CustomValidationUser]
         [HttpPost]
-        public IActionResult randevuHasta([FromForm] RandevuDTO ds)
+        public IActionResult randevuHasta([FromForm] RandevuDTO ds,int tip,string dradi,string bolum,string dates)
         {
+            List<RandevuHastaDTO> hastas = new List<RandevuHastaDTO>();
+            RandevuHasta hasta = new RandevuHasta();
+            hastas = hasta.Lists("select RandevuID,HastaID,R.DoktorID,R.TC,R.AdiSoyadi,Tarih,Uzmanlık,C.AdiSoyadi as dradi from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID join Calisan C on c.CalisanID=D.DoktorID where Tarih<Getdate() and R.HastaID=" + idExtractor.userid);
             try
             {
+                if (tip == 5)
+                {
+                    if (dates != null)
+                    {
+                        RandevuHasta hasta2 = new RandevuHasta();
+                        string[] tarih = parse(dates);
+                        if (tarih[0] != tarih[1])
+                        {
+                            hastas = hasta2.Lists("select RandevuID,HastaID,R.DoktorID,R.TC,R.AdiSoyadi,Tarih,Uzmanlık,C.AdiSoyadi as dradi from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID join Calisan C on c.CalisanID=D.DoktorID where R.HastaID=" + idExtractor.userid +" and Tarih between '"+ tarih[0] + "' and '" + tarih[1] + "' and C.AdiSoyadi like '%" + dradi + "%' and Uzmanlık like '%"+bolum+"%'");
+                            return View(hastas);
+                        }
+                        else
+                        {
 
-                string strtarih = ds.Tarih.ToString("yyyy/MM/dd") + " " + ds.Tarih.ToString("HH") + ":" + ds.Tarih.ToString("mm");
-                executer.execute("delete from Randevu where HastaID='" + ds.HastaID + "' and Tarih='" + strtarih + "'");
-                TempData["AlertMessage"] = "Randevu silme başarılı";
-                return View();
+                            hastas = hasta2.Lists("select RandevuID,HastaID,R.DoktorID,R.TC,R.AdiSoyadi,Tarih,Uzmanlık,C.AdiSoyadi as dradi from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID join Calisan C on c.CalisanID=D.DoktorID where R.HastaID=" + idExtractor.userid + " and C.AdiSoyadi like '%" + dradi + "%' and Uzmanlık like '%" + bolum + "%'");
+                            return View(hastas);
+                        }
+                    }
+                    else
+                    {
+                        RandevuHasta hasta2 = new RandevuHasta();
+                        hastas = hasta2.Lists("select RandevuID,HastaID,R.DoktorID,R.TC,R.AdiSoyadi,Tarih,Uzmanlık,C.AdiSoyadi as dradi from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID join Calisan C on c.CalisanID=D.DoktorID where R.HastaID=" + idExtractor.userid + " and C.AdiSoyadi like '%" + dradi + "%' and Uzmanlık like '%" + bolum + "%'");
+                        return View(hastas);
+                    }
+
+                    return View(hastas);
+
+                }
+
+                else {
+                    string strtarih = ds.Tarih.ToString("yyyy/MM/dd") + " " + ds.Tarih.ToString("HH") + ":" + ds.Tarih.ToString("mm");
+                    executer.execute("delete from Randevu where HastaID='" + ds.HastaID + "' and Tarih='" + strtarih + "'");
+                    TempData["AlertMessage"] = "Randevu silme başarılı";
+                    return View(hastas);
+                }
             }
             catch
             {
@@ -622,30 +945,59 @@ namespace DHBS_Sistemi.Controllers
         }
         public IActionResult GiderEkle()
         {
-
-
-            return View();
+            List<GiderDTO> hastas = new List<GiderDTO>();
+            Gider hasta = new Gider();
+            hastas = hasta.Lists("select * from Gider");
+            return View(hastas);
         }
         [HttpPost]
-        public IActionResult GiderEkle([FromForm]GiderDTO giderDTO)
+        public IActionResult GiderEkle([FromForm]GiderDTO giderDTO, int tip, string aciklama, string Adi,string dates)
         {
+            List<GiderDTO> hastas = new List<GiderDTO>();
+            Gider hasta = new Gider();
+            hastas = hasta.Lists("select * from Gider");
             try
             {
-                DateTime Tarih = DateTime.UtcNow; 
-                string strtime = Tarih.ToString("yyyy/MM/dd") + " " +Tarih.ToString("HH") + ":" +Tarih.ToString("mm");
+                if (tip==5) {
+                    if (dates != null)
+                    {
+                        Gider hasta2 = new Gider();
+                        string[] tarih = parse(dates);
+                        if (tarih[0] != tarih[1])
+                        {
+                            hastas = hasta2.Lists("select * from Gider where Açıklama like '%" + aciklama + "%' and Tarih between '" + tarih[0] + "' and '" + tarih[1] + "'");
+                        }
+                        else
+                        {
+                            hastas = hasta2.Lists("select * from Gider where Açıklama like '%" + aciklama + "%'");
+                        }
+                        return View(hastas);
+                    }
+                    else
+                    {
+
+                        Gider hasta1 = new Gider();
+                        hastas = hasta1.Lists("select * from Gider where Açıklama like '%" + aciklama + "%'");
+                        return View(hastas);
+                    }
+
+
+                } else { 
+                DateTime Tarih = DateTime.UtcNow;
+                string strtime = Tarih.ToString("yyyy/MM/dd") + " " + Tarih.ToString("HH") + ":" + Tarih.ToString("mm");
 
                 Gider hastacommand = new Gider();
-                    hastacommand.insert("insert into Gider values(1," + giderDTO.GiderTutari + ",'" + strtime + "','" + giderDTO.Aciklama + "')");
-                    TempData["AlertMessage"] = "Gider ekleme Başarılı";
-                    return View();
-                
+                hastacommand.insert("insert into Gider values(1," + giderDTO.GiderTutari + ",'" + strtime + "','" + giderDTO.Aciklama + "')");
+                TempData["AlertMessage"] = "Gider ekleme Başarılı";
+                    return View(hastas);
 
+                }
 
             }
             catch
             {
                 TempData["AlertMessage"] = "Gider ekleme Başarısız";
-                return View();
+                return View(hastas);
 
             }
         }
@@ -698,12 +1050,13 @@ namespace DHBS_Sistemi.Controllers
 
             try
             {
-                if(tip==1)
+                List<HastaDTO> hastas = new List<HastaDTO>();
+                Hasta hasta3 = new Hasta();
+                hastas = hasta3.Lists("select * from Hasta where TC like '%" + TC + "%' and AdiSoyadi like '%" + Adi + "%'");
+                if (tip==1)
                 {
                     
-                        List<HastaDTO> hastas = new List<HastaDTO>();
-                        Hasta hasta3 = new Hasta();
-                        hastas = hasta3.Lists("select * from Hasta where TC like '%"+TC+ "%' and AdiSoyadi like '%"+Adi+"%'");
+
                         return View(hastas);
 
                     
@@ -714,24 +1067,28 @@ namespace DHBS_Sistemi.Controllers
                     hastacommand.insert("update Hasta set TC='" + hasta.TC + "',AdiSoyadi='" + hasta.AdiSoyadi + "',Iletisim='" + hasta.Iletisim
                         + "',DogumTarihi='" + hasta.DogumTarihi + "',Status='" + "Active" + "',Cinsiyet='" + hasta.Cinsiyet + "' where TC='" + hasta.TC+"'");
                     TempData["AlertMessage"] = "Hasta Başarı ile güncellendi";
-                    return View();
+
+                    return View(hastas);
                 }
                 else if (hasta.hastaid == 0 && hasta.AdiSoyadi == null)
                 {
                     Hasta hastacommand = new Hasta();
                     hastacommand.delete("update Hasta set Status='Passive' where TC='" + hasta.TC+"'");
                     TempData["AlertMessage"] = "Hasta Başarı ile Silindi";
-                    return View();
+                    return View(hastas);
                 }
+                return View(hastas);
                 
             }
             catch
             {
                 TempData["AlertMessage"] = "Hasta ekleme Başarısız";
-                return View();
-
+                List<HastaDTO> hastas = new List<HastaDTO>();
+                Hasta hasta3 = new Hasta();
+                hastas = hasta3.Lists("select * from Hasta where TC like '%" + TC + "%' and AdiSoyadi like '%" + Adi + "%'");
+                return View(hastas);
             }
-            return View();
+           
 
         }
         public IActionResult FiyatListesiY()
@@ -741,14 +1098,22 @@ namespace DHBS_Sistemi.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult FiyatListesiY([FromForm] FiyatListesiDTO fiyat)
+        public IActionResult FiyatListesiY([FromForm] FiyatListesiDTO fiyat,string islemadi,string ucret)
         {
 
 
             try
             {
-                executer.execute("Update FiyatListesi set Ucreti=" + fiyat.Ucreti + " where ProsedurID=" + fiyat.ProsedurID);
-                TempData["AlertMessage"] = "Fiyat Güncelleme Başarılı";
+                if (islemadi != null)
+                {
+                    executer.execute("insert into FiyatListesi values('" + islemadi+ "',"+ucret+",0)");
+                    TempData["AlertMessage"] = "Fiyat Güncelleme Başarılı";
+                }
+                else
+                {
+                    executer.execute("Update FiyatListesi set Ucreti=" + fiyat.Ucreti + " where ProsedurID=" + fiyat.ProsedurID);
+                    TempData["AlertMessage"] = "Fiyat Güncelleme Başarılı";
+                }
                 return View();
 
 
@@ -763,21 +1128,35 @@ namespace DHBS_Sistemi.Controllers
         }
         public IActionResult IzinYonetimi()
         {
-
-
-            return View();
+            List<YillikIzinDTO> hastas = new List<YillikIzinDTO>();
+            YillikIzin hasta = new YillikIzin();
+            hastas = hasta.Lists("select distinct y.DoktorID,y.BaslangicTarihi,y.BitisTarihi,d.AdiSoyadi,d.Uzmanlık from YillikIzin  y join vw_doktorlar d on d.DoktorID=y.DoktorID");
+            return View(hastas);
         }
         [HttpPost]
-        public IActionResult IzinYonetimi(int DoktorID,DateTime BaslangicTarihi,DateTime BitisTarihi)
+        public IActionResult IzinYonetimi(int DoktorID, int tip, string uzmanlik, string Adi,string dates)
         {
-
+            List<YillikIzinDTO> hastas = new List<YillikIzinDTO>();
+            YillikIzin hasta = new YillikIzin();
+            hastas = hasta.Lists("select distinct y.DoktorID,y.BaslangicTarihi,y.BitisTarihi,d.AdiSoyadi,d.Uzmanlık from YillikIzin  y join vw_doktorlar d on d.DoktorID=y.DoktorID");
             try
             {
-                string strbaslangic = BaslangicTarihi.ToString("yyyy/MM/dd") + " " + BaslangicTarihi.ToString("HH") + ":" + BaslangicTarihi.ToString("mm");
-                string strbitis = BitisTarihi.ToString("yyyy/MM/dd") + " " + BitisTarihi.ToString("HH") + ":" + BitisTarihi.ToString("mm");
-                executer.execute("Update YillikIzin set BaslangicTarihi='" + strbaslangic + "',BitisTarihi='"+ strbitis + "' where DoktorID=" + DoktorID);
-                TempData["AlertMessage"] = "İzin ekleme Başarılı";
-                return View();
+                if (tip == 5)
+                {
+                    YillikIzin hasta1 = new YillikIzin();
+                    hastas = hasta1.Lists("select distinct y.DoktorID,y.BaslangicTarihi,y.BitisTarihi,d.AdiSoyadi,d.Uzmanlık from YillikIzin  y join vw_doktorlar d on d.DoktorID=y.DoktorID where d.Uzmanlık like'%"+uzmanlik+"%' and d.AdiSoyadi like'%"+Adi+"%'");
+                    return View(hastas);
+                }
+                else
+                {
+                    string[] trh = parse(dates);
+                    executer.execute("Update YillikIzin set BaslangicTarihi='" + trh[0] + "',BitisTarihi='" + trh[1] + "' where DoktorID=" + DoktorID);
+                    TempData["AlertMessage"] = "İzin ekleme Başarılı";
+                    YillikIzin hasta2 = new YillikIzin();
+                    hastas = hasta2.Lists("select distinct y.DoktorID,y.BaslangicTarihi,y.BitisTarihi,d.AdiSoyadi,d.Uzmanlık from YillikIzin  y join vw_doktorlar d on d.DoktorID=y.DoktorID");
+
+                    return View(hastas);
+                }
 
 
 
@@ -785,34 +1164,75 @@ namespace DHBS_Sistemi.Controllers
             catch
             {
                 TempData["AlertMessage"] = "İzin ekleme Başarısız";
-                return View();
+                return View(hastas);
 
             }
         }
+        [CustomValidationHK]
         public IActionResult RandevuGRNThk()
         {
+            List<RandevuHastaDTO> hastas = new List<RandevuHastaDTO>();
+            RandevuHasta hasta = new RandevuHasta();
+            hastas = hasta.Lists("select RandevuID,HastaID,R.DoktorID,R.TC,R.AdiSoyadi,Tarih,Uzmanlık,C.AdiSoyadi as dradi from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID join Calisan C on c.CalisanID=D.DoktorID where Tarih<Getdate()");
+            return View(hastas);
 
-
-            return View();
+          
         }
+        [CustomValidationHK]
         [HttpPost]
-        public IActionResult RandevuGRNThk([FromForm] RandevuDTO ds)
+        public IActionResult RandevuGRNThk([FromForm] RandevuDTO ds, int tip, string TC, string Adi,string dradi,string dates)
         {
-            try {
-                Hasta hasta = new Hasta();
-                foreach (var item in hasta.Lists("select * from Hasta where TC='" + ds.TC+"'"))
-                {
 
-                    ds.HastaID = item.hastaid;
+            List<RandevuHastaDTO> hastas1 = new List<RandevuHastaDTO>();
+            RandevuHasta hasta1 = new RandevuHasta();
+            hastas1 = hasta1.Lists("select RandevuID,HastaID,R.DoktorID,R.TC,R.AdiSoyadi,Tarih,Uzmanlık,C.AdiSoyadi as dradi from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID join Calisan C on c.CalisanID=D.DoktorID where Tarih<Getdate()");
+
+            try
+            {
+                if (tip==5)
+                {
+                    if (dates != null)
+                    {
+                        RandevuHasta hasta2 = new RandevuHasta();
+                        string[] tarih = parse(dates);
+                        if (tarih[0] != tarih[1])
+                        {
+                            hastas1 = hasta2.Lists("select RandevuID,HastaID,R.DoktorID,R.TC,R.AdiSoyadi,Tarih,Uzmanlık,C.AdiSoyadi as dradi from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID join Calisan C on c.CalisanID=D.DoktorID where Tarih between '" + tarih[0] +"' and '" + tarih[1] +"' and R.TC like '%"+TC+"%' and R.AdiSoyadi like'%"+Adi+"%' and C.AdiSoyadi like '%"+dradi+"%'");
+                            return View(hastas1);
+                        }
+                        else
+                        {
+
+                            hastas1 = hasta2.Lists("select RandevuID,HastaID,R.DoktorID,R.TC,R.AdiSoyadi,Tarih,Uzmanlık,C.AdiSoyadi as dradi from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID join Calisan C on c.CalisanID=D.DoktorID where R.TC like '%" + TC + "%' and R.AdiSoyadi like'%" + Adi + "%' and C.AdiSoyadi like '%" + dradi + "%'");
+                            return View(hastas1);
+                        }
+                    }
+                    else
+                    {
+                        RandevuHasta hasta2 = new RandevuHasta();
+                        hastas1 = hasta2.Lists("select RandevuID,HastaID,R.DoktorID,R.TC,R.AdiSoyadi,Tarih,Uzmanlık,C.AdiSoyadi as dradi from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID join Calisan C on c.CalisanID=D.DoktorID where R.TC like '%" + TC + "%' and R.AdiSoyadi like'%" + Adi + "%' and C.AdiSoyadi like '%" + dradi + "%'");
+                        return View(hastas1);
+                    }
+
+                            return View(hastas1);
 
                 }
+               else {
+                    Hasta hasta = new Hasta();
+                    foreach (var item in hasta.Lists("select * from Hasta where TC='" + ds.TC + "'"))
+                    {
 
-           
+                        ds.HastaID = item.hastaid;
 
-                string strtarih = ds.Tarih.ToString("yyyy/MM/dd") + " " + ds.Tarih.ToString("HH") + ":" + ds.Tarih.ToString("mm");
-                executer.execute("delete from Randevu where HastaID='" + ds.HastaID + "' and Tarih='" + strtarih + "'");
-                TempData["AlertMessage"] = "Randevu silme başarılı";
-                return View();
+                    }
+
+
+
+                    string strtarih = ds.Tarih.ToString("yyyy/MM/dd") + " " + ds.Tarih.ToString("HH") + ":" + ds.Tarih.ToString("mm");
+                    executer.execute("delete from Randevu where HastaID='" + ds.HastaID + "' and Tarih='" + strtarih + "'");
+                    TempData["AlertMessage"] = "Randevu silme başarılı";
+                    return View();
+                }
             
             }
             catch
@@ -829,16 +1249,42 @@ namespace DHBS_Sistemi.Controllers
         [CustomValidationDoktor]
         public IActionResult CikisVer() 
         {
-            return View(); 
+            List<vw_cikisverAnaKisimDTO> hastas = new List<vw_cikisverAnaKisimDTO>();
+            vw_cikisverAnaKisim hasta = new vw_cikisverAnaKisim();
+            hastas = hasta.Lists("select * from vw_cikisverAnaKisim");
+            return View(hastas);
         }
         [CustomValidationDoktor]
         [HttpPost]
-        public IActionResult CikisVer([FromForm] IslemEkle ıslemEkle)
+        public IActionResult CikisVer([FromForm] IslemEkle ıslemEkle,int tip,string TC,string Adi)
         {
 
-            executer.execute("UPDATE IslemGrubu SET IslemDurumu = 0 WHERE HastaID = '" + ıslemEkle.hastaid + "'");
-            TempData["AlertMessage"] = " Başarı ile Çıkış verildi";
-            return View();
+            if(tip == 1)
+            {
+                List<vw_cikisverAnaKisimDTO> hastas = new List<vw_cikisverAnaKisimDTO>();
+                vw_cikisverAnaKisim hasta = new vw_cikisverAnaKisim();
+                hastas = hasta.Lists("select * from vw_cikisverAnaKisim where TC like '%" + TC + "%' and AdiSoyadi like '%" + Adi + "%'");
+                return View(hastas);
+
+            }
+            else
+            {
+                executer.execute("UPDATE IslemGrubu SET IslemDurumu = 0 WHERE HastaID = '" + ıslemEkle.hastaid + "'");
+                TempData["AlertMessage"] = " Başarı ile Çıkış verildi";
+                List<vw_cikisverAnaKisimDTO> hastas = new List<vw_cikisverAnaKisimDTO>();
+                vw_cikisverAnaKisim hasta = new vw_cikisverAnaKisim();
+                hastas = hasta.Lists("select * from vw_cikisverAnaKisim");
+                return View(hastas);
+            }
+
+
+        }
+
+
+        private string[] parse(string time){
+
+            string[] tarihler = time.Replace(" ", "").Split('-');
+            return tarihler;
         }
 
     }

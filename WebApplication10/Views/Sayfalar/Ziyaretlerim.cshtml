@@ -4,40 +4,14 @@
     Layout = "~/Views/Shared/_Layout_Hasta.cshtml";
     ViewBag.Title = "Ziyaretlerim";
 }
-<script>
-    function getRowData123(button) {
 
-
-        var data1 = document.getElementById("btsil").value;
-
-        document.getElementById("myLabel").textContent = data1;
-
-
-
-        // Loop through all table rows, and hide those who don't match the search query
-
-
-
-
-        // ... Diğer işlemler ...
-    };
-    setInterval(function () {
-        oTable = $('#myTable').dataTable();
-
-
-        oTable.fnFilter(document.getElementById("myLabel").textContent);
-    }, 1)
-
-
-
-</script>
 <div class="pagetitle">
     <h1>Ziyaretlerim</h1>
 </div>
 
     <label id="label1"></label>
     <div style="margin-top:-40px">
-        <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px; margin-top:-40px;">
+        <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:0px; margin-top:30px;">
             <thead>
                 <tr>
                     <th class="th-sm">
@@ -135,17 +109,22 @@
     div.dataTables_wrapper div.dataTables_filter {
         margin-left: 480px;
         margin-top: -170px;
+        display:none;
     }
 
     div.dataTables_wrapper div.dataTables_length {
-        visibility: hidden;
+        display: none;
     }
 
     div.dataTables_info {
-        visibility: hidden;
+        display: none;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: .3rem .3rem;
     }
 </style>
-
+@section SayfaiciJS{
 <script>
     $.ajax({
         url: '/HastalarD.cshtml',
@@ -156,3 +135,33 @@
         }
     });
 </script>
+
+
+    <script>
+        function getRowData123(button) {
+
+
+            var data1 = document.getElementById("btsil").value;
+
+            document.getElementById("myLabel").textContent = data1;
+
+
+
+            // Loop through all table rows, and hide those who don't match the search query
+
+
+
+
+            // ... Diğer işlemler ...
+        };
+        setInterval(function () {
+            oTable = $('#myTable').dataTable();
+
+
+            oTable.fnFilter(document.getElementById("myLabel").textContent);
+        }, 1)
+
+
+
+    </script>
+}

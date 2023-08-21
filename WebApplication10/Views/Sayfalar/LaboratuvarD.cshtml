@@ -1,4 +1,7 @@
 ﻿@using Service;
+@using Service.DTO;
+@model IEnumerable<LabDTO>;
+
 @{
     Layout = "~/Views/Shared/_Layout_Doktor.cshtml";
     ViewBag.Title = "Laboratuvar";
@@ -34,8 +37,20 @@
     }
 </script>
 
+@using (Html.BeginForm("LaboratuvarD", "Sayfalar", FormMethod.Post))
+{
+    <div class="row g-3">
+        <div class="col-md-8">
+            <input id="tarih" class="form-control" type="text" name="Durum" placeholder=" Laboratuvar Durumu ile Filtrele...">
+        </div>
+        <div class="col-md-4">
+            <button name="tip" class="form-control" value="5" style="background-color:lightgrey" id="searchButton">Filtrele</button>
+        </div>
+    </div>
+}
 
-    <table id="tablo1" class="table table-hover" style="margin-left:0px;">
+
+<table id="tablo1" class="table table-hover" style="margin-top:30px;">
         <thead>
             <tr>
                 <th class="th-sm">
@@ -60,10 +75,8 @@
             </tr>
         </thead>
         <tbody>
-            @{
-                Lab hasta1 = new Lab();
-            }
-            @foreach (var item in hasta1.Lists("select * from Lab"))
+
+            @foreach (var item in Model)
             {
                 if (item.LabDurum == "Kabul Edildi")
                 {
@@ -113,15 +126,20 @@
 <style>
     /* Custom CSS to move the search bar to the right */
     div.dataTables_wrapper div.dataTables_filter {
-        margin-left: 480px;
+        display: none;
+
     }
 
     div.dataTables_wrapper div.dataTables_length {
-        margin-left: 90px;
+        display: none;
     }
 
     div.dataTables_info {
-        visibility: hidden;
+        display: none;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: .3rem .3rem;
     }
 
 </style>

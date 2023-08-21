@@ -23,6 +23,7 @@ namespace DHBS_Sistemi.Controllers
     {
        Router router = new Router();
         Giris giris = new Giris();
+        Hasta Hasta= new Hasta();
         public readonly JwtAyarları _jwtAyarları;
         public KimlikDoğrulamaController(IOptions<JwtAyarları> jwtAyarları)
         {
@@ -49,7 +50,13 @@ namespace DHBS_Sistemi.Controllers
             var tokens = decodedValue as JwtSecurityToken;
             HttpContext.Session.SetString("Token", token);
             HttpContext.Session.SetString("Id", apikullanıcıBilgileri.KullaniciAdi.ToString());
-            
+
+            List<HastaDTO> hastadto =new List<HastaDTO>();
+            hastadto = Hasta.Lists("select * from Hasta where TC='"+ apikullanıcıBilgileri.KullaniciAdi.ToString() + "'");
+            foreach (var item in hastadto) {
+                HttpContext.Session.SetString("userid", item.hastaid.ToString());
+                ViewBag.userid = item.hastaid;
+            }
             return RedirectToAction(router.FirstRouting(token), "Sayfalar");
         }
 

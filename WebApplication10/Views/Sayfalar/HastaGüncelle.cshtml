@@ -22,7 +22,7 @@
         }
     }
 <div class="pagetitle">
-    <h1>Hasta Güncelleme</h1>
+    <h1>Hasta İşlemleri</h1>
 </div>
         @using (Html.BeginForm("HastaGüncelle", "Sayfalar", FormMethod.Post))
         {
@@ -34,12 +34,12 @@
                 <input id="tarih" class="form-control"  type="text" name="Adi" placeholder=" Ad ile Filtrele...">
             </div>
             <div class="col-md-2">
-                <button name="tip" class="form-control" value="5" style="background-color:lightgrey" id="searchButton">Filtrele</button>
+                <button name="tip" class="form-control btn-sm" value="5" style="background-color:lightgrey" id="searchButton">Filtrele</button>
             </div>
             </div>
         }
 
-    <div id="divtablo">
+    <div id="divtablo" style="margin-top:30px;">
         <table id="tablo1" class="table table-hover">
             <thead>
                 <tr>
@@ -90,7 +90,7 @@
                             <button id="sil" style="width: 60px;" class="btn btn-primary btn-danger" onclick="getRowData1(this)" value="@itemx.hastaid" data-toggle="modal" data-target="#exampleModal2">Sil</button>
                             <div style="display:block;" > @using (Html.BeginForm("RandevularHK", "Sayfalar", FormMethod.Post))
                                 {
-                                    <button style="width: 140px; height: 37px; display: block;margin-top: 2px;" class="btn btn-primary btn-warning" value="@itemx.TC" name="TC">Randevu Ekle</button>
+                                    <button style="width: 140px; height: 37px; display: block;margin-top: 2px;" class="btn btn-sm btn-primary btn-warning" value="@itemx.TC" name="TC">Randevu Ekle</button>
                                 }
                             </div>
                         </td>
@@ -151,7 +151,7 @@
                                 <span class="fa fa-envelope" aria-hidden="true"></span>
                             <input class="form-control" id="hastaid" type="text" required="" name="HastaID" readonly />
                             </div>
-                            <button class="btn btn-danger btn-block" type="submit">Güncelle</button>
+                            <button class="btn btn-danger btn-block btn-sm" type="submit">Güncelle</button>
                             </div>
                             </div>
                         }
@@ -178,7 +178,7 @@
                                 <span class="fa fa-envelope" aria-hidden="true"></span>
                                 <input id="hastaidsil" type="text" required="" name="TC" style="visibility:hidden;" readonly />
                             </div>
-                            <button style="margin-left:100px;" class="btn btn-danger btn-block" type="submit">Onayla</button>
+                            <button style="margin-left:100px;" class="btn btn-sm btn-danger btn-block" type="submit">Onayla</button>
                         }
 
                     </div>
@@ -191,15 +191,19 @@
 <style>
     /* Custom CSS to move the search bar to the right */
     div.dataTables_wrapper div.dataTables_filter {
-        visibility: hidden;
+        display: none;
     }
 
     div.dataTables_wrapper div.dataTables_length {
-        visibility: hidden;
+        display: none;
     }
 
     div.dataTables_info {
-        visibility: hidden;
+        display: none;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: .3rem .3rem;
     }
 
 </style>

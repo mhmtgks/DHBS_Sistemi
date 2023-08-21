@@ -128,15 +128,19 @@
 <style>
     /* Custom CSS to move the search bar to the right */
     div.dataTables_wrapper div.dataTables_filter {
-        margin-left: 480px;
+        display: none;
     }
 
     div.dataTables_wrapper div.dataTables_length {
-        margin-left: 90px;
+        display: none;
     }
 
     div.dataTables_info {
-        visibility: hidden;
+        display: none;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: .3rem .3rem;
     }
 
 </style>

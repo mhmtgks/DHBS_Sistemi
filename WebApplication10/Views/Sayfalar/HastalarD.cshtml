@@ -1,4 +1,6 @@
 ﻿@using Service;
+@using Service.DTO;
+@model IEnumerable<HastaDTO>;
 @{
     Layout = "~/Views/Shared/_Layout_Doktor.cshtml";
     ViewBag.Title = "HastaKayıt";
@@ -8,8 +10,22 @@
 <div class="pagetitle">
     <h1>Hasta İşlemleri Görüntüleme</h1>
 </div>
+@using (Html.BeginForm("HastalarD", "Sayfalar", FormMethod.Post))
+{
+    <div class="row g-3">
+        <div class="col-md-5">
+            <input id="tcsearch" class="form-control" type="text" name="TC" placeholder=" TC Filtrele...">
+        </div>
+        <div class="col-md-5">
+            <input id="tarih" class="form-control" type="text" name="Adi" placeholder=" Ad ile Filtrele...">
+        </div>
+        <div class="col-md-2">
+            <button name="tip" class="form-control" value="5" style="background-color:lightgrey" id="searchButton">Filtrele</button>
+        </div>
+    </div>
+}
     <label id="label1"></label>
-    <table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:70px; margin-top:-90px;">
+<table id="tablo1" class="table table-striped table-bordered dt-resposive nowrap" style="margin-top:30px;">
         <thead>
             <tr>
                 <th class="th-sm">
@@ -36,10 +52,8 @@
             </tr>
         </thead>
         <tbody>
-            @{
-                Hasta hasta1 = new Hasta();
-            }
-            @foreach (var item in hasta1.Lists("select * from Hasta where Status='Active'"))
+
+            @foreach (var item in Model)
             {
                 <tr>
                     <td>
@@ -55,6 +69,7 @@
                         @Html.Label(item.Iletisim.ToString())
                     </td>
                     <td>
+                    
                         @Html.Label(item.DogumTarihi.Day.ToString()+"/"+item.DogumTarihi.Month.ToString()+"/"+item.DogumTarihi.Year.ToString())
 
                     </td>
@@ -134,16 +149,19 @@
 <style>
     /* Custom CSS to move the search bar to the right */
     div.dataTables_wrapper div.dataTables_filter {
-        margin-left:480px;
-        margin-top:-170px;
+        display: none;
     }
 
     div.dataTables_wrapper div.dataTables_length {
-        visibility: hidden;
+        display: none;
     }
 
     div.dataTables_info {
-        visibility: hidden;
+        display: none;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: .3rem .3rem;
     }
 </style>
 @section SayfaiciJS{
