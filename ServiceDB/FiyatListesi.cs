@@ -27,7 +27,7 @@ namespace Service
                     ProsedurID = (int)sqlDataReader["ProsedurID"],
                     Adi = sqlDataReader["Adi"].ToString(),
                     Ucreti = (Decimal)sqlDataReader["Ucreti"],
-
+                    IsActive = (int)sqlDataReader["IsActive"],
 
                 });
 

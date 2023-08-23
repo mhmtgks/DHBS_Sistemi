@@ -4,6 +4,7 @@
 @{
     Layout = "~/Views/Shared/_Layout_Yonetici.cshtml";
     ViewBag.Title = "Calışanlar";
+    string id = ViewBag.id;
 }
 
   
@@ -107,7 +108,9 @@
             <div class="modal-content" style="width:650px">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel1">Calışan Güncelle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
                 </div>
                 <div class="modal-body">
                     <div >
@@ -165,7 +168,9 @@
         <div class="modal-content" style="width:650px">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel1">Calışan Ekle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
                 </div>
                 <div class="modal-body">
                      <div >

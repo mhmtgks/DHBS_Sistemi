@@ -1,6 +1,7 @@
 ﻿@using Service;
 @{
-    string id=ViewBag.userid;
+    string id=ViewBag.id;
+    string username=ViewBag.isim;
 }
 
 <!DOCTYPE html>
@@ -56,7 +57,7 @@
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                         <img src="~/assets/img/avatar.jpg" alt="Profile" class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2">@idExtractor.username</span>
+                        <span class="d-none d-md-block dropdown-toggle ps-2">@username</span>
                     </a><!-- End Profile Iamge Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -164,6 +165,9 @@
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 
+
+
+
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     @*<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>*@
@@ -177,7 +181,9 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-    <script  src="~/js/script.js"></script>
+
+
+
     <!-- Vendor JS Files -->
     <script src="~/assets/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="~/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -188,9 +194,14 @@
     <script src="~/assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="~/assets/vendor/php-email-form/validate.js"></script>
 
+
     <!-- Template Main JS File -->
     <script src="~/assets/js/main.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/script.js"></script>
+
+
 
     @RenderSection("SayfaiciJS", false)
 

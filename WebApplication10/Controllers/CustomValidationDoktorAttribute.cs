@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using Service;
 
 namespace DHBS_Sistemi.Controllers
 {
@@ -14,6 +15,7 @@ namespace DHBS_Sistemi.Controllers
                 var user = context.HttpContext.Session;
                 var tokenHandler = new JwtSecurityTokenHandler();
                 string tstring = tokenHandler.ReadJwtToken(user.GetString("Token")).ToString();
+              
                 if (!tstring.Contains("\"43274205\""))
                 {
                     context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);

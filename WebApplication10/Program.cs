@@ -11,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.Configure<JwtAyarlarý>(builder.Configuration.GetSection("Jwt"));
+//builder.Services.Configure<string>(builder.Configuration.GetSection("ConnectionStrings"));
+
 
 builder.Services.AddAuthentication(x =>
 {

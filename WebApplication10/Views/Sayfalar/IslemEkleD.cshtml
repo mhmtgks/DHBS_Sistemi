@@ -2,7 +2,7 @@
 @using Service.DTO;
 @model IEnumerable<HastaDTO>;
 @{
-
+    string id = ViewBag.id;
     IslemEkle ıslemEkle = new IslemEkle();
 }
 @{
@@ -109,8 +109,10 @@
         <div class="modal-dialog" role="document">
             <div id="content" class="modal-content" style="width:950px;margin-left:-150px;">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">Islem Ekle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="exampleModalLabel1">Islem Ekle</h5>                   
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
                 </div>
                 <div class="modal-body">
                     <div style="margin-left:0px; margin-top:30px;">
@@ -227,6 +229,10 @@
 @section SayfaiciJS{
 
 <script>
+    function closee(){
+            const modal = document.getElementById('exampleModal');
+            modal.style.display = 'none';
+    }
     function combovalue1() {
         var comboBox1 = document.getElementById("ComboBox2");
         var selectedOptionValue1 = comboBox1.value;

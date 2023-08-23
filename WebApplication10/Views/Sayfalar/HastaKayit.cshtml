@@ -3,6 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Layout_HastaKayit.cshtml";
     ViewBag.Title = "HastaKayıt";
+    string id = ViewBag.id;
 }
 
 @if (TempData["AlertMessage"] != null)
@@ -55,7 +56,12 @@
                 <div class="row mb-3">
                     <label class="col-sm-2 col-form-label">Cinsiyet</label>
                     <div class="col-sm-10">
-                        <input class="form-control" type="text" placeholder="Cinsiyet" required="" name="Cinsiyet" />
+                    <select class="form-select" id=" ComboBox">
+
+                        <option value="Kadın" name="">Kadın</option>
+                        <option value="Erkek" name="">Erkek</option>
+                        
+                    </select>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -76,8 +82,8 @@
                         <input class="form-control" type="text" placeholder="Email" required="" name="Email" />
                     </div>
                 </div>
-           
-                <button style="margin-top:20px;" class=" col-12 btn btn-danger btn-block btn-sm" type="submit">Kaydet</button>
+                <input id="comboinput" name="Cinsiyet" style="visibility:hidden; margin-right:-100px;" />
+                <button style="margin-top:20px;" onclick="combovalue1()" class=" col-12 btn btn-danger btn-block btn-sm" type="submit">Kaydet</button>
             </div>
         </div>
     }
@@ -241,6 +247,12 @@
 
 @section SayfaiciJS{
     <script>
+        function combovalue1() {
+            var comboBox1 = document.getElementById("ComboBox");
+            var selectedOptionValue1 = comboBox1.value;
+            var inp3 = document.getElementById("comboinput");
+            inp3.value = selectedOptionValue1;
+        }
         function updatetable1() {
 
             let element1 = document.getElementById("divtablo");

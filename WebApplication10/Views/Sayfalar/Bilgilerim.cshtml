@@ -1,8 +1,10 @@
 ﻿@using Service;
 @using Service.DTO;
+@model IEnumerable<HastaDTO>;
 @{
     Layout = "~/Views/Shared/_Layout_Hasta.cshtml";
     ViewBag.Title = "Bilgilerim";
+    string id = ViewBag.id;
 }
 @if (TempData["AlertMessage"] != null)
 {
@@ -60,7 +62,7 @@
                             @{
                                 Hasta hasta2 = new Hasta();
                             }
-                             @foreach (var item in hasta2.Lists("select * from Hasta where HastaID=" + idExtractor.userid)){
+                             @foreach (var item in hasta2.Lists("select * from Hasta where HastaID=" + @id)){
                             <div class="row">
                                 <div class="col-lg-3 col-md-4 label">TC</div>
                                 <div class="col-lg-9 col-md-8">@item.TC</div>
@@ -101,7 +103,7 @@
                                 Hasta hasta1 = new Hasta();
                             }
                             
-                        @foreach (var item in hasta1.Lists("select * from Hasta where HastaID=" + idExtractor.userid))
+                        @foreach (var item in hasta1.Lists("select * from Hasta where HastaID=" + id))
                         {
                             @using (Html.BeginForm("Bilgilerim", "Sayfalar", FormMethod.Post))
                             {
@@ -137,7 +139,10 @@
                                 <div class="row mb-3">
                                     <label for="Country" class="col-md-4 col-lg-3 col-form-label">Cinsiyet</label>
                                     <div class="col-md-8 col-lg-9">
-                                            <input readonly name="Cinsiyet" type="text" class="form-control" id="Country" value="@item.Cinsiyet">
+                                            <select class="form-select" id="ComboBox">
+                                                <option value="Kadın" >Kadın</option>
+                                                <option value="Erkek" selected >Erkek</option>
+                                            </select>
                                     </div>
                                 </div>
 
@@ -155,8 +160,9 @@
                                     </div>
                                 </div>
 
+                                    <input id="comboinput" name="Cinsiyet" style="visibility:hidden; margin-right:-100px;" />
                                 <div class="text-center">
-                                    <button type="submit" name="HastaID" value="@idExtractor.userid" class="btn btn-primary">Değişiklikleri Kaydet</button>
+                                        <button type="submit" onclick="combovalue2()" name="HastaID" value="@id" class="btn btn-primary">Değişiklikleri Kaydet</button>
                                 </div>
                             }
                             }
@@ -172,5 +178,17 @@
         </div>
     </div>
 </section>
+
+@section SayfaiciJS{
+    <script>
+        function combovalue2() {
+            var comboBox1 = document.getElementById("ComboBox");
+            var selectedOptionValue1 = comboBox1.value;
+            var inp3 = document.getElementById("comboinput");
+            inp3.value = selectedOptionValue1;
+        }
+    </script>
+
+}
 
 

@@ -23,7 +23,7 @@ namespace DHBS_Sistemi.Controllers
     {
        Router router = new Router();
         Giris giris = new Giris();
-        Hasta Hasta= new Hasta();
+        Hasta hastak = new Hasta();
         public readonly JwtAyarları _jwtAyarları;
         public KimlikDoğrulamaController(IOptions<JwtAyarları> jwtAyarları)
         {
@@ -42,21 +42,47 @@ namespace DHBS_Sistemi.Controllers
         public IActionResult Login([FromForm] GirisDTO apikullanıcıBilgileri)
         {
             var kullanıcı = KimlikDoğrulamaYap(apikullanıcıBilgileri);
-            if (kullanıcı == null) return NotFound("Kullanıcı Bulunamadı .");
+            if (kullanıcı == null) {
 
+                ViewBag.style = "margin-left: 100px;margin-bottom: 20px; -webkit-text-fill-color:red;";
+                ViewBag.Alert = "Kullanıcı Bulunamadı";
+                return View(); 
+            
+            
+            }
+            ViewBag.style = "display:none";
+            ViewBag.Alert = "";
             var token = TokenOluştur(kullanıcı);
             var handler = new JwtSecurityTokenHandler();
             var decodedValue = handler.ReadToken(token);
             var tokens = decodedValue as JwtSecurityToken;
             HttpContext.Session.SetString("Token", token);
             HttpContext.Session.SetString("Id", apikullanıcıBilgileri.KullaniciAdi.ToString());
-
-            List<HastaDTO> hastadto =new List<HastaDTO>();
-            hastadto = Hasta.Lists("select * from Hasta where TC='"+ apikullanıcıBilgileri.KullaniciAdi.ToString() + "'");
-            foreach (var item in hastadto) {
-                HttpContext.Session.SetString("userid", item.hastaid.ToString());
-                ViewBag.userid = item.hastaid;
+            List<HastaDTO> dto = new List<HastaDTO>();
+            string id="";
+            string isim="";
+            foreach (var item in hastak.Lists("select * from Hasta where TC='" + apikullanıcıBilgileri.KullaniciAdi.ToString() + "'"))
+            {
+                id= @item.hastaid.ToString();
+                isim= @item.AdiSoyadi.ToString();
             }
+            if (id == "")
+            {
+                List<CalisanDTO> dto1 = new List<CalisanDTO>();
+                Calisan hastak1 = new Calisan();
+                foreach (var item in hastak1.Lists("select * from Calisan where TC='" + apikullanıcıBilgileri.KullaniciAdi.ToString() + "'"))
+                {
+                    
+                    id = @item.CalisanID.ToString();
+                    isim = @item.AdiSoyadi.ToString();
+
+                }
+            }
+            HttpContext.Session.SetString("userid", id);
+            HttpContext.Session.SetString("username", isim);
+
+            ViewBag.id= HttpContext.Session.GetString("userid");
+            ViewBag.isim= HttpContext.Session.GetString("username");
             return RedirectToAction(router.FirstRouting(token), "Sayfalar");
         }
 

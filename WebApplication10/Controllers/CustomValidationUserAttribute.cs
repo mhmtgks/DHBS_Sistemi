@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System.ComponentModel.DataAnnotations;
 using static DHBS_Sistemi.Controllers.KimlikDoğrulamaController;
 using System.IdentityModel.Tokens.Jwt;
-
-
+using Service;
 
 namespace DHBS_Sistemi.Controllers
 {
@@ -20,6 +19,7 @@ namespace DHBS_Sistemi.Controllers
                 var user = context.HttpContext.Session;
                 var tokenHandler = new JwtSecurityTokenHandler();
                 string tstring = tokenHandler.ReadJwtToken(user.GetString("Token")).ToString();
+   
                 if (!tstring.Contains("\"74859012\""))
                 {
                     context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);

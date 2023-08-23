@@ -2,6 +2,7 @@
     Layout = "~/Views/Shared/_Layout_HastaKayit.cshtml";
     ViewBag.Title = "Laboratuvar";
     string stylelab = "";
+    
 }
 @using Service;
 @using Service.DTO;
@@ -46,9 +47,6 @@
         </tr>
     </thead>
     <tbody>
-        @{
-            Lab hasta1 = new Lab();
-        }
         @foreach (var item in Model)
         {
             if (item.LabDurum == "Kabul Edildi")
@@ -99,7 +97,7 @@
 <style>
     /* Custom CSS to move the search bar to the right */
     div.dataTables_wrapper div.dataTables_filter {
-        display: none;
+       margin-left:-700px;
     }
 
     div.dataTables_wrapper div.dataTables_length {

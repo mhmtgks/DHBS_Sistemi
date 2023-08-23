@@ -90,10 +90,12 @@
             <div class="modal-content" style="width: 850px;margin-left: -150px;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel1">Hasta İşlemleri</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
                 </div>
                 <div class="modal-body" style="width:800px">
-                    <div style="margin-top:-40px">
+                    <div style="margin-top:30px">
                         <table id="tablodetay" class="table table-striped table-bordered dt-resposive nowrap" style="margin-left:10px; margin-top:0px;">
                             <label hidden="hidden" id="myLabel"></label>
                             <thead>
@@ -117,7 +119,7 @@
                                     Islemler ıslemler = new Islemler();
                                     
                                 }
-                                @foreach (var item in ıslemler.Lists("select I.HastaID,I.IslemGrubuID,I.IslemID,[Adı Soyadı] as adhasta,I.IslemAciklamasi,Tarih,I.DrAciklaması,c.CalisanID,c.AdiSoyadi from vw_IslemlerDR I join Calisan c on c.AdiSoyadi=I.AdiSoyadi where c.CalisanID=" + +idExtractor.userid))
+                                @foreach (var item in ıslemler.Lists("select I.HastaID,I.IslemGrubuID,I.IslemID,[Adı Soyadı] as adhasta,I.IslemAciklamasi,Tarih,I.DrAciklaması,c.CalisanID,c.AdiSoyadi from vw_IslemlerDR I join Calisan c on c.AdiSoyadi=I.AdiSoyadi where c.CalisanID=" +idExtractor.userid))
                                 {
                                     <tr>
                                         <td>

@@ -3,6 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Layout_Hasta.cshtml";
     ViewBag.Title = "Randevularım";
+    string id = ViewBag.id;
 }
 
 <head>
@@ -72,7 +73,7 @@
                 @{
                     RandevuHasta rnd = new RandevuHasta();
                 }
-                @foreach (var item1 in rnd.Lists("select * from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID where R.HastaID=" + idExtractor.userid))
+                @foreach (var item1 in rnd.Lists("select * from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID where R.HastaID="+ @id))
                 {
                     <tr>
                         <td>
@@ -99,7 +100,9 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel1">Hasta İşlemleri</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>

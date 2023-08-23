@@ -3,6 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Layout_Hasta.cshtml";
     ViewBag.Title = "Randevu Al";
+    string id = ViewBag.id;
 }
 
 
@@ -356,7 +357,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel1">Randevu Al</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
                 </div>
                 <div class="modal-body"> 
                     @{
@@ -376,7 +379,7 @@
                                     <label> Adı Soyadı</label>
                                     <div class="col-12">
                                         <span class="fa fa-lock" aria-hidden="true"></span>
-                                        <input id="label1" style="resize:none" type="text" required="" name="" readonly value="@idExtractor.username">
+                                        <input id="label1" style="resize:none" type="text" required="" name="" readonly value="@id">
                                     </div>                
                                     <label> Diş Hekimi Adı</label>
                                     <div class="col-12">
@@ -394,7 +397,7 @@
                                         <input id="Tarih" style="resize:none; user-select: none;" type="text" required="" name="Tarih" readonly>
                                     </div>
                                     <input id="label" style="visibility:hidden" type="text" required="" name="DoktorID" readonly value="@TempData["Doktorid"]">
-                                    <input id="label" style="visibility:hidden" type="text" required="" name="HastaID" readonly value="@idExtractor.userid">
+                                    <input id="label" style="visibility:hidden" type="text" required="" name="HastaID" readonly value="@id">
                                     <button class="btn btn-danger btn-block" name="type" value="1" type="submit">Kaydet</button>
                                 </div>
                             </div>

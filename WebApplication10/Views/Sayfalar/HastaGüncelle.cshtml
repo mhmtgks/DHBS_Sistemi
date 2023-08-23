@@ -4,6 +4,7 @@
 @{
     Layout = "~/Views/Shared/_Layout_HastaKayit.cshtml";
     ViewBag.Title = "Hastalar";
+    string id = ViewBag.id;
 }
 
     @if (TempData["AlertMessage"] != null)
@@ -111,7 +112,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel1">Hasta Kayıt Güncelle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
                 </div>
                 <div class="modal-body">
                     
@@ -142,16 +145,19 @@
                             <input class="form-control" id="dogumtarihi" type="datetime" name="DogumTarihi" readonly />
                             </div>
                             <label> Cinsiyet</label>
-                            <div class="col-12">
-                                <span class="fa fa-lock" aria-hidden="true"></span>
-                            <input class="form-control" id="cinsiyet" type="text" required="" name="Cinsiyet" readonly />
+                            <div class="col-12">                               
+                                    <select class="form-select" id="ComboBox">
+                                        <option value="Kadın" name="">Kadın</option>
+                                        <option value="Erkek" name="">Erkek</option>
+                                    </select>
                             </div>
                             <label style="visibility:hidden"> HastaID</label>
                             <div style="visibility:hidden" class="col-12">
                                 <span class="fa fa-envelope" aria-hidden="true"></span>
                             <input class="form-control" id="hastaid" type="text" required="" name="HastaID" readonly />
                             </div>
-                            <button class="btn btn-danger btn-block btn-sm" type="submit">Güncelle</button>
+                            <input id="comboinput" name="Cinsiyet" style="visibility:hidden; margin-right:-100px;" />
+                            <button onclick="combovalue2()" class="btn btn-danger btn-block btn-sm" type="submit">Güncelle</button>
                             </div>
                             </div>
                         }
@@ -229,13 +235,13 @@
             var lbl3 = document.getElementById("adi");
             var lbl6 = document.getElementById("iletisim");
             var lbl4 = document.getElementById("dogumtarihi");
-            var lbl5 = document.getElementById("cinsiyet");
+
             lbl1.value = data1;
             lbl2.value = data2;
             lbl3.value = data3;
             lbl4.value = data5;
             lbl6.value = data4;
-            lbl5.value = data6;
+
             // ... Diğer işlemler ...
         }
         function getRowData1(button) {
@@ -275,6 +281,12 @@
             });
 
 
+        }
+        function combovalue2() {
+            var comboBox1 = document.getElementById("ComboBox");
+            var selectedOptionValue1 = comboBox1.value;
+            var inp3 = document.getElementById("comboinput");
+            inp3.value = selectedOptionValue1;
         }
     </script>
 

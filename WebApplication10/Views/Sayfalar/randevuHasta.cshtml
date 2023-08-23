@@ -4,6 +4,7 @@
 @{
     Layout = "~/Views/Shared/_Layout_Hasta.cshtml";
     ViewBag.Title = "Randevularım";
+    string id = ViewBag.id;
 }
 
 @if (TempData["AlertMessage"] != null)
@@ -52,7 +53,7 @@
                     @{
                         RandevuHasta rnd = new RandevuHasta();
                     }
-                    @foreach (var item1 in rnd.Lists("select RandevuID,HastaID,R.DoktorID,R.TC,R.AdiSoyadi,Tarih,Uzmanlık,C.AdiSoyadi as dradi from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID join Calisan C on c.CalisanID=D.DoktorID where Tarih>Getdate() and R.HastaID=" + idExtractor.userid))
+                    @foreach (var item1 in rnd.Lists("select RandevuID,HastaID,R.DoktorID,R.TC,R.AdiSoyadi,Tarih,Uzmanlık,C.AdiSoyadi as dradi from vw_Randevu R join Doktor D on D.DoktorID=R.DoktorID join Calisan C on c.CalisanID=D.DoktorID where Tarih>Getdate() and R.HastaID=" + @id))
                     {
                         <tr>
                             <td>
@@ -139,7 +140,9 @@
             <div class="modal-content" style="width: 900px; margin-left:-250px;">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel1">Randevu Sil</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
                     </div>
                     <div class="modal-body">
                         <div style="margin-top:0px">
@@ -154,7 +157,7 @@
                                             <label class="col-sm-2 col-form-label"> Hasta Adı</label>
                                             <div class="col-12">
                                                 <span class="fa fa-envelope" aria-hidden="true"></span>
-                                                <textarea class="form-control" id="hstadi" style="resize:none" type="text" required="" name="" disabled>@idExtractor.username</textarea>
+                                                <textarea class="form-control" id="hstadi" style="resize:none" type="text" required="" name="" disabled>@id</textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -178,7 +181,7 @@
                                                 <textarea class="form-control" id="Tarih" style="resize:none; user-select: none;" type="text" required="" name="Tarih" readonly></textarea>
                                             </div>
                                         </div>
-                                        <textarea id="tc" style="visibility:hidden" type="text" required="" name="HastaID" readonly>@idExtractor.userid</textarea>
+                                        <textarea id="tc" style="visibility:hidden" type="text" required="" name="HastaID" readonly>@id</textarea>
                                         <button style="margin-left:80px;" class="col-4 btn btn-danger"  name="" value="">Randevuyu Sil</button>
 
 

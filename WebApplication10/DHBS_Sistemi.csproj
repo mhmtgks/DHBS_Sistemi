@@ -42,6 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\assets\img\app-store-badge.svg" />
+    <None Include="wwwroot\assets\img\google-play-badge.svg" />
+    <None Include="wwwroot\assets\img\tnw-logo.svg" />
     <None Include="wwwroot\assets\css\style.css" />
     <None Include="wwwroot\assets\img\apple-touch-icon.png" />
     <None Include="wwwroot\assets\img\card.jpg" />
@@ -464,6 +467,7 @@
     <None Include="wwwroot\assets\vendor\tinymce\tinymce.min.js" />
     <None Include="wwwroot\forms\contact.php" />
     <None Include="wwwroot\forms\Readme.txt" />
+    <None Include="wwwroot\js\scriptsmp.js" />
   </ItemGroup>
 
 </Project>

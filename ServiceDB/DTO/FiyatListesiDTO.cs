@@ -14,6 +14,7 @@ namespace Service.DTO
         public string Adi { get; set; }
      
         public Decimal Ucreti { get; set; }
+        public int IsActive { get; set; }
 
     }
 }

@@ -3,6 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Layout_Hasta.cshtml";
     ViewBag.Title = "Ziyaretlerim";
+    string id = ViewBag.id;
 }
 
 <div class="pagetitle">
@@ -32,7 +33,7 @@
                 @{
                     VW_Faturalar hasta1 = new VW_Faturalar();
                 }
-                @foreach (var item in hasta1.Lists("select * from vw_Faturalar where HastaID="+idExtractor.userid))
+                @foreach (var item in hasta1.Lists("select * from vw_Faturalar where HastaID="+@id))
                 {
                     <tr>
                         <td>
@@ -59,7 +60,9 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel1">Fatura Detay</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
                     </div>
                     <div class="modal-body">
                         <div class="container">

@@ -3,6 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Layout_Yonetici.cshtml";
     ViewBag.Title = "Fiyat Güncelleme";
+    string id = ViewBag.id;
 }
 
     @if (TempData["AlertMessage"] != null)
@@ -63,6 +64,7 @@
                             <button id="btnekle" style="margin-bottom:0px; " class="btn btn-primary btn-sm" onclick="" name="ProsedurID" value="@item.ProsedurID">Güncelle</button>
 
                         }
+                    <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" onclick="ıslemvalue1(this)">İşlem Sil </button>
                     </td>
                 </tr>
 
@@ -75,7 +77,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel1">Gider Ekle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
 
             </div>
             <div class="modal-body">
@@ -114,6 +118,35 @@
     </div>
 
 </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Hasta İşlemleri</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-top:0px">
+                    <div style="margin-bottom: 0px;margin-left: 100px;">
+                        @using (Html.BeginForm("FiyatListesiY", "Sayfalar", FormMethod.Post))
+                        {
+
+                                
+                            <input style="display:block; visibility:hidden" id="input1" name="Adi" /> 
+                            <label display:block"> İşlemi Silmek İstediğinize Eminmisiniz?</label>
+                            <button name="tip" value="3" class="btn btn-danger btn-block" type="submit" style=" margin-left:70px;margin-top:30px; display:block">Evet, Eminim</button>
+
+
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
     div.dataTables_wrapper div.dataTables_filter {
@@ -129,5 +162,21 @@
     }
     </style>
 
+
+    @section SayfaiciJS{
+        <script>
+        function ıslemvalue1(button) {
+            var row = button.parentNode.parentNode;
+            var cells = row.getElementsByTagName("td");
+            var data1 = cells[0].innerText;
+            var lbl1 = document.getElementById("input1");
+            lbl1.value = data1;
+        }
+
+
+        </script>
+
+
+    }
 
 

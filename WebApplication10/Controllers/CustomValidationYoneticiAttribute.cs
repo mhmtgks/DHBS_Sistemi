@@ -20,7 +20,6 @@ namespace DHBS_Sistemi.Controllers
                 var tokenHandler = new JwtSecurityTokenHandler();
                 string tstring = tokenHandler.ReadJwtToken(user.GetString("Token")).ToString();
 
-            
                 
                 if (!tstring.Contains("\"647384539\""))
                 {
