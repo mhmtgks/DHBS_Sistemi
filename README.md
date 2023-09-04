@@ -2,6 +2,7 @@ Dental Clinic Web Application: All Your Dentistry Needs in One Platform
 
 Dental health is of vital importance, and effective management in this field contributes to maintaining patients' healthy smiles. We provide a solution that leverages modern technology to facilitate the work of both patients and dentists.
 
+
 Key Features:
 
 🦷 Patient Registration and Tracking System: Easily create patient records, schedule appointments, and track treatment histories. Storing patient files digitally minimizes the risk of data loss.
